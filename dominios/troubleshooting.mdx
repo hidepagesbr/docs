@@ -1,0 +1,56 @@
+---
+title: "Domínios: status e problemas comuns"
+icon: "wrench"
+description: "Resolva domínio travado em Pendente, verificação de propriedade, exclusão bloqueada e conflitos de DNS."
+---
+
+Reunimos aqui os problemas mais comuns com domínios e como resolver cada um.
+
+<AccordionGroup>
+  <Accordion title="O domínio está travado em 'Pendente'" icon="clock">
+    Quase sempre é o DNS. Verifique:
+
+    1. **O registro certo existe?** Raiz → registro **A**; subdomínio → registro **CNAME**.
+    2. **O valor está exato?** Compare com o que aparece no diálogo de **Instruções DNS** (use os botões de copiar).
+    3. **O proxy está desligado?** Na Cloudflare, o registro precisa estar como **"DNS only"** (nuvem cinza).
+    4. **Já propagou?** Pode levar até **48h**. Cheque em [whatsmydns.net](https://www.whatsmydns.net).
+    5. Clique em **Verificar Status** para forçar uma nova checagem.
+  </Accordion>
+
+  <Accordion title="Aparece 'Verificação Necessária'" icon="shield-halved">
+    O domínio já está registrado em outra conta/projeto. Você precisa provar a propriedade adicionando o registro **TXT** que aparece no diálogo:
+
+    1. Abra o painel de DNS do domínio.
+    2. Crie o **TXT** (Tipo / Nome / Valor exatamente como mostrado).
+    3. Volte e clique em **Verificar Status**.
+    4. Depois de verificado, o TXT pode ser removido.
+  </Accordion>
+
+  <Accordion title="Não consigo excluir o domínio" icon="trash-can">
+    Um domínio **não pode ser excluído enquanto tiver campanhas associadas**. A mensagem é:
+
+    > *"Não é possível excluir o domínio. Existem N campanhas associadas… exclua ou reatribua as campanhas primeiro."*
+
+    Exclua (ou mova para outro domínio) todas as campanhas que usam esse domínio e tente de novo.
+  </Accordion>
+
+  <Accordion title="Editei o nome do domínio e as campanhas voltaram para 'Pendente'" icon="pen">
+    Isso é esperado. Alterar o domínio faz o HidePages **registrá-lo de novo**, então ele volta a **Pendente** até o DNS ser verificado outra vez. Reconfigure/atualize o DNS e aguarde virar **OK** — as campanhas voltam a **Ativa** sozinhas.
+  </Accordion>
+
+  <Accordion title="Minha campanha está 'Pendente' e o domínio está OK" icon="circle-exclamation">
+    Se o domínio já está **OK**, o problema costuma ser **página em rascunho**. A campanha só fica **Ativa** quando **todas** as páginas dela (White, Black e a Gray, se houver) estão **publicadas**. Publique cada página e a campanha reativa.
+  </Accordion>
+
+  <Accordion title="Existem outros registros no mesmo nome (conflito)" icon="triangle-exclamation">
+    Se já houver um registro **A**/**AAAA**/**CNAME** apontando aquele mesmo nome para outro serviço, ele **entra em conflito** com o registro do HidePages. Remova ou ajuste os registros antigos para que só o registro indicado responda por aquele nome.
+  </Accordion>
+
+  <Accordion title="Os filtros de cloaking parecem não funcionar" icon="user-secret">
+    O suspeito número um é o **proxy da Cloudflare ligado** (nuvem laranja). Com ele ativo, o IP e os cabeçalhos reais do visitante chegam mascarados e o filtro perde precisão. Deixe o registro como **"DNS only"**.
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+Ainda travado depois de checar tudo isso? Fale com o **Suporte** (botão do WhatsApp no painel) informando o domínio e uma captura das suas configurações de DNS.
+</Info>

@@ -1,0 +1,243 @@
+---
+title: "Delay de oferta na VSL"
+icon: "stopwatch"
+description: "Esconder a oferta e revelá-la após X tempo de vídeo (VSL), via HTML — o sistema de 3 camadas usado nas páginas de produção."
+---
+
+Em uma VSL, você quer que a **oferta (botões/preços) só apareça depois do pitch** — por exemplo, aos 40 minutos de vídeo. Isso é o **delay de oferta**: a oferta começa escondida e é revelada quando o vídeo atinge X segundos, com rolagem automática até ela.
+
+<Warning>
+Todo esse código vai **dentro de um elemento HTML** no canvas, junto com o player VTurb — é o lugar que roda HTML + JS custom sem filtro. Veja [HTML e scripts](/paginas/html-e-scripts).
+</Warning>
+
+## Como funciona (3 camadas)
+
+Usamos **camadas redundantes** de propósito: se o player falhar, o backup garante que a oferta apareça mesmo assim.
+
+| Camada | Mecanismo | O que faz |
+|---|---|---|
+| **1** | VTurb `displayHiddenElements` | API nativa do player: revela `.offer-wrapper` quando o vídeo passa do delay. `persist: true` grava cookie → em recarga já mostra a oferta. |
+| **2** | Backup (MutationObserver + poll + `timeupdate` + timeout) | O "cérebro": detecta a revelação por qualquer via, e tem um **timeout de segurança** que revela de qualquer jeito. |
+| **3** | `localStorage` | Em visitas seguintes, revela na hora sem esperar o vídeo. |
+
+O delay é contado em **tempo de vídeo assistido**, não no relógio — `2510` = 2510 s de reprodução (~41 min).
+
+## Passo a passo
+
+<Steps>
+  <Step title="1. Adicione as classes que escondem">
+    No `<style>` do seu bloco (com escopo no wrapper):
+
+    ```css
+    .esconder, .hide { display: none !important; }
+    ```
+  </Step>
+
+  <Step title="2. Marque a seção da oferta">
+    Envolva **toda a oferta** numa seção com `id="offer-section"` e as classes `esconder hide offer-wrapper`. Coloque um `<div id="scrolldown"></div>` como **primeiro filho** (alvo da rolagem):
+
+    ```html
+    <section id="offer-section" class="esconder hide offer-wrapper">
+      <div id="scrolldown"></div>
+      <!-- cards, preços, botões, garantia... toda a oferta aqui -->
+    </section>
+    ```
+
+    <Info>São dois alvos: a **classe `offer-wrapper`** é o que a Camada 1 revela; o **`id="offer-section"`** é o que a Camada 2 controla. A seção precisa das duas.</Info>
+  </Step>
+
+  <Step title="3. Coloque o player VTurb + a Camada 1">
+    Logo após o `<script>` do player, adicione a Camada 1. Troque o **delay** e o **ID do player**:
+
+    ```html
+    <!-- player VTurb -->
+    <vturb-smartplayer id="vid-SEU-PLAYER" style="display:block;margin:0 auto;width:100%;max-width:400px"></vturb-smartplayer>
+    <script src="https://scripts.converteai.net/SUA-CONTA/players/SEU-VIDEO/v4/player.js" async></script>
+
+    <!-- Camada 1: API nativa do VTurb -->
+    <script>
+    (function () {
+      var delaySeconds = SEU_DELAY_EM_SEGUNDOS;
+      var player = document.getElementById("vid-SEU-PLAYER") || document.querySelector("vturb-smartplayer");
+      if (!player) return;
+      player.addEventListener("player:ready", function () {
+        if (typeof player.displayHiddenElements === "function") {
+          player.displayHiddenElements(delaySeconds, [".offer-wrapper"], { persist: true });
+        }
+      });
+    })();
+    </script>
+    ```
+  </Step>
+
+  <Step title="4. Adicione a Camada 2 (o backup) no fim do bloco">
+    Cole este script no **final** do elemento HTML (antes de fechar o wrapper). Troque `SEU_DELAY_EM_SEGUNDOS` e `vid-SEU-PLAYER` — os **mesmos** valores da Camada 1:
+
+    ```html
+    <script>
+    (function () {
+      var SECONDS_TO_DISPLAY = SEU_DELAY_EM_SEGUNDOS;
+      var alreadyDisplayedKey = "offer_revealed_v4_" + SECONDS_TO_DISPLAY;
+      var revealDone = false;
+      var PLAYER_ID = "vid-SEU-PLAYER";
+      var OFFER_ID = "offer-section";
+
+      function unlockOfferDom() {
+        var el = document.getElementById(OFFER_ID);
+        if (!el) return;
+        el.classList.remove("esconder", "hide");
+        el.style.removeProperty("display");
+        el.style.removeProperty("visibility");
+      }
+      function offerLooksVisible() {
+        var w = document.getElementById(OFFER_ID);
+        if (!w) return false;
+        var cs = window.getComputedStyle(w);
+        if (cs.display === "none" || cs.visibility === "hidden" || Number(cs.opacity) === 0) return false;
+        return w.getBoundingClientRect().height > 0;
+      }
+      function afterReveal() {
+        if (revealDone) return;
+        revealDone = true;
+        unlockOfferDom();
+        try { localStorage.setItem(alreadyDisplayedKey, "true"); } catch (e) {}
+        var sd = document.getElementById("scrolldown");
+        if (sd) {
+          setTimeout(function () {
+            try { sd.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {}
+          }, 400);
+        }
+        try { document.dispatchEvent(new Event("offerRevealed")); } catch (e) {}
+      }
+      function init() {
+        try {
+          if (localStorage.getItem(alreadyDisplayedKey) === "true") {
+            unlockOfferDom(); setTimeout(afterReveal, 0); return;
+          }
+        } catch (e0) {}
+        var wrap = document.getElementById(OFFER_ID);
+        if (!wrap) return;
+
+        var obs = new MutationObserver(function () {
+          if (offerLooksVisible()) { obs.disconnect(); afterReveal(); }
+        });
+        try { obs.observe(wrap, { attributes: true, attributeFilter: ["class", "style"] }); } catch (eObs) {}
+
+        var pollVis = setInterval(function () {
+          if (revealDone) { clearInterval(pollVis); return; }
+          if (offerLooksVisible()) { clearInterval(pollVis); afterReveal(); }
+        }, 350);
+
+        var spTry = 0;
+        function bindSmartplayer() {
+          if (revealDone) return;
+          try {
+            if (typeof smartplayer !== "undefined" && smartplayer.instances && smartplayer.instances.length) {
+              var host = document.getElementById(PLAYER_ID);
+              var inst = null;
+              for (var i = 0; i < smartplayer.instances.length; i++) {
+                var cand = smartplayer.instances[i];
+                if (!cand) continue;
+                try { if (cand.host === host || cand.el === host) { inst = cand; break; } } catch (e1) {}
+              }
+              if (!inst) inst = smartplayer.instances[0];
+              inst.on("timeupdate", function () {
+                if (revealDone) return;
+                if (inst.smartAutoPlay) return;
+                var t = inst.video && typeof inst.video.currentTime === "number" ? inst.video.currentTime : 0;
+                if (t >= SECONDS_TO_DISPLAY) afterReveal();
+              });
+              return;
+            }
+          } catch (e2) {}
+          if (++spTry < 200) setTimeout(bindSmartplayer, 250);
+        }
+        bindSmartplayer();
+
+        setTimeout(function () { if (!revealDone) afterReveal(); }, (SECONDS_TO_DISPLAY + 90) * 1000);
+      }
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+      else init();
+    })();
+    </script>
+    ```
+  </Step>
+
+  <Step title="5. (Opcional) Countdown após revelar">
+    Se a oferta tem um contador de escassez (`.countdown`), este script o anima quando a oferta aparece:
+
+    ```html
+    <script>
+    document.addEventListener("offerRevealed", function () {
+      var root = document.getElementById("offer-section");
+      if (!root) return;
+      var nodes = root.querySelectorAll(".countdown");
+      for (var i = 0; i < nodes.length; i++) {
+        (function (el) {
+          var m = el.textContent.trim().match(/\d+/);
+          if (!m) return;
+          var val = parseInt(m[0], 10);
+          var timer = setInterval(function () {
+            if (val > 48) { val = Math.max(val - 6, 48); el.textContent = String(val); }
+            else { clearInterval(timer); }
+          }, 8000);
+        })(nodes[i]);
+      }
+    });
+    </script>
+    ```
+  </Step>
+</Steps>
+
+## Os 3 valores que precisam bater
+
+<Warning>
+Estes valores têm que ser **idênticos** nas Camadas 1 e 2:
+- **`SEU_DELAY_EM_SEGUNDOS`** — o mesmo número nas duas camadas.
+- **`vid-SEU-PLAYER`** — o `id` do `<vturb-smartplayer>`.
+- A seção da oferta com **`id="offer-section"`** e a classe **`offer-wrapper`**.
+</Warning>
+
+## Delay por tempo puro (sem vídeo)
+
+Se a página **não tem VSL** e você só quer revelar após X segundos de relógio:
+
+```html
+<script>
+setTimeout(function () {
+  var el = document.getElementById("offer-section");
+  if (el) el.classList.remove("esconder", "hide");
+}, 10000); // 10000 ms = 10 s
+</script>
+```
+
+## Testar antes de subir
+
+<Steps>
+  <Step title="Use delay 10 primeiro">
+    Coloque **`10`** no lugar do delay real e publique um teste — não espere 40 minutos para validar.
+  </Step>
+  <Step title="Simule uma primeira visita (console do navegador)">
+    ```js
+    localStorage.removeItem('offer_revealed_v4_10');
+    location.reload();
+    ```
+  </Step>
+  <Step title="Confira se a oferta apareceu e rolou">
+    Depois de ~10 s de vídeo, a oferta deve **aparecer** e a página **rolar** até ela. Depois, troque o delay para o valor real.
+  </Step>
+</Steps>
+
+<Info>
+A chave do `localStorage` é **específica do delay** (`offer_revealed_v4_10` para o teste, `offer_revealed_v4_2510` para produção) — trocar o delay já invalida a persistência antiga.
+</Info>
+
+## Erros comuns
+
+| Sintoma | Causa | Correção |
+|---|---|---|
+| Oferta aparece antes do vídeo | Faltou `.esconder`/`.hide` na seção ou o delay | Marque a seção e ligue as 3 camadas |
+| Oferta nunca aparece | ID do player errado ou Camada 2 ausente | Confira `PLAYER_ID` e cole a Camada 2 |
+| Oferta some ao recarregar | — | O `persist`/localStorage já resolve; confira que os valores batem |
+| Não rolou até a oferta | Faltou `<div id="scrolldown">` como primeiro filho | Adicione o `#scrolldown` |
+| Nada aparece / o player não carrega | Player e delay em lugares separados | Mantenha player + oferta + delay no **mesmo elemento HTML** |

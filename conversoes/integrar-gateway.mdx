@@ -1,0 +1,84 @@
+---
+title: "Integrar um gateway de pagamento"
+icon: "plug"
+description: "Conecte Hotmart, CartPanda, Digistore24, BuyGoods ou ClickBank para rastrear conversões automaticamente."
+---
+
+O fluxo é o mesmo para todos: **escolher a plataforma → escolher o parâmetro → copiar a URL gerada e colar no gateway**. Cada gateway tem particularidades (parâmetros aceitos e tipo de integração) descritas abaixo.
+
+## Fluxo geral
+
+<Steps>
+  <Step title="Conversions → Adicionar integração">
+    Selecione a(s) plataforma(s). Máximo de **4 integrações** na conta.
+  </Step>
+  <Step title="Escolha o parâmetro do gateway">
+    Escolha um parâmetro que **aquele gateway aceita e devolve** na venda (veja a tabela de cada um abaixo). É nele que a chave `hp1_...` vai viajar. Cada parâmetro deve ser **único** entre as integrações.
+  </Step>
+  <Step title="Copie a URL gerada">
+    O HidePages monta a **URL de Webhook/Postback** já com o `?token=...`. Copie-a com o botão da tabela.
+  </Step>
+  <Step title="Cole no gateway">
+    Vá na área de **Webhook / IPN / Postback** do gateway e cole a URL. É isso que faz o gateway avisar o HidePages a cada venda.
+  </Step>
+</Steps>
+
+## Detalhes por gateway
+
+<AccordionGroup>
+  <Accordion title="Hotmart — Webhook / IPN" icon="h">
+    - **Tipo:** Webhook / IPN
+    - **Parâmetros suportados:** `src`, `sck`, `xcod`
+    - **Eventos de venda considerados:** compra completa/aprovada.
+    - **Onde colar:** área de **Webhook** (notificação de eventos) do Hotmart, apontando para a URL gerada.
+
+    Escolha, por exemplo, `sck` como parâmetro no HidePages e garanta que o mesmo `sck` é o que carrega a chave no checkout.
+  </Accordion>
+
+  <Accordion title="CartPanda — Advertiser (Webhook)" icon="cart-shopping">
+    - **Tipo:** Webhook
+    - **Parâmetros suportados:** `src`, `sid2`, `sid3`, `sid4`, `sid5`
+    - **Eventos:** `order_paid`, `order_approved`.
+    - **Onde colar:** configuração de **webhooks** da loja CartPanda.
+  </Accordion>
+
+  <Accordion title="CartPanda — Affiliate (Postback S2S)" icon="cart-shopping">
+    - **Tipo:** Postback S2S
+    - Use a **URL de postback** gerada na configuração de afiliado/postback.
+  </Accordion>
+
+  <Accordion title="Digistore24 — Postback S2S" icon="cart-shopping">
+    - **Tipo:** Postback S2S (IPN)
+    - **Eventos:** pagamento concluído; transações de **teste** (`is_test`) são ignoradas.
+    - **Onde colar:** no Digistore24, em **IPN/Postback**, cole a URL gerada. Escolha o parâmetro (ex.: `sid1`) que carrega a chave.
+
+    <Note>Para **upsell dentro do checkout** do Digistore24, veja também a fonte de tráfego **Digistore24 (Upsell)** na campanha.</Note>
+  </Accordion>
+
+  <Accordion title="BuyGoods — Advertiser / Affiliate (Postback S2S)" icon="bag-shopping">
+    - **Tipo:** Postback S2S
+    - Cole a **URL de postback** gerada no painel do BuyGoods (as macros de valor/ordem são preenchidas pelo próprio gateway).
+  </Accordion>
+
+  <Accordion title="ClickBank — Webhook (criptografado)" icon="c">
+    - **Tipo:** Webhook (payload **criptografado**)
+    - **Passo extra obrigatório:** informe a **Secret Key (INSS)** do ClickBank no HidePages — sem ela, o webhook não pode ser descriptografado e a integração não ativa.
+    - **Parâmetros suportados:** `vtid`, `unique_aff_sub2`…`unique_aff_sub5`.
+  </Accordion>
+</AccordionGroup>
+
+## Boas práticas
+
+<Check>
+  - O **parâmetro** escolhido no HidePages precisa ser o **mesmo** que carrega a chave no checkout.
+  - Prefira enviar/mapear o **ID do pedido** quando possível — o HidePages **dedup**lica por ordem para não contar a mesma venda duas vezes.
+  - Transações de **teste** são descartadas automaticamente (não se assuste se um teste não aparecer).
+</Check>
+
+## Como saber que funcionou
+
+Depois de colar a URL no gateway, faça uma **venda de teste real** (ou aguarde a primeira venda). O status da integração vai de **"Aguardando 1ª venda"** para **"Integrado"**, e a conversão aparece no **Dashboard** e nas **Métricas** da campanha.
+
+<Card title="Gateway sem integração nativa?" icon="diagram-project" href="/conversoes/n8n" horizontal>
+  Use o webhook genérico via N8N.
+</Card>

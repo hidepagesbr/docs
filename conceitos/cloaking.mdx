@@ -1,0 +1,70 @@
+---
+title: "O que é cloaking (White, Black e Gray)"
+icon: "mask"
+description: "Entenda o conceito de cloaking e o papel de cada uma das três páginas de uma campanha no HidePages."
+---
+
+**Cloaking** é mostrar **conteúdos diferentes para públicos diferentes na mesma URL**. No contexto de tráfego pago, significa apresentar uma página **segura e dentro das políticas** para quem está fiscalizando (moderadores da rede de anúncios, robôs, crawlers, ferramentas de verificação) e a sua **página de oferta real** para o comprador que clicou no seu anúncio.
+
+<Info>
+O objetivo é **proteger a conta e a campanha** da reprovação automática. A White Page precisa ser genuinamente compatível com as políticas da rede — ela é a sua "cara pública".
+</Info>
+
+## Por que isso é necessário
+
+Quando você sobe uma campanha, a rede de anúncios não olha sua página só uma vez. Ela:
+
+- Faz o **crawl** da URL antes de aprovar o anúncio.
+- **Revisita** periodicamente com bots e moderadores humanos.
+- Usa **ferramentas de verificação de terceiros** que abrem sua página a partir de servidores.
+
+Todos esses acessos **não são o seu comprador** — e quase nunca chegam do jeito que um clique real chega (com o parâmetro do anúncio, do dispositivo e da região certa, sem VPN de datacenter). O HidePages usa exatamente essas diferenças para separar um do outro.
+
+## As três páginas
+
+<Steps>
+  <Step title="White Page — a página segura">
+    É a página que **passa na revisão**. Deve ser um conteúdo legítimo, dentro das regras da rede (um artigo, uma página institucional, um blog, um comparativo neutro…). É o que **moderadores, bots e qualquer tráfego suspeito** enxergam.
+
+    <Warning>
+    Se a sua White Page violar as políticas, o cloaking não salva nada — ela é justamente o que a rede vai avaliar. Trate-a como uma página real que precisa ser aprovada.
+    </Warning>
+  </Step>
+  <Step title="Black Page — a página de oferta">
+    É a sua **página que converte** (VSL, advertorial agressivo, oferta direta). Só é servida para o **tráfego humano aprovado** que veio pelo seu anúncio pago. É aqui que a mágica de vendas acontece.
+
+    A Black Page pode ser **uma página única** ou um **Teste A/B** (várias variantes disputando o mesmo tráfego).
+  </Step>
+  <Step title="Gray Page — o meio-termo (opcional)">
+    É uma página para o tráfego **suspeito, mas não confirmado como bot** — por exemplo, alguém atrás de uma VPN. Serve como um "amortecedor": nem entrega a oferta, nem trata como bot puro.
+
+    Se você **não** configurar uma Gray Page, o tráfego suspeito simplesmente cai na **White Page**. No painel, a Gray Page fica disponível para campanhas de **Meta**.
+  </Step>
+</Steps>
+
+## Como tudo se conecta
+
+As páginas sozinhas não fazem nada. Quem liga tudo é a **Campanha**: ela amarra um **domínio + slug** a um trio de páginas (White / Black / Gray) e a um conjunto de **regras** (país, idioma, dispositivo, bloqueio de conexões suspeitas).
+
+```
+Campanha  =  domínio.com/slug
+             ├── White Page  → moderador / bot / suspeito
+             ├── Black Page  → comprador aprovado (a oferta)
+             └── Gray Page   → suspeito (opcional; senão vai pra White)
+             + Regras: país, idioma, dispositivo, conexões suspeitas
+```
+
+<Note>
+A decisão de **qual página mostrar** é feita a cada acesso, em tempo real, no seu próprio domínio — **sem redirecionar** o visitante para outro lugar. Isso é o que torna o HidePages diferente dos cloakers tradicionais.
+</Note>
+
+## Próximos passos
+
+<CardGroup cols={2}>
+  <Card title="Estrutura (dome) vs Redirecionamento" icon="diagram-project" href="/conceitos/estrutura-vs-redirect">
+    O diferencial técnico contra TWR e CloakUp, explicado.
+  </Card>
+  <Card title="Como o HidePages decide quem vê o quê" icon="filter" href="/conceitos/como-decide">
+    Os sinais que separam comprador de moderador.
+  </Card>
+</CardGroup>

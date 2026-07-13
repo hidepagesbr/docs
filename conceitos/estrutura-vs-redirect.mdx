@@ -1,0 +1,91 @@
+---
+title: "Estrutura (dome) vs Redirecionamento"
+icon: "diagram-project"
+description: "Por que o HidePages serve a oferta 'no lugar', sem redirect — e como isso se compara ao The White Rabbit (TWR) e ao CloakUp."
+---
+
+Este é o diferencial central do HidePages. Entender isso é entender **por que a nossa estrutura escala com menos bloqueios** do que um cloaker tradicional.
+
+## Os dois modelos
+
+<Columns cols={2}>
+  <Card title="Cloaker de redirecionamento" icon="right-left" color="#B45309">
+    **TWR, CloakUp e a maioria.** O clique cai numa URL (o "filtro") e, se aprovado, é **redirecionado** para *outra* URL — normalmente em **outro domínio**, onde está a oferta. Existe um **pulo** entre a página que a rede aprovou e a página que o comprador vê.
+  </Card>
+  <Card title="Estrutura HidePages (dome)" icon="cube" color="#2942B8">
+    **Sem redirect.** O clique cai no **seu domínio** e a página é montada **ali mesmo**, na mesma URL. Moderador e comprador pedem o mesmo endereço e recebem HTML diferente **na mesma resposta**. Nada de segundo domínio, nada de pulo.
+  </Card>
+</Columns>
+
+## Por que o redirecionamento é arriscado
+
+O redirect resolve o problema de mostrar páginas diferentes, mas cria um **rastro** que é exatamente o que as redes e os scanners procuram:
+
+<AccordionGroup>
+  <Accordion title="A barra de endereço muda" icon="link">
+    O visitante (e qualquer moderador olhando) vê a URL saltar de um domínio para outro. A URL que foi submetida ao anúncio **não é** a URL final — e esse descasamento é um sinal clássico de cloaking.
+  </Accordion>
+  <Accordion title="Os crawlers seguem o pulo" icon="robot">
+    O crawler da rede de anúncios não para na primeira URL: ele segue o redirect. Quando ele chega no segundo domínio, encontra a oferta real. O "filtro" só atrasou a descoberta.
+  </Accordion>
+  <Accordion title="Scanners de redirect e Safe Browsing" icon="magnifying-glass">
+    Existem ferramentas dedicadas a mapear **cadeias de redirect**. Um hop para um domínio de oferta recém-criado, sem histórico, acende alerta em verificadores e no Google Safe Browsing.
+  </Accordion>
+  <Accordion title="Dois domínios para correlacionar" icon="sitemap">
+    Ter a oferta num domínio separado significa que existe uma **segunda propriedade** que pode ser encontrada, denunciada e ligada à sua conta. É mais superfície para queimar.
+  </Accordion>
+</AccordionGroup>
+
+## Como o HidePages faz diferente
+
+<Steps>
+  <Step title="Uma URL, duas respostas">
+    Um moderador e um comprador acessam **exatamente o mesmo endereço** (`seudominio.com/sua-oferta`). O HidePages decide na hora e devolve o HTML certo dentro de uma **única resposta 200** — a barra de endereço nunca muda.
+  </Step>
+  <Step title="Tudo no seu domínio">
+    A White Page, a Black Page e a Gray Page são **hospedadas por você, no seu domínio**. Para um scanner, o site parece uma propriedade única e consistente — porque é isso que ele é.
+  </Step>
+  <Step title="O funil troca de página por dentro">
+    Oferta, upsell, downsell e página de obrigado fazem parte de uma **única estrutura** (por isso "dome"). Ao avançar no funil, o conteúdo é **trocado internamente** na mesma página, sem navegar para fora. Não há uma nova URL de checkout aparecendo a cada passo para ser rastreada.
+  </Step>
+</Steps>
+
+<Note>
+Na prática: **não existe um "pulo" para detectar, nem um segundo domínio para correlacionar.** Quando o crawler da rede acessa a página (chegando sem o clique real do anúncio, muitas vezes de um IP de datacenter), ele é **genuinamente servido a White Page**, no seu domínio — e enxerga um site normal e bem hospedado.
+</Note>
+
+## Comparativo direto
+
+| Recurso | HidePages | The White Rabbit | CloakUp |
+|---|---|---|---|
+| Modelo de entrega | **Sem redirect** (mesma URL) | Redirect tradicional | Redirect tradicional |
+| Onde a oferta é servida | No **seu** domínio | Domínio/URL separado | Domínio/URL separado |
+| Criador de páginas | **Nativo, integrado** | Limitado / externo | Externo |
+| Hospedagem das páginas | **Inclusa** | Você configura | Você configura |
+| Safe page | **Dinâmica** (White/Gray por acesso) | Estática | Estática |
+| Funil (upsell/downsell) | **Inline, mesma estrutura** | Páginas/URLs separadas | Páginas/URLs separadas |
+| Filtragem | **Avançada, em tempo real** | Básica a intermediária | Intermediária |
+| Footprint na jornada | **Menor** (um domínio, um hop) | Maior (múltiplos hops/domínios) | Maior |
+| Logs de acesso | **Em tempo real**, com o motivo | Variável | Variável |
+
+<Info>
+Resumo: TWR e CloakUp seguem o modelo clássico de **filtrar no nível da campanha e redirecionar**. O HidePages controla o **fluxo inteiro** — páginas, hospedagem, filtragem e roteamento — num único produto e num único domínio.
+</Info>
+
+## O que você ganha com isso
+
+- **Menor footprint** → menos sinais para a rede e para os scanners cruzarem.
+- **Escala com mais segurança** → sem cadeias de redirect que ficam previsíveis em volume.
+- **Menos peças para gerenciar** → você não mantém um builder externo, uma hospedagem separada e um cloaker à parte; é tudo o mesmo produto.
+- **Consistência** → a URL que você submete ao anúncio é a mesma que serve tudo, do começo ao fim.
+
+## Próximos passos
+
+<CardGroup cols={2}>
+  <Card title="Como o HidePages decide quem vê o quê" icon="filter" href="/conceitos/como-decide">
+    Os sinais por trás da decisão em tempo real.
+  </Card>
+  <Card title="Criar sua primeira campanha" icon="bullseye" href="/campanhas/criar">
+    Coloque a estrutura para rodar.
+  </Card>
+</CardGroup>

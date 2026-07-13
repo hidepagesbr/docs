@@ -1,0 +1,102 @@
+---
+title: "Primeiros passos"
+icon: "rocket"
+description: "O caminho completo para colocar sua primeira campanha no ar: Página → Domínio → Campanha → Tráfego → Conversões."
+---
+
+Este é o fluxo de ponta a ponta no HidePages. Cada passo tem um guia detalhado — aqui você vê a **ordem certa** e como as peças se encaixam.
+
+<Note>
+**Pré-requisito:** você precisa de uma **assinatura ativa**. Sem plano ativo, o painel leva você direto para a página de cobrança e não libera as demais telas.
+</Note>
+
+## A ordem importa
+
+```
+1. Páginas   →  2. Domínio   →  3. Campanha   →  4. Link do anúncio (HPID)   →  5. Conversões
+   (crie e         (conecte e      (amarre tudo      (leve tráfego pago            (rastreie
+    publique)       verifique)      + regras)         com o hash)                   as vendas)
+```
+
+Duas travas que confundem quem está começando:
+
+- A campanha só fica **Ativa** quando o **domínio está OK** *e* **todas as páginas dela estão publicadas**.
+- O tráfego pago só vê a oferta se o link do anúncio carregar o **hash HPID**.
+
+## Use páginas do próprio HidePages
+
+<Warning>
+As páginas da campanha (White, Black e as do funil) devem ser **páginas criadas dentro do HidePages** — no editor, do zero, por **template**, **importadas** por código ou **clonadas** por URL. Ou seja: servidas pelo HidePages, não hospedadas em outra plataforma.
+</Warning>
+
+É isso que faz todo o setup funcionar. Quando a página é do HidePages, a plataforma consegue:
+
+- servir tudo no **seu domínio, sem redirect** (a "estrutura/dome");
+- injetar a **chave de conversão** (`hp1_`) nos links de checkout;
+- repassar **UTMs e click-ids** automaticamente até o checkout;
+- rodar o **funil inline** (upsell/downsell/obrigado) sem trocar de URL;
+- injetar seus **scripts/pixels** nas páginas certas.
+
+Se você apenas **apontar para uma página hospedada fora**, perde o cloaking, o rastreamento de conversão e o funil. Clonar ou importar a página para dentro do HidePages leva poucos minutos — e é o que garante o resultado.
+
+## Passo a passo
+
+<Steps>
+  <Step title="Crie e publique suas páginas" icon="pen-ruler">
+    Em **Pages**, construa pelo menos a **White Page** (segura) e a **Black Page** (oferta). Você pode começar do zero, usar um **template**, **importar** por código ou **clonar um site** por URL.
+
+    <Check>Publique cada página. Uma página em rascunho ("Draft") deixa a campanha travada em "Pendente".</Check>
+  </Step>
+  <Step title="Conecte um domínio" icon="globe">
+    Em **Domains**, adicione seu domínio e configure os registros de **DNS** (A ou CNAME). Espere o status virar **OK**.
+
+    <Card title="Guia: adicionar domínio e DNS" icon="globe" href="/dominios/adicionar-e-dns" horizontal>
+      Registros A/CNAME, verificação por TXT e propagação.
+    </Card>
+  </Step>
+  <Step title="Crie a campanha" icon="bullseye">
+    Em **Campaigns**, crie uma campanha escolhendo: **domínio**, **slug**, **fonte de tráfego**, as **páginas** (White/Black/Gray) e as **regras** (país, idioma, dispositivo, Block Suspicious Connections).
+
+    <Card title="Guia: criar uma campanha" icon="bullseye" href="/campanhas/criar" horizontal>
+      Todos os campos, passo a passo.
+    </Card>
+  </Step>
+  <Step title="Pegue o hash HPID e monte o link do anúncio" icon="key">
+    Ao criar a campanha, o HidePages mostra o **endereço** (`seudominio.com/slug`) e o **hash HPID**. **Anexe o hash ao link que vai no anúncio** — sem ele, seu tráfego pago cai na White Page.
+
+    <Card title="Guia: o hash HPID" icon="key" href="/campanhas/hpid" horizontal>
+      Como montar o link do anúncio corretamente.
+    </Card>
+  </Step>
+  <Step title="Configure o rastreamento de conversões" icon="chart-line">
+    Em **Conversions**, conecte seu gateway de pagamento (Hotmart, CartPanda, Digistore24, BuyGoods, ClickBank ou N8N) para que cada venda seja atribuída à campanha e à página certa.
+
+    <Card title="Guia: rastreamento de conversões" icon="chart-line" href="/conversoes/visao-geral" horizontal>
+      Como as vendas voltam para o painel.
+    </Card>
+  </Step>
+</Steps>
+
+## Checklist antes de subir tráfego
+
+<Card title="Verifique tudo isso" icon="clipboard-check">
+  - [ ] White Page e Black Page **publicadas** (não em rascunho)
+  - [ ] Domínio com status **OK**
+  - [ ] Campanha com status **Ativa**
+  - [ ] **Fonte de tráfego** correta selecionada
+  - [ ] **Block Suspicious Connections** ligado (obrigatório em Google/YouTube/TikTok/Taboola/Outbrain/NewsBreak)
+  - [ ] Link do anúncio **com o hash HPID** (`...?hpid=...`)
+  - [ ] Integração de **conversões** configurada
+</Card>
+
+## Depois que estiver no ar
+
+Acompanhe o desempenho em tempo real:
+
+- **Dashboard** → visão geral de tráfego (White/Gray/Black), acessos válidos, bots e bloqueios.
+- **Logs de Acesso** → cada visita com o **motivo** da decisão (útil para ajustar regras).
+- **Conversões / Receita** → vendas atribuídas por campanha e por página.
+
+<Tip>
+Faça um teste você mesmo: abra o **link do anúncio com o hash** no celular (fora de VPN) e confirme que você vê a **Black Page**. Depois abra o domínio **sem o hash** e confirme que aparece a **White Page**.
+</Tip>

@@ -1,0 +1,92 @@
+---
+title: "Páginas: visão geral"
+icon: "file-lines"
+description: "O que é uma página no HidePages, as 4 formas de criar, rascunho vs publicado e o explorador de páginas."
+---
+
+<Note>
+  Esta seção cobre o **Builder V1**. O HidePages tem um editor novo — o **[Builder V2](/builder-v2/visao-geral)** — com recursos nativos (como o delay de oferta). Páginas novas são criadas no V2; páginas antigas continuam abrindo aqui no V1.
+</Note>
+
+Uma **página** é um bloco reutilizável que você monta no editor e depois atribui a uma campanha como **White**, **Black** ou **Gray**. A mesma página pode ser usada em várias campanhas.
+
+<Warning>
+Sempre construa as páginas **dentro do HidePages** — é o que faz o cloaking, o rastreamento e o funil funcionarem. [Entenda por quê](/primeiros-passos#use-p%C3%A1ginas-do-pr%C3%B3prio-hidepages).
+</Warning>
+
+## As 4 formas de criar uma página
+
+Em **Pages → Criar Página**, você tem quatro opções:
+
+<CardGroup cols={2}>
+  <Card title="Em branco" icon="file">
+    Começa do zero. Você informa **Nome da Página** (obrigatório) e **Descrição** (opcional), e cai direto no editor.
+  </Card>
+  <Card title="Template" icon="table-cells">
+    Escolhe um modelo pronto da galeria. Informa Nome + Descrição e o editor abre com os elementos do template.
+  </Card>
+  <Card title="Importar" icon="file-import">
+    Cola um **código de compartilhamento** de outra página, clica em **Buscar**, e importa (traz os elementos **e as sub-páginas**).
+  </Card>
+  <Card title="Clonar site" icon="clone">
+    Cola a **URL** de um site e o HidePages clona o HTML para dentro de uma página.
+  </Card>
+</CardGroup>
+
+<Card title="Detalhes de clonar e importar" icon="clone" href="/paginas/clonar-e-importar" horizontal>
+  O que exatamente é clonado, o aviso de páginas SPA e a limpeza recomendada do HTML.
+</Card>
+
+<Info>
+Toda página nova respeita o **limite de páginas do seu plano**. Ao criar, um **slug** é gerado automaticamente a partir do nome.
+</Info>
+
+## Rascunho vs Publicado
+
+Toda página tem **dois estados**:
+
+<Steps>
+  <Step title="Rascunho (Draft)">
+    O editor **salva sozinho** (autosave) alguns segundos depois de cada alteração. É o seu trabalho em andamento.
+  </Step>
+  <Step title="Publicado">
+    Ao clicar em **Publicar**, o rascunho vira a versão **ao vivo** — a que as campanhas realmente servem.
+  </Step>
+</Steps>
+
+<Warning>
+Uma campanha só fica **Ativa** quando **todas** as páginas dela estão **publicadas**. Uma página em **rascunho** deixa a campanha travada em "Pendente". E não dá para publicar uma página **sem nome**.
+</Warning>
+
+## O explorador de páginas
+
+Na tela **Pages** você organiza tudo:
+
+- **Pastas** — crie pastas e **arraste** páginas para dentro (ou arraste para a gaveta **"Solte para mover para fora"** para tirar de uma pasta). Pastas podem ser aninhadas.
+- **Status** — cada card mostra **Publicada** (verde) ou **Rascunho** (cinza).
+- **Ações** (ao passar o mouse) — **Renomear**, **Duplicar**, **Excluir**.
+
+### Regras importantes
+
+<AccordionGroup>
+  <Accordion title="Duplicar sempre cria um rascunho" icon="copy">
+    A cópia recebe um slug único (`-copy`), mantém a pasta e nasce **não publicada** — ótimo para criar variações sem mexer na original.
+  </Accordion>
+  <Accordion title="Não dá para excluir uma página em uso" icon="trash-can">
+    Se a página está ligada a uma **campanha** (White/Black/Gray) ou a um **Teste A/B**, a exclusão é bloqueada. Remova-a de todas as campanhas/testes primeiro.
+  </Accordion>
+  <Accordion title="Compartilhar página (código)" icon="share-nodes">
+    No editor você pode gerar um **código de compartilhamento** para que outra conta importe sua página. É esse código que a opção **Importar** consome.
+  </Accordion>
+</AccordionGroup>
+
+## Próximos passos
+
+<CardGroup cols={2}>
+  <Card title="Boas práticas do editor" icon="lightbulb" href="/paginas/boas-praticas">
+    Dicas para páginas sólidas, rápidas e consistentes.
+  </Card>
+  <Card title="Delay de oferta na VSL" icon="stopwatch" href="/paginas/delay-de-oferta">
+    Esconder a oferta e revelar após X tempo de vídeo.
+  </Card>
+</CardGroup>

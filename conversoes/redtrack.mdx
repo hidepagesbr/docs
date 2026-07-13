@@ -1,0 +1,153 @@
+---
+title: "RedTrack (no-redirect)"
+icon: "arrow-right-arrow-left"
+description: "Setup recomendado do RedTrack no HidePages: modo no-redirect, script de rastreamento e encaminhamento do clickid até o checkout."
+---
+
+<Info>
+O RedTrack **não** é uma integração de API no HidePages (não existe campo de "domínio" ou "postback do RedTrack" no painel). O setup recomendado é rodar o RedTrack em **modo no-redirect** e instalar **dois scripts na página de oferta (Black)**: o script de rastreamento do RedTrack + um script que **encaminha o `clickid` para os links de checkout**. Assim o click-id sobrevive até a venda, e o **postback nativo do gateway** credita a conversão no RedTrack.
+</Info>
+
+## Visão geral do fluxo
+
+<Steps>
+  <Step title="RedTrack (no-redirect) leva o visitante à sua oferta">
+    O link do RedTrack aponta **direto** para a sua campanha no HidePages, sem redirecionar.
+  </Step>
+  <Step title="O script do RedTrack grava o click-id">
+    O `track.js` do RedTrack registra o acesso e guarda o click-id no cookie `rtkclickid-store`.
+  </Step>
+  <Step title="O encaminhador injeta o clickid nos checkouts">
+    O segundo script lê esse cookie e adiciona o click-id (como `clickid`) em todos os **links externos** (checkout) da página.
+  </Step>
+  <Step title="O gateway devolve a venda ao RedTrack">
+    No checkout, o click-id viaja no pedido. O **postback nativo do gateway** (apontando para o RedTrack) credita a conversão.
+  </Step>
+</Steps>
+
+## Passo a passo
+
+<Steps>
+  <Step title="Configure a campanha no RedTrack em modo no-redirect">
+    Pegue o **script de rastreamento** do RedTrack (`track.js?rtkcmpid=...`) e o seu domínio de tracking.
+  </Step>
+  <Step title="Abra a página de oferta (Black) → aba Scripts → Head">
+    No **editor da página**, abra **Scripts** e use o slot **Head** ("Ideal para pixels de tracking").
+  </Step>
+  <Step title="Cole os dois scripts (abaixo)">
+    Primeiro o `track.js` do RedTrack, depois o encaminhador do `clickid`.
+  </Step>
+  <Step title="Publique a página">
+    Republique a Black para os scripts irem ao ar.
+  </Step>
+  <Step title="Ative o postback no gateway">
+    No seu gateway, configure o **postback do RedTrack** (server-to-server) para receber as vendas.
+  </Step>
+</Steps>
+
+<Warning>
+Este setup depende de a oferta ser uma **página do próprio HidePages** — é o que permite injetar os scripts e reescrever os links de checkout. Veja [Use páginas do próprio HidePages](/primeiros-passos#use-p%C3%A1ginas-do-pr%C3%B3prio-hidepages).
+</Warning>
+
+## Os dois scripts
+
+<Warning>
+Troque `trk.seudominio.com` e `rtkcmpid=xxxxxxxxxxxxx` pelos valores da **sua conta RedTrack**. E confirme que o parâmetro **`clickid`** é o que o seu gateway repassa de volta ao RedTrack no postback.
+</Warning>
+
+**1. Script de rastreamento do RedTrack**
+
+```html
+<script type="text/javascript" src="https://trk.seudominio.com/track.js?rtkcmpid=xxxxxxxxxxxxx"></script>
+```
+
+**2. Encaminhador do `clickid` para o checkout**
+
+```html
+<script>
+(function () {
+  var PARAM = "clickid";
+
+  function gc(name) {
+    var parts = document.cookie.split(/;\s*/);
+    for (var i = 0; i < parts.length; i++) {
+      var eq = parts[i].indexOf("=");
+      if (eq === -1) continue;
+      if (parts[i].substring(0, eq).trim() === name)
+        return parts[i].substring(eq + 1);
+    }
+    return "";
+  }
+
+  function getId() {
+    var raw = gc("rtkclickid-store");
+    if (!raw) return "";
+    var dec = raw;
+    try { dec = decodeURIComponent(raw); } catch (e) {}
+    try {
+      var j = JSON.parse(dec);
+      if (j && typeof j === "object") return j.rtkcid || j.clickid || "";
+    } catch (e) {}
+    return dec.trim();
+  }
+
+  function fix(a, val) {
+    try {
+      var u = new URL(a.href);
+      if (u.origin === location.origin) return;
+      u.searchParams.set(PARAM, val);
+      a.href = u.toString();
+    } catch (e) {}
+  }
+
+  function run() {
+    var val = getId();
+    if (!val) return;
+    document.querySelectorAll("a[href]").forEach(function (a) { fix(a, val); });
+  }
+
+  function boot() {
+    run();
+    [500, 1500, 3000, 6000, 10000].forEach(function (ms) { setTimeout(run, ms); });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else setTimeout(boot, 0);
+
+  document.addEventListener("click", function (e) {
+    var val = getId();
+    if (!val) return;
+    var path = e.composedPath ? e.composedPath() : [];
+    for (var i = 0; i < path.length; i++) {
+      if (path[i].tagName === "A" && path[i].href) { fix(path[i], val); return; }
+    }
+  }, true);
+})();
+</script>
+```
+
+## Como funciona
+
+- O `track.js` do RedTrack grava o click-id no cookie **`rtkclickid-store`**.
+- O encaminhador lê esse cookie, extrai o click-id (aceita valor puro ou JSON com `rtkcid`/`clickid`) e o adiciona como **`clickid`** em todos os links **externos** — ele **ignora** links do próprio domínio.
+- Ele reforça a injeção em **intervalos** (de 500&nbsp;ms a 10&nbsp;s) e **no clique** (via `composedPath`). Isso cobre botões de pacote/"potes" e players de VSL que **reescrevem o `href`** na hora de escolher a oferta.
+- No checkout, o `clickid` entra no pedido; o **postback do gateway** devolve a venda ao RedTrack.
+
+<Tip>
+O `PARAM = "clickid"` é o nome do parâmetro que carrega o click-id até o checkout. Ele precisa ser o **mesmo** que o seu gateway repassa de volta ao RedTrack no postback. Se o seu setup usa outro nome, troque nas duas pontas.
+</Tip>
+
+## Atribuição no painel do HidePages (opcional)
+
+O fluxo acima credita a venda **no RedTrack**. Se você também quer ver a conversão **no painel do HidePages** (Conversões/Receita, por campanha e por variante), configure **também** uma integração em [Conversões](/conversoes/integrar-gateway) — ela usa a chave `hp1_` do HidePages, que viaja em um **parâmetro separado** do `clickid`.
+
+<Warning>
+Use **parâmetros diferentes** para o `clickid` do RedTrack e para a chave `hp1_` do HidePages — assim um não sobrescreve o outro no checkout.
+</Warning>
+
+## Pixels também contam
+
+Você pode colar **pixels** (Facebook Pixel, Google, etc.) nos **Scripts da página** (mesmo lugar: editor → **Scripts**), disparando no navegador em paralelo ao RedTrack.
+
+<Card title="Voltar para a visão geral de conversões" icon="chart-line" href="/conversoes/visao-geral" horizontal>
+  Como tudo se conecta.
+</Card>

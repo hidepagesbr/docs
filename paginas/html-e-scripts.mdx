@@ -1,0 +1,77 @@
+---
+title: "HTML e scripts (onde colar cada coisa)"
+icon: "code"
+description: "O elemento HTML, o padrão de wrapper com escopo e onde colar cada script para funcionar direitinho."
+---
+
+Para os scripts funcionarem direitinho, o segredo é colar cada um **no lugar certo**. Existem **dois lugares** para código, e cada um tem o seu papel.
+
+## Onde colar cada script
+
+<CardGroup cols={2}>
+  <Card title="Elemento HTML (no canvas)" icon="code">
+    Roda **sem filtro**. É aqui que vão **VTurb/player, delay da oferta e qualquer HTML/JS custom**.
+  </Card>
+  <Card title="Scripts da página (Head/Body/Footer)" icon="hashtag">
+    Roda **sem filtro**, mas só aceita `<script>/<link>/<meta>/<style>`. É o lugar dos **pixels de rastreamento**.
+  </Card>
+</CardGroup>
+
+| O que você quer colar | Onde colar | Por quê |
+|---|---|---|
+| **VTurb / player + delay da oferta** | **Elemento HTML** (canvas) | O player é markup e precisa do JS custom rodando junto |
+| **HTML custom da oferta** (cards, botões) | **Elemento HTML** (canvas) | Conteúdo visual + scripts juntos |
+| **Pixel do Facebook, GA4, GTM, Clarity** | **Scripts da página → Head** | Injetados direto no `<head>` |
+
+<Warning>
+Mantenha o **player VTurb + o delay + a oferta** juntos no **mesmo elemento HTML**. O player é markup (não é um "script"), então ele vive no conteúdo da página — não nos Scripts.
+</Warning>
+
+## O elemento HTML
+
+Arraste o elemento **HTML** para o canvas e cole seu **HTML completo** (um fragmento auto-contido). No editor, você ainda consegue:
+
+- **Trocar qualquer imagem** (upload) — máx. **2 MB**;
+- **Editar o link** de qualquer botão;
+- **Trocar o player VTurb/ConverteAI**.
+
+Quando você **publica**, o conteúdo do bloco é injetado na página real: os `<style>`/`<link>` vão para o `<head>`, os `<script>` rodam, e o HTML do corpo entra num `<div>`.
+
+<Note>
+Um bloco HTML **só com script** (um pixel, por exemplo) aparece **em branco** na página. Pixel é para os **Scripts da página** (Head), não para um elemento HTML.
+</Note>
+
+## O padrão de wrapper com escopo
+
+Este é o padrão que mantém seu estilo **isolado e previsível**. Como o `<style>` do bloco passa a valer para a página inteira, **dê escopo a cada seletor** num wrapper — assim o CSS afeta só o seu bloco.
+
+```html
+<div id="hp-minha-pagina-root" class="hp-minha-pagina">
+  <style>
+    /* 1) Reset do container do HidePages (deixa o bloco ocupar a largura toda) */
+    html:has(#hp-minha-pagina-root),
+    body:has(#hp-minha-pagina-root) {
+      background-color: #fff !important; /* ou #000 se a página for dark */
+      color: #000 !important;
+      margin: 0 !important;
+    }
+
+    /* 2) Estilos do bloco — SEMPRE prefixados com .hp-minha-pagina */
+    .hp-minha-pagina { width: 100%; font-family: Roboto, sans-serif; }
+    .hp-minha-pagina .titulo { font-size: 32px; }
+    .hp-minha-pagina .btn { background: #008912; color: #fff; }
+    /* Prefira sempre o prefixo, em vez de seletores globais (body, *, h2, .card). */
+  </style>
+
+  <!-- seu conteúdo aqui -->
+
+</div>
+```
+
+<Info>
+A **regra de ouro**, em uma frase: nenhum seletor solto (`.card`, `h2`, `a`) — sempre `.hp-minha-pagina .card`. Troque `hp-minha-pagina` por um nome único por página.
+</Info>
+
+<Card title="Agora o delay de oferta" icon="stopwatch" href="/paginas/delay-de-oferta" horizontal>
+  Esconder a oferta e revelar após X tempo de vídeo, dentro de um elemento HTML.
+</Card>

@@ -1,0 +1,80 @@
+---
+title: "Sub-páginas (presell e back redirect)"
+icon: "layer-group"
+description: "Presells e back redirects dentro da mesma página — como funcionam e como controlar o fluxo com botões."
+---
+
+**Sub-páginas** são páginas extras que vivem **dentro da mesma página** e trocam de conteúdo *inline* (sem mudar de URL, sem redirect). Servem para montar um mini-funil na própria landing: uma **presell** antes da oferta e um **back redirect** para reter quem tenta sair.
+
+<Info>
+Recurso **dependente do plano**. Na aba **Sub-páginas** (ícone de trilha), um interruptor ativa o recurso — se seu plano não inclui, aparece a mensagem para fazer upgrade.
+</Info>
+
+<Note>
+Não confunda com o **Funil de Vendas da campanha** (upsell/downsell/obrigado em slugs diferentes). As **sub-páginas** são o fluxo **interno** de uma única página; o [funil da campanha](/campanhas/funil) é o fluxo **entre páginas** depois da compra.
+</Note>
+
+## Os dois tipos de sub-página
+
+<CardGroup cols={2}>
+  <Card title="Presell" icon="arrow-right-to-bracket">
+    Uma etapa **antes** da página de vendas (advertorial, quiz, aviso). O visitante avança da presell para a oferta.
+  </Card>
+  <Card title="Back Redirect" icon="arrow-rotate-left">
+    Uma etapa que aparece quando o visitante tenta **sair** — para recuperar o clique em vez de perdê-lo.
+  </Card>
+</CardGroup>
+
+Cada sub-página é uma **mini-página completa**, com seus próprios elementos, estilo e scripts. Na aba Sub-páginas:
+
+- A linha **"Página de Vendas (main)"** é a sua página principal.
+- **Adicionar** cria uma Presell ou um Back Redirect.
+- **Editar** numa linha faz o canvas passar a editar aquela sub-página.
+- Dá para **duplicar, excluir e reordenar** (arrastando).
+
+## A ordem em que rodam
+
+```
+Presells  →  Página de Vendas (main)  →  Back Redirects
+```
+
+## Controlar o fluxo com botões
+
+Para avançar/voltar entre as etapas, use um **Botão** cujo link seja um destes destinos:
+
+| Link do botão | Ação |
+|---|---|
+| `#next-step` | Avança para a próxima etapa |
+| `#back-step` | Volta para a etapa anterior |
+
+<Tip>
+Numa presell, o botão de CTA aponta para `#next-step` para levar o visitante à oferta — tudo na mesma página, sem redirect.
+</Tip>
+
+## Gatilhos do Back Redirect
+
+Nas configurações da etapa de back redirect você escolhe **quando** ela dispara:
+
+<AccordionGroup>
+  <Accordion title="Botão voltar do navegador" icon="arrow-left">
+    Quando o visitante aperta "voltar", em vez de sair ele cai no back redirect.
+  </Accordion>
+  <Accordion title="Intenção de saída (exit intent)" icon="arrow-up-right-from-square">
+    Quando o mouse sobe rumo a fechar a aba, o back redirect aparece.
+  </Accordion>
+  <Accordion title="Ativar nas presells" icon="toggle-on">
+    Faz o back redirect valer também durante as presells, não só na página de vendas.
+  </Accordion>
+</AccordionGroup>
+
+## Scripts por sub-página
+
+No modal **Scripts**, quando há sub-páginas, aparece uma aba para cada uma (**Página Principal** + cada sub-página), cada uma com seus próprios **Head/Body/Footer**. Assim você coloca pixels/tags específicos de cada etapa.
+
+<Warning>
+Lembre: o **Desfazer (Undo) é zerado ao trocar de sub-página**. Confira suas alterações antes de mudar de etapa.
+</Warning>
+
+<Card title="Voltar para a visão geral de páginas" icon="file-lines" href="/paginas/visao-geral" horizontal>
+  Criar, publicar e organizar suas páginas.
+</Card>

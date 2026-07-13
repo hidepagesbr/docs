@@ -1,97 +1,79 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "O que é o HidePages"
+icon: "house"
+description: "A plataforma tudo-em-um para construir, hospedar, proteger e rastrear suas páginas de tráfego pago — sem redirecionamento."
 ---
 
-## Setting up
+O **HidePages** é uma plataforma **tudo-em-um** para quem roda **tráfego pago** e precisa proteger suas ofertas. Num só lugar você:
 
-Get your documentation site up and running in minutes.
+<CardGroup cols={2}>
+  <Card title="Constrói as páginas" icon="pen-ruler">
+    Editor visual de arrastar-e-soltar (ou clone/importe uma página pronta). Nada de builder externo.
+  </Card>
+  <Card title="Hospeda no seu domínio" icon="globe">
+    Conecte seu próprio domínio. As páginas são servidas direto nele.
+  </Card>
+  <Card title="Filtra o tráfego (cloaking)" icon="shield-halved">
+    Cada visita é classificada e roteada em tempo real: comprador vê a oferta, moderador/bot vê a página segura.
+  </Card>
+  <Card title="Rastreia as conversões" icon="chart-line">
+    Integração com gateways e RedTrack para atribuir cada venda à campanha e à página certa.
+  </Card>
+</CardGroup>
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
+<Note>
+Tudo começa pelas **páginas construídas dentro do HidePages**. É o que permite servir a oferta no seu domínio sem redirect, injetar o rastreamento de conversão e rodar o funil. [Entenda por quê](/primeiros-passos#use-p%C3%A1ginas-do-pr%C3%B3prio-hidepages).
+</Note>
+
+## O problema que ele resolve
+
+Redes de anúncios (Google, Meta, TikTok, Taboola, Outbrain, native ads…) revisam suas páginas com **moderadores humanos, robôs e ferramentas de verificação**. Se eles virem sua oferta agressiva, a conta e a campanha caem.
+
+O HidePages coloca uma **camada de filtragem** entre o anúncio e a página. Ele diferencia **quem realmente clicou no anúncio pago** (seu comprador) de **quem está inspecionando** (moderador, crawler, bot, VPN de datacenter) — e mostra uma página diferente para cada um, **na mesma URL**.
+
+## As três páginas
+
+Toda campanha trabalha com até três páginas. Este é o vocabulário que você vai ver em todo o painel:
+
+<CardGroup cols={3}>
+  <Card title="White Page" icon="shield-check">
+    A página **segura**. É o que moderadores, bots e tráfego suspeito veem. Deve ser 100% dentro das políticas da rede.
+  </Card>
+  <Card title="Black Page" icon="fire">
+    A página de **oferta** (a que converte). Só é mostrada para o tráfego humano aprovado que veio do anúncio pago.
+  </Card>
+  <Card title="Gray Page" icon="circle-half-stroke">
+    Uma página **intermediária** para tráfego suspeito (opcional). Se não configurada, o suspeito cai na White.
+  </Card>
+</CardGroup>
+
+<Info>
+No editor e nas campanhas os nomes são exatamente esses: **White Page**, **Black Page** e **Gray Page**. Guarde bem, porque eles aparecem o tempo todo.
+</Info>
+
+## O diferencial: sem redirecionamento
+
+A maioria dos cloakers (como TWR / CloakUp) faz um **redirect**: o clique cai numa URL e é *jogado* para outra URL de oferta, em outro domínio. Esse "pulo" é visível — e é justamente o que scanners e as redes de anúncio detectam.
+
+O HidePages **não redireciona**. Moderador e comprador pedem a **mesma URL** e recebem conteúdos diferentes na **mesma resposta**, tudo no **seu próprio domínio**. O funil inteiro (oferta, upsells, obrigado) troca de página *por dentro*, sem sair do lugar.
+
+<Card title="Entenda o diferencial: Estrutura (dome) vs Redirecionamento" icon="diagram-project" href="/conceitos/estrutura-vs-redirect" horizontal>
+  Por que servir a página "no lugar" é mais furtivo do que redirecionar — e como isso se compara ao TWR e ao CloakUp.
 </Card>
 
-## Make it yours
+## Por onde começar
 
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Primeiros passos" icon="rocket" href="/primeiros-passos">
+    O caminho completo: Página → Domínio → Campanha → Tráfego pago.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="O que é cloaking" icon="mask" href="/conceitos/cloaking">
+    White, Black e Gray na prática, e como o HidePages decide.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Adicionar um domínio" icon="globe" href="/dominios/adicionar-e-dns">
+    Conecte seu domínio e configure o DNS passo a passo.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Criar uma campanha" icon="bullseye" href="/campanhas/criar">
+    Amarre domínio, páginas e regras de filtragem.
   </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
-
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+</CardGroup>

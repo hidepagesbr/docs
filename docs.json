@@ -1,122 +1,121 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "HidePages",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#2563EB",
+    "light": "#60A5FA",
+    "dark": "#1D4ED8"
   },
-  "favicon": "/favicon.svg",
+  "appearance": {
+    "default": "dark"
+  },
+  "background": {
+    "decoration": "grid"
+  },
+  "favicon": "/favicon.png",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Guia",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Comece por aqui",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "primeiros-passos"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Builder V2",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "builder-v2/visao-geral",
+              "builder-v2/blocos",
+              "builder-v2/estilo-e-configuracoes",
+              "builder-v2/video-e-delay",
+              "builder-v2/sub-paginas-e-navegacao",
+              "builder-v2/pagina-e-scripts"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Páginas (Builder V1)",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "paginas/visao-geral",
+              "paginas/boas-praticas",
+              "paginas/clonar-e-importar",
+              "paginas/html-e-scripts",
+              "paginas/delay-de-oferta",
+              "paginas/sub-paginas"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Domínios",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
+              "dominios/adicionar-e-dns",
+              "dominios/troubleshooting"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Campanhas",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "campanhas/criar",
+              "campanhas/hpid",
+              "campanhas/fontes-de-trafego",
+              "campanhas/funil"
+            ]
+          },
+          {
+            "group": "Conversões e rastreamento",
+            "pages": [
+              "conversoes/visao-geral",
+              "conversoes/integrar-gateway",
+              "conversoes/n8n",
+              "conversoes/redtrack"
+            ]
+          },
+          {
+            "group": "Conceitos",
+            "pages": [
+              "conceitos/cloaking",
+              "conceitos/estrutura-vs-redirect",
+              "conceitos/como-decide"
+            ]
+          },
+          {
+            "group": "Testes A/B",
+            "pages": [
+              "testes-ab/visao-geral",
+              "testes-ab/rules-manager"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/hidepages-light.svg",
+    "dark": "/logo/hidepages-dark.svg",
+    "href": "https://www.hidepages.com"
   },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Suporte",
+        "href": "https://wa.me/5551980417208"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Acessar o app",
+      "href": "https://app.hidepages.com"
     }
   },
   "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+    "options": []
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "website": "https://www.hidepages.com"
     }
   }
 }

@@ -1,0 +1,59 @@
+---
+title: "Funil de vendas (upsell, downsell e obrigado)"
+icon: "filter-circle-dollar"
+description: "Adicione etapas de upsell, downsell e página de obrigado depois da oferta principal para aumentar o ticket médio."
+---
+
+O **Funil de Vendas** encadeia etapas **depois da oferta principal** — upsells, downsells e a página de obrigado — para aumentar o valor médio por cliente. Cada etapa vira uma página no **mesmo domínio**, e a navegação acontece **por dentro da estrutura**, sem redirecionar.
+
+<Info>
+O Funil é um recurso **dependente do plano**. Se o seu plano não o inclui, aparece a mensagem *"Sales funnel is not available in your current plan."*.
+</Info>
+
+## Como abrir
+
+Na lista de **Campaigns**, use a coluna **Funnel** da campanha: clique em **"Criar funil"** (ou no número de etapas, se já houver). Você entra na tela **Sales Funnel**, com a campanha-mãe no topo (domínio/slug) e a lista ordenada de etapas abaixo.
+
+## Anatomia de uma etapa
+
+Cada etapa do funil tem, ela própria, um par de páginas cloakeadas:
+
+| Campo | O que é |
+|-------|---------|
+| **Step Name** | Nome da etapa (ex.: *Upsell 1*). |
+| **Slug** | Vira `dominio.com/{slug}` (ex.: `upsell-1`). |
+| **Type** | **Upsell**, **Downsell** ou **Thank You** (badges verde/âmbar/azul). |
+| **White Page** | A página segura da etapa. |
+| **Black Page** | A oferta da etapa. |
+
+<Warning>
+Como em qualquer campanha: **White ≠ Black**, e ambas precisam estar **publicadas**. O **slug** deve ser único no domínio — considerando tanto as campanhas quanto as outras etapas do funil.
+</Warning>
+
+## Adicionar etapas
+
+<Steps>
+  <Step title="Clique em Add Step">
+    No rodapé da tabela de etapas.
+  </Step>
+  <Step title="Preencha o diálogo">
+    Informe **Step Name**, **Slug**, **Type** e escolha **White Page** e **Black Page** (só páginas publicadas aparecem).
+  </Step>
+  <Step title="Ordene as etapas">
+    Use as setas ↑ ↓ para definir a ordem em que o cliente avança (ex.: Upsell 1 → Downsell 1 → Upsell 2 → Obrigado).
+  </Step>
+</Steps>
+
+<Tip>
+Um funil clássico: **Oferta principal** (a campanha) → **Upsell 1** → (se recusar) **Downsell 1** → **Thank You**. Cada passo é uma etapa com seu próprio par White/Black.
+</Tip>
+
+## Editar, reordenar e excluir
+
+- **Editar/Excluir** por etapa, direto na linha da tabela.
+- **Reordenar** com as setas — as posições se ajustam sozinhas quando você remove uma etapa.
+- **Delete funnel** remove todas as etapas de uma vez (a campanha-mãe permanece).
+
+<Note>
+Porque tudo roda no **mesmo domínio** e a troca de página é **inline**, não há uma nova URL de checkout surgindo a cada passo para ser rastreada por scanners — o funil inteiro mantém o footprint baixo. Veja o porquê em [Estrutura (dome) vs Redirecionamento](/conceitos/estrutura-vs-redirect).
+</Note>

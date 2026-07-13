@@ -1,0 +1,69 @@
+---
+title: "Sub-páginas e navegação"
+icon: "diagram-project"
+description: "Monte um funil dentro da mesma página e ligue uma página na outra no Builder V2."
+---
+
+As **sub-páginas** deixam você montar um **funil inteiro dentro da mesma página** — pré-venda, oferta, upsell, downsell, obrigado — com a navegação acontecendo *por dentro*, sem trocar de URL.
+
+## Ativar e organizar sub-páginas
+
+Na aba **Subpáginas**, ligue o **Ativar subpáginas**. As páginas ficam organizadas por tipo:
+
+| Tipo | Papel |
+|---|---|
+| **Página de vendas (principal)** | Sua página principal. |
+| **Pré-venda** | Uma etapa antes da oferta (advertorial, quiz…). |
+| **Upsell / Downsell** | Ofertas depois da compra. |
+| **Redirecionamento de retorno** | Aparece quando o visitante tenta sair (botão voltar). |
+| **Páginas básicas** | Páginas extras do funil. |
+
+Use **Adicionar subpágina** para criar uma **Página básica** ou uma **Página de redirecionamento**. Em cada linha você tem: **Renomear**, **Duplicar**, **Copiar ID da página**, **Definir como página inicial**, **Definir como redirecionamento**, **Definir como página básica** e **Excluir**.
+
+<Info>
+A **página inicial** é a primeira que o visitante vê. Você pode trocá-la a qualquer momento (opção **Definir como página inicial**, ou em **Configurações da Página → Página inicial**).
+</Info>
+
+## Como ligar uma página na outra
+
+Esta é a parte mais importante: fazer um botão (ou imagem, ou texto) **levar para outra página** do funil.
+
+<Steps>
+  <Step title="Selecione o componente (botão, imagem, texto…)" />
+  <Step title="Abra Configurações → Navegação">
+    Na aba **Configurações**, abra **Navegação**.
+  </Step>
+  <Step title="Escolha o Destino">
+    Em **Destino**, selecione **outra página do funil** — ou **URL externa** para mandar o visitante para um endereço de fora (ex.: o checkout).
+  </Step>
+</Steps>
+
+<Tip>
+Um funil típico: na **pré-venda**, o botão de CTA tem **Destino = a página de oferta**; na **oferta**, o botão leva ao **checkout** (URL externa). Tudo no mesmo lugar, sem redirect.
+</Tip>
+
+## Redirecionamento de retorno (back redirect)
+
+As páginas de **Redirecionamento de retorno** aparecem quando o visitante **clica em voltar** no navegador — em vez de perder o clique, ele cai numa página que você controla. Qualquer página desse tipo pode ser definida como destino nas configurações da página.
+
+## Navegação avançada (HTML/JavaScript)
+
+Se você usa um bloco **HTML** e quer disparar a navegação pelo seu próprio código, dá para navegar entre páginas assim:
+
+```html
+<!-- Em um link/botão dentro de um bloco HTML -->
+<a data-page-link="ID_DA_PAGINA">Continuar</a>
+```
+
+```js
+// Ou via JavaScript
+pageNavigator.goTo("ID_DA_PAGINA");
+```
+
+<Note>
+Você encontra o **ID da página** nas configurações de cada sub-página (opção **Copiar ID da página**).
+</Note>
+
+<Card title="Configurações da página e scripts" icon="gear" href="/builder-v2/pagina-e-scripts" horizontal>
+  Página inicial, back redirect, compartilhamento e pixels.
+</Card>

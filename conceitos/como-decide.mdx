@@ -1,0 +1,81 @@
+---
+title: "Como o HidePages decide quem vê o quê"
+icon: "filter"
+description: "Os sinais que o filtro usa para separar comprador de moderador — o que é automático e o que você controla na campanha."
+---
+
+A cada acesso, o HidePages faz uma pergunta central: **"esse visitante veio de verdade pelo seu anúncio pago, ou está inspecionando a página?"**. A resposta define se ele vê a **Black Page** (oferta), a **White Page** (segura) ou a **Gray Page** (suspeito).
+
+A decisão combina **sinais automáticos** (que já vêm prontos e são atualizados por nós) com as **suas regras** (que você define na campanha). Você não precisa entender cada detalhe técnico — mas conhecer os sinais ajuda a configurar campanhas que convertem sem tomar bloqueio.
+
+## O sinal decisivo: o hash HPID
+
+O mais importante de todos. Cada campanha tem um **hash secreto** (o **HPID**). O **link do seu anúncio** precisa carregar esse hash (`?hpid=...`). Quando um clique real chega com o hash, o HidePages entrega um "selo" (um cookie assinado) para aquele visitante — e é isso que o marca como **tráfego legítimo do anúncio**.
+
+<Warning>
+Quem chega **sem o hash** — porque digitou o domínio, porque é um crawler, ou porque está copiando a página para revisar — **nunca recebe o selo e cai na White Page**. É assim que moderadores são filtrados. Por isso, **esquecer o `hpid` no link do anúncio manda todo o seu tráfego pago para a página segura** (e você não vende).
+</Warning>
+
+<Card title="Guia completo do HPID" icon="key" href="/campanhas/hpid" horizontal>
+  Onde encontrar o hash e como colá-lo corretamente no link do anúncio.
+</Card>
+
+## Sinais automáticos (já vêm prontos)
+
+Esses filtros funcionam sozinhos — você não configura nada. Eles existem para barrar o que claramente **não é** um comprador:
+
+<AccordionGroup>
+  <Accordion title="Bots e automação" icon="robot">
+    Robôs, crawlers e navegadores automatizados são reconhecidos automaticamente e enviados para a White — cobrindo tanto buscadores e ferramentas de scraping quanto automação de navegador.
+  </Accordion>
+  <Accordion title="Inteligência de IP: VPN, proxy e datacenter" icon="server">
+    IPs de **datacenter** (servidores de nuvem) e de **VPNs/proxies** não costumam ser de compradores comuns. Esse é o sinal por trás da regra **"Block Suspicious Connections"** (veja abaixo), que você ativa na campanha.
+  </Accordion>
+  <Accordion title="Ferramentas de verificação de anúncios" icon="shield-virus">
+    As redes e empresas terceiras usam ferramentas para auditar campanhas. Esses acessos automatizados são reconhecidos e enviados para a White.
+  </Accordion>
+  <Accordion title="Regiões e redes de revisão" icon="earth-asia">
+    Acessos vindos de redes e regiões tipicamente associadas a times de revisão são tratados como suspeitos e vão para a White.
+  </Accordion>
+  <Accordion title="Filtros específicos por fonte de tráfego" icon="fingerprint">
+    Cada rede de anúncios tem seus próprios padrões de revisão e preview. Quando você declara a **fonte de tráfego** na campanha, o HidePages aplica automaticamente os filtros daquela rede para separar clique real de acesso de auditoria. Você não configura nada — só precisa escolher a fonte certa.
+  </Accordion>
+</AccordionGroup>
+
+## As suas regras (você configura na campanha)
+
+Aqui é onde você tem controle. Na criação/edição da campanha você define:
+
+| Regra | O que faz |
+|---|---|
+| **Países** | Permitir **apenas** os países selecionados, ou **bloquear** os selecionados. Quem estiver fora da regra vai para a White. |
+| **Idiomas** | Mesma lógica de permitir/bloquear, baseada no idioma do navegador. |
+| **Dispositivo** | Mobile e/ou Desktop. Quem não estiver no dispositivo permitido vai para a White. |
+| **Block Suspicious Connections** | Manda VPNs, proxies e datacenters para a **Gray** (ou White). **Recomendado ligar** — e **obrigatório** para Google, YouTube, TikTok, Taboola, Outbrain e NewsBreak. |
+| **Fonte de tráfego** | O HidePages verifica se o visitante realmente veio da rede que você declarou. Se não bater, o acesso é tratado como suspeito (Gray). |
+
+<Card title="Regras e exigências por fonte de tráfego" icon="sliders" href="/campanhas/fontes-de-trafego" horizontal>
+  Veja quais regras são obrigatórias para cada rede de anúncios.
+</Card>
+
+## O resultado da decisão
+
+<Steps>
+  <Step title="Passou em tudo → Black Page">
+    Tem o selo do HPID, não é bot, IP limpo, bate com a fonte e com as suas regras de país/idioma/dispositivo. Este é o seu comprador — ele vê a **oferta**.
+  </Step>
+  <Step title="Falhou em algo crítico → White Page">
+    Sem hash, é bot, é verificador, região de moderação, ou fora das suas regras. Vê a **página segura**.
+  </Step>
+  <Step title="Suspeito, mas não confirmado → Gray Page">
+    Por exemplo, uma conexão suspeita (VPN) com a regra ligada. Vai para a **Gray** (ou White, se não houver Gray configurada).
+  </Step>
+</Steps>
+
+## Você acompanha tudo nos logs
+
+Cada acesso vira uma linha nos **Logs de Acesso** do painel, com o **motivo** da decisão — por exemplo: `Bot`, `Automation`, `Suspicious headers`, `Missing param` (chegou sem o hash), `Country`, `Language`, `Device`, `Suspicious`, `Ad verification` ou `Approved` (foi para a Black). Isso deixa você **ajustar as regras com base em dados reais**, em vez de operar no escuro.
+
+<Info>
+**E os navegadores "SamsungBrowser" e "Android 10"?** Hoje o Chrome no Android **reduz o próprio User-Agent** por privacidade (vira algo como `Android 10; K`), e o Samsung Internet é um navegador mainstream — ou seja, são **compradores reais**. Fique tranquilo: esses visitantes são tratados como **usuários reais**, não como bots. Se você já viu recomendações antigas de "bloquear" esses navegadores, ignore — bloqueá-los mataria conversão.
+</Info>

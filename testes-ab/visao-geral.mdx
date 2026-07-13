@@ -1,0 +1,95 @@
+---
+title: "Testes A/B: visão geral"
+icon: "flask"
+description: "Divida o tráfego da sua oferta entre várias páginas para descobrir qual converte mais — sem trocar a campanha."
+---
+
+Um **Teste A/B** é um objeto reutilizável que você **encaixa no lugar da Black Page** de uma campanha para dividir o tráfego da oferta entre várias **variantes** (páginas) e descobrir qual converte mais.
+
+<Info>
+O Teste A/B entra **no campo Black Page** da campanha. Em vez de escolher uma única página de oferta, você escolhe um teste, e o HidePages roteia cada visitante aprovado para uma das variantes. Recurso **dependente do plano**.
+</Info>
+
+<Warning>
+**Use páginas do próprio HidePages.** As variantes são páginas criadas **dentro do HidePages** (do zero, por template, importadas ou clonadas por URL). É isso que permite servir tudo no seu domínio **sem redirect** e atribuir a conversão à variante certa. Veja [por que isso é essencial](/primeiros-passos#use-p%C3%A1ginas-do-pr%C3%B3prio-hidepages).
+</Warning>
+
+## Criar um teste
+
+<Steps>
+  <Step title="Abra A/B Tests → novo teste">
+    Dê um **nome** ao teste (ex.: *VSL V1 vs V2*). Isso cria o teste e abre o editor.
+  </Step>
+  <Step title="Escolha o modo">
+    **A/B padrão** (por peso) ou **Rules Manager** (por regras de parâmetro).
+  </Step>
+</Steps>
+
+## Os dois modos
+
+<CardGroup cols={2}>
+  <Card title="A/B padrão (por peso)" icon="chart-pie">
+    Divide o tráfego entre variantes com **porcentagens fixas**. É o clássico "50/50".
+  </Card>
+  <Card title="Rules Manager (por regras)" icon="route" href="/testes-ab/rules-manager">
+    Roteia por **parâmetro da URL**, com um fallback padrão. Para segmentar por parâmetro do anúncio.
+  </Card>
+</CardGroup>
+
+## Modo padrão (por peso)
+
+<Steps>
+  <Step title="Adicione variantes">
+    Até **20 páginas** como variantes. Cada variante tem **Nome**, **Página** e **Tráfego %**.
+  </Step>
+  <Step title="Ajuste os pesos (soma = 100%)">
+    A soma dos percentuais precisa fechar **100%**. Use **"Distribuir igualmente"** para dividir automaticamente.
+
+    <Tip>Você pode deixar uma variante em **0%** (pausa aquela variante sem removê-la), desde que o total continue 100%.</Tip>
+  </Step>
+</Steps>
+
+## Usar o teste na campanha
+
+<Steps>
+  <Step title="No campo Black Page da campanha">
+    Ao criar/editar a campanha, no campo **Black Page**, selecione o teste (ele aparece no grupo **"A/B Tests"**, com a contagem de variantes) em vez de uma página única.
+  </Step>
+  <Step title="Suba o tráfego normalmente">
+    O roteamento entre variantes é **determinístico por visitante** (a mesma pessoa vê sempre a mesma variante).
+  </Step>
+</Steps>
+
+<Note>
+Teste A/B **não** está disponível para campanhas **Digistore24 (Upsell)**.
+</Note>
+
+## Status do teste
+
+| Status | Significado |
+|--------|-------------|
+| **Draft** | Rascunho, ainda não em uso. |
+| **Running** | Ativo, dividindo tráfego. |
+| **Paused** | Pausado. |
+| **Completed** | Encerrado. |
+
+<Info>
+**Excluir** um teste devolve as campanhas ligadas a ele para uma **Black Page fixa** (elas não quebram).
+</Info>
+
+## Métricas
+
+A tela de **métricas** do teste mostra, por variante: **Acessos/Views**, **Conversões**, **Taxa de conversão** e **Receita**, além de uma **tabela comparativa** (com % editável na hora), gráfico e logs de acesso.
+
+<Warning>
+As **conversões por variante** só aparecem se você tiver o **rastreamento de conversões** configurado — é a chave `hp1_` que carrega o id da variante de volta na venda.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Rules Manager (por regras)" icon="route" href="/testes-ab/rules-manager">
+    Roteie a oferta por parâmetro da URL.
+  </Card>
+  <Card title="Rastreamento de conversões" icon="chart-line" href="/conversoes/visao-geral">
+    Para medir conversão e receita por variante.
+  </Card>
+</CardGroup>

@@ -1,0 +1,120 @@
+---
+title: "Adicionar um domínio e configurar o DNS"
+icon: "globe"
+description: "Conecte seu próprio domínio ao HidePages e aponte o DNS para que ele sirva suas campanhas."
+---
+
+Todo campanha roda em um **domínio seu**. É nele que a White, a Black e a Gray são servidas — sem redirecionar para lugar nenhum. Você adiciona o domínio uma vez e depois pode usá-lo em **várias campanhas** (cada uma com um slug diferente).
+
+## 1. Adicionar o domínio
+
+<Steps>
+  <Step title="Abra Domains → Adicionar Domínio">
+    No menu, vá em **Domains** e clique em **Adicionar Domínio**.
+  </Step>
+  <Step title="Digite o domínio (sem protocolo)">
+    Informe apenas o nome, **sem** `http://` ou `https://`.
+
+    - ✅ `exemplo.com`
+    - ✅ `ofertas.exemplo.com` (subdomínio)
+    - ❌ `https://exemplo.com`
+
+    <Note>O limite de domínios depende do seu plano. Se atingir o limite, o app avisa: *"Domain limit reached. You are using X of Y domains…"*.</Note>
+  </Step>
+  <Step title="Salve e receba as instruções de DNS">
+    Ao adicionar, o domínio é provisionado nos bastidores e o status inicial fica **Pendente** ou **Verificação Necessária**. Um diálogo de **Instruções DNS** abre automaticamente com os registros que você precisa criar.
+  </Step>
+</Steps>
+
+## 2. Configurar os registros de DNS
+
+Vá até o painel de DNS **onde seu domínio está registrado** (Registro.br, GoDaddy, Cloudflare, Namecheap, etc.) e crie o registro indicado. O tipo depende de você estar usando o domínio **raiz** ou um **subdomínio**:
+
+<Tabs>
+  <Tab title="Domínio raiz (exemplo.com)">
+    Crie um registro do tipo **A**:
+
+    | Tipo | Nome | Valor |
+    |------|------|-------|
+    | `A` | `@` | *(o IP exato mostrado no diálogo)* |
+
+    O símbolo `@` representa a raiz do domínio.
+  </Tab>
+  <Tab title="Subdomínio (ofertas.exemplo.com)">
+    Crie um registro do tipo **CNAME**:
+
+    | Tipo | Nome | Valor |
+    |------|------|-------|
+    | `CNAME` | `ofertas` | *(o destino exato mostrado no diálogo)* |
+
+    No campo **Nome**, use apenas a parte do subdomínio (`ofertas`), não o domínio inteiro.
+  </Tab>
+</Tabs>
+
+<Warning>
+Use **sempre os valores exatos** que aparecem no diálogo de **Instruções DNS** da sua conta (com os botões de copiar). Não copie IPs de tutoriais antigos — o valor correto é o que o HidePages mostra para o seu domínio.
+</Warning>
+
+### Proxy: desativado
+
+Se o seu DNS é gerenciado pela **Cloudflare** (ou outro CDN), deixe o registro como **"DNS only"** — ou seja, a **nuvem cinza**, não laranja.
+
+<Warning>
+Com o proxy da Cloudflare **ligado** (nuvem laranja), o tráfego passa por outra camada antes de chegar ao HidePages e os **filtros de cloaking podem falhar** (o IP e os cabeçalhos do visitante chegam mascarados). Sempre **DNS only**.
+</Warning>
+
+## 3. Verificação de propriedade (se pedir)
+
+Se o status ficar **Verificação Necessária**, o domínio já está vinculado a outra conta e você precisa **provar que é o dono** com um registro **TXT**:
+
+<Steps>
+  <Step title="Abra o seu painel de DNS" />
+  <Step title="Adicione o registro TXT mostrado no diálogo (Tipo / Nome / Valor)" />
+  <Step title="Volte ao HidePages e clique em Verificar Status" />
+  <Step title="Depois de verificado, você pode remover o TXT">
+    O TXT só serve para a verificação inicial.
+  </Step>
+</Steps>
+
+## 4. Aguarde a propagação
+
+Alterações de DNS podem levar de alguns minutos até **48 horas** para propagar. Enquanto isso o status fica **Pendente**.
+
+- O HidePages **reverifica automaticamente** os domínios pendentes a cada poucos minutos.
+- Você também pode forçar com o botão **Verificar Status** na linha do domínio.
+- Para conferir por fora, use o link **"Verificar propagação de DNS"** (whatsmydns.net) que aparece no diálogo.
+
+Quando o DNS estiver correto e propagado, o status vira **OK** ✅ — e o domínio fica pronto para receber campanhas.
+
+## O que os status significam
+
+| Status | Significado |
+|--------|-------------|
+| **OK** | DNS verificado e configurado. Pronto para uso. |
+| **Pendente** | Aguardando o DNS propagar/verificar. |
+| **Verificação Necessária** | Falta adicionar o registro **TXT** para provar a propriedade. |
+
+<Info>
+Assim que um domínio vira **OK**, o status das campanhas ligadas a ele é recalculado automaticamente — uma campanha que estava "Pendente" por causa do domínio pode passar a **Ativa** sozinha.
+</Info>
+
+## Um domínio, várias campanhas
+
+Você pode hospedar **quantas campanhas quiser** no mesmo domínio, cada uma em um **slug** diferente:
+
+```
+exemplo.com/oferta-a     → Campanha A
+exemplo.com/oferta-b     → Campanha B
+exemplo.com              → Campanha na raiz (slug vazio)
+```
+
+## Próximos passos
+
+<CardGroup cols={2}>
+  <Card title="Problemas com o domínio?" icon="wrench" href="/dominios/troubleshooting">
+    Status travado, exclusão bloqueada e erros comuns.
+  </Card>
+  <Card title="Criar uma campanha" icon="bullseye" href="/campanhas/criar">
+    Agora que o domínio está OK, amarre as páginas e as regras.
+  </Card>
+</CardGroup>

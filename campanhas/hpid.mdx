@@ -1,0 +1,115 @@
+---
+title: "O hash HPID (o link do anúncio)"
+icon: "key"
+description: "O hash HPID é o que marca o tráfego como legítimo. Sem ele no link do anúncio, todo o tráfego pago cai na White Page."
+---
+
+<Warning>
+**Leia esta página antes de subir qualquer tráfego.** Esquecer o hash HPID no link do anúncio é o erro nº 1 — e o sintoma é sempre o mesmo: **"não vende, tudo cai na White Page"**.
+</Warning>
+
+## O que é o hash HPID
+
+Cada campanha tem um **hash secreto** — o **HPID**. Ele é a "senha" que diz ao HidePages: *"este visitante veio pelo meu anúncio pago de verdade"*.
+
+Quando alguém acessa a sua campanha **com o hash na URL**, o HidePages entrega a essa pessoa um selo (um cookie assinado) que a marca como **tráfego legítimo do anúncio**.
+
+O hash é **necessário, mas não é suficiente sozinho**. Para ver a **Black Page**, o acesso também precisa **vir da fonte de tráfego configurada** na campanha e passar nas demais regras (dispositivo, país, idioma, conexão). Ou seja: o hash *destrava a porta* — mas o visitante ainda tem que ser um **clique real vindo da rede certa**.
+
+Quem chega **sem o hash** — um moderador copiando a URL, um crawler, alguém digitando o domínio — **não recebe o selo e vê a White Page**. É exatamente assim que a fiscalização é filtrada.
+
+<Info>
+Texto que o próprio painel mostra: *"Sem o hash HPID, toda visita à sua campanha é registrada como white (sem origem). Adicione-o às UTMs do seu tráfego pago."*
+</Info>
+
+## Onde encontrar o hash
+
+<Steps>
+  <Step title="Na tela de criação">
+    Logo depois de criar a campanha, a tela **"Campanha Criada com Sucesso!"** mostra o hash já no formato `&hpid=xxxxxxxx`, com botão de copiar.
+  </Step>
+  <Step title="Na lista de campanhas">
+    Na tabela de **Campaigns** existe a coluna **HPID Hash**, com um botão para **mostrar/ocultar** e **copiar** o hash a qualquer momento.
+  </Step>
+</Steps>
+
+## Como montar o link do anúncio
+
+A regra é simples: **anexe `hpid=` na URL da campanha** usando o separador certo.
+
+<Steps>
+  <Step title="Comece pela URL da campanha">
+    ```
+    https://seudominio.com/sua-oferta
+    ```
+  </Step>
+  <Step title="Anexe o hash">
+    - Se a URL **ainda não tem** `?`, use `?hpid=`:
+      ```
+      https://seudominio.com/sua-oferta?hpid=SEU_HASH
+      ```
+    - Se a URL **já tem** parâmetros (um `?` antes), use `&hpid=`:
+      ```
+      https://seudominio.com/sua-oferta?utm_source=taboola&utm_campaign=123&hpid=SEU_HASH
+      ```
+  </Step>
+  <Step title="Use esse link no anúncio">
+    Cole a URL final no campo de destino/URL da sua campanha na rede de anúncios.
+  </Step>
+</Steps>
+
+<Tip>
+O `hpid` **convive com as suas UTMs e parâmetros de rastreamento**. Você pode (e deve) manter `utm_source`, `utm_campaign`, click-ids, etc. — é só garantir que o `hpid` esteja lá junto.
+</Tip>
+
+## Exemplos prontos
+
+<CodeGroup>
+```text Google Ads
+https://seudominio.com/oferta?hpid=a1b2c3d4e5f6a7b8
+```
+
+```text Taboola / Outbrain (com click-id)
+https://seudominio.com/oferta?utm_source=taboola&click_id={click_id}&hpid=a1b2c3d4e5f6a7b8
+```
+
+```text Meta
+https://seudominio.com/oferta?utm_source=fb&utm_medium={{adset.name}}&hpid=a1b2c3d4e5f6a7b8
+```
+</CodeGroup>
+
+## Como validar
+
+<Warning>
+**Só abrir o link no navegador não mostra a Black.** A oferta só aparece para um **clique real vindo da fonte de tráfego** configurada na campanha (além do hash e das demais regras). Se você colar o link direto no navegador, o esperado é ver a **White** — isso é o filtro funcionando, não um erro.
+</Warning>
+
+<Steps>
+  <Step title="Acompanhe os Logs de Acesso (recomendado)">
+    Depois de subir o anúncio, abra **Logs de Acesso**. Os cliques reais aprovados aparecem como **Approved** (receberam a oferta); os acessos sem o hash aparecem como **Missing param** (`no_hash`). É aqui que você confirma que o **tráfego real** está sendo aprovado.
+  </Step>
+  <Step title="Confira a oferta pelo preview">
+    Para checar se a *Black Page* em si está correta (layout, checkout), use o **preview** da página — ele mostra a oferta sem passar pelo filtro de cloaking.
+  </Step>
+  <Step title="Confirme a White sem o hash">
+    Abra `seudominio.com/sua-oferta` **sem** o hash: deve aparecer a **White Page**. Isso confirma que a sua página segura está no ar.
+  </Step>
+</Steps>
+
+## Erros comuns
+
+<AccordionGroup>
+  <Accordion title="Esqueci o hpid no link" icon="circle-xmark">
+    Sintoma clássico: **tudo cai na White, zero vendas**. Confira o link no anúncio e adicione o `hpid`.
+  </Accordion>
+  <Accordion title="Usei o separador errado (? em vez de &)" icon="link-slash">
+    Uma URL só pode ter **um** `?`. Se já existe um `?` antes, o `hpid` tem que vir com `&`. Dois `?` quebram os parâmetros.
+  </Accordion>
+  <Accordion title="A rede 'comeu' os parâmetros" icon="scissors">
+    Algumas redes reescrevem a URL de destino. Confirme, no clique real, que o `hpid` chega até a página (o teste dos logs acima mostra isso na hora).
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+**Exceção — Digistore24 (Upsell):** campanhas nesse modo **não usam HPID**. O link é instalado na configuração de upsell do próprio gateway, não no anúncio.
+</Info>

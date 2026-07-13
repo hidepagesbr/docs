@@ -1,0 +1,80 @@
+---
+title: "Clonar site e importar"
+icon: "clone"
+description: "Como clonar um site por URL ou importar por código de compartilhamento — e a limpeza recomendada para um resultado leve e consistente."
+---
+
+Duas formas de trazer uma página pronta: **Clonar site** (a partir de uma URL externa) e **Importar** (a partir de um código de compartilhamento de outra página HidePages).
+
+## Clonar site por URL
+
+Em **Criar Página → Clonar site**:
+
+<Steps>
+  <Step title="Cole a URL e clique em Buscar">
+    O HidePages busca a página, lê o título/descrição e **detecta se é uma SPA** (site que renderiza via JavaScript).
+  </Step>
+  <Step title="Resolva o aviso de SPA, se aparecer">
+    Se surgir o aviso âmbar *"Esta página usa JavaScript para renderizar"*, a clonagem **pode ficar incompleta** (dependendo do site). Sites estáticos clonam melhor.
+  </Step>
+  <Step title="Clique em Clonar Página">
+    O site é convertido em **um único bloco HTML** dentro da nova página (não vira widgets editáveis separados).
+  </Step>
+</Steps>
+
+<Info>
+O que a clonagem faz automaticamente: embute o CSS, **re-hospeda as imagens**, e remove scripts de tracking/perigosos. Limites: HTML até **10 MB**, CSS até **5 MB**.
+</Info>
+
+<Warning>
+Sites muito pesados podem passar do limite de salvamento (~1 MB de rascunho / 500 elementos). Para o melhor desempenho, prefira clonar páginas enxutas — ou dar uma limpada no HTML antes (veja abaixo).
+</Warning>
+
+## Dando uma limpada no HTML
+
+Ao trazer HTML de fora (clonando ou colando), vale dar uma limpeza no que veio junto — isso deixa a página **mais leve e consistente**:
+
+<Card title="Vale remover" icon="broom">
+  - **jQuery**, **Elementor** (CSS/JS), **WP Rocket**
+  - **GTranslate**, **Microsoft Clarity**, **Cloudflare beacon** (`beacon.min.js`)
+  - O **CSS gigante do WordPress** (aqueles `:root{--wp--preset...}` de megabytes)
+  - A tag **`<base href="...">`** (pode atrapalhar os caminhos de imagem)
+  - Scripts **soltos** do Digistore no head (`digistore.js` cru, `digistoreUpsell()` avulso)
+  - **Trackers duplicados** que conflitam com o rastreamento do painel
+</Card>
+
+<Warning>
+Dica importante: se o HTML tem `<style>` com regras **globais** (`body`, `*`, `html`, resets), dê **escopo** a tudo num wrapper antes de publicar — assim o estilo fica isolado e previsível. Veja o [padrão de wrapper com escopo](/paginas/html-e-scripts#o-padr%C3%A3o-de-wrapper-com-escopo).
+</Warning>
+
+**Imagens:** toda `<img src>` precisa ser **`https://` absoluto**. Em imagens *lazy-load*, use a URL real de `data-lazy-src` ou do `<noscript>` (não o placeholder) — assim você garante a imagem certa.
+
+## Importar por código de compartilhamento
+
+Em **Criar Página → Importar**:
+
+<Steps>
+  <Step title="Cole o código de compartilhamento e clique em Buscar">
+    Aparece um painel verde **"Página encontrada"** com o nome pré-preenchido.
+  </Step>
+  <Step title="Clique em Importar Página">
+    A página é copiada com **novos IDs**, incluindo **as sub-páginas** (o funil interno vem junto).
+  </Step>
+</Steps>
+
+<Tip>
+O código de compartilhamento é gerado **no editor** da página de origem (opção de compartilhar). Importar é a forma mais limpa de reaproveitar uma estrutura que já funciona — sem o excesso de um site externo.
+</Tip>
+
+## Qual usar?
+
+| Situação | Use |
+|---|---|
+| Reaproveitar uma página que já está no HidePages | **Importar** (código) |
+| Trazer uma landing/VSL de fora | **Clonar site** (+ limpeza) |
+| Começar de uma base testada | **Template** |
+| Montar do zero | **Em branco** |
+
+<Card title="Próximo: HTML e scripts" icon="code" href="/paginas/html-e-scripts" horizontal>
+  Onde colar cada script e como usar o elemento HTML com segurança.
+</Card>

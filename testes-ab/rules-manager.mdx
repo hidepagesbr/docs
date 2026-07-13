@@ -1,0 +1,55 @@
+---
+title: "Testes A/B: Rules Manager (por regras)"
+icon: "route"
+description: "Roteie o tráfego da oferta por parâmetro da URL, com prioridade e fallback padrão."
+---
+
+O **Rules Manager** é o modo de Teste A/B que **roteia o tráfego por parâmetro da URL**, em vez de dividir por peso fixo. Ideal para servir páginas de oferta diferentes conforme um parâmetro que vem do anúncio (ex.: `cid=F19` → página A).
+
+## Como funciona
+
+- Você define **regras em ordem de prioridade**. A **primeira** que casar decide qual conjunto de páginas serve.
+- Cada regra combina:
+  - **Parâmetro** — um preset ou **Custom** (ex.: `cid`).
+  - **Operador** — **contém** ou **igual a**.
+  - **Argumento** — o valor a comparar (ex.: `F19`).
+- Cada regra tem seu **próprio conjunto de páginas + pesos**.
+- **Tráfego padrão (Default)** — o conjunto usado quando **nenhuma** regra casa.
+
+```
+Regra 1:  cid  contém  "F19"   → Página A (100%)
+Regra 2:  cid  igual   "V2"    → Página B (50%) / Página C (50%)
+Default:  (nenhuma regra casou) → Página original (100%)
+```
+
+## Montar as regras
+
+<Steps>
+  <Step title="Adicione uma regra">
+    Escolha o **Parâmetro**, o **Operador** e o **Argumento**, e monte o conjunto de páginas + pesos daquela regra.
+  </Step>
+  <Step title="Ordene por prioridade">
+    As regras são avaliadas **de cima para baixo** — a primeira que casar vence. Coloque as mais específicas no topo.
+  </Step>
+  <Step title="Configure o Tráfego padrão">
+    Defina o conjunto de páginas que atende quem **não** casou com nenhuma regra.
+  </Step>
+</Steps>
+
+## Teste antes de subir
+
+<Card title="Testar regras" icon="flask">
+  Use o simulador **"Testar regras"**: digite um valor de parâmetro e veja **qual regra e qual variante** seriam servidas — assim você valida a lógica antes de mandar tráfego real.
+</Card>
+
+## Usar na campanha
+
+Igual ao modo padrão: selecione o teste no campo **Black Page** da campanha. O parâmetro que você usa nas regras deve **chegar na URL** do seu tráfego (normalmente vindo do anúncio, junto com o `hpid` e as UTMs).
+
+<Warning>
+Como qualquer variante, as páginas das regras precisam ser **páginas do próprio HidePages** e estar **publicadas**.
+</Warning>
+
+<Card title="Voltar para a visão geral de Testes A/B" icon="chart-pie" href="/testes-ab/visao-geral" horizontal>
+  Modos, métricas e como plugar na campanha.
+</Card>

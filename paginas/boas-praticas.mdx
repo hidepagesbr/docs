@@ -1,0 +1,93 @@
+---
+title: "Boas práticas do editor"
+icon: "lightbulb"
+description: "Dicas para construir páginas sólidas, rápidas e consistentes no editor do HidePages — CSS com escopo, preview, imagens e publicação."
+---
+
+O editor te dá **controle total** sobre a página — do arrastar-e-soltar ao HTML na mão. Com algumas boas práticas, suas páginas ficam **sólidas, rápidas e idênticas** do editor ao ar.
+
+## Tour rápido do editor
+
+- **Elementos** (painel esquerdo): Título, Texto, Imagem, Vídeo, Botão, **HTML**, DTC, Acordeão, Comentários, Cabeçalho, Garantia. Seções e colunas vêm por estruturas prontas.
+- **Conteúdo / Estilo / Configurações**: as três abas de cada elemento selecionado.
+- **Camadas**: a árvore de elementos (selecionar, arrastar para reordenar).
+- **Configurações da Página**: fundo, nome e ajustes gerais.
+- **Scripts**: os slots Head/Body/Footer (veja [HTML e scripts](/paginas/html-e-scripts)).
+- **Desfazer/Refazer**, **Preview**, **Salvar Rascunho**, **Publicar** (no topo).
+
+<Info>
+O editor **salva rascunho automaticamente** (autosave) alguns segundos após cada alteração. **Publicar** promove o rascunho para a versão ao vivo.
+</Info>
+
+## Boas práticas para páginas impecáveis
+
+<AccordionGroup>
+  <Accordion title="Confira no Preview antes de publicar" icon="eye">
+    O **Preview** mostra a página exatamente como o público vai ver. Como o editor renderiza cada bloco HTML de forma **isolada**, o Preview é a melhor forma de confirmar o resultado final — especialmente depois de adicionar HTML ou scripts.
+
+    **Prática:** ao terminar um bloco HTML, clique em **Preview** (abre `?mode=draft` em nova aba) e dê uma conferida antes de publicar.
+  </Accordion>
+
+  <Accordion title="Dê escopo ao CSS que você colar" icon="code">
+    Ao publicar, o `<style>` de um bloco HTML passa a valer para a página toda. Para o seu estilo ficar **isolado e previsível**, encapsule o HTML num wrapper e **prefixe cada seletor** com a classe dele. Assim seu CSS afeta só o seu bloco.
+
+    ```html
+    <div id="hp-minha-pagina-root" class="hp-minha-pagina">
+      <style>
+        /* ✅ com escopo — afeta só este bloco */
+        .hp-minha-pagina .titulo { font-size: 32px; }
+        .hp-minha-pagina .btn { background: #008912; }
+        /* Prefira sempre o prefixo em vez de seletores globais
+           (body, *, html, resets), que valeriam para a página inteira. */
+      </style>
+      <!-- seu conteúdo aqui -->
+    </div>
+    ```
+
+    <Card title="Passo a passo do wrapper com escopo" icon="code" href="/paginas/html-e-scripts" horizontal>
+      O padrão completo para colar HTML com segurança.
+    </Card>
+  </Accordion>
+
+  <Accordion title="Use URLs absolutas (https)" icon="link">
+    Imagens e links com o endereço **`https://...` completo** funcionam igual no editor e no ar. Caminhos relativos (`/img/foto.png`) podem não resolver depois de publicar — então prefira sempre o link absoluto.
+
+    <Tip>Ao trazer de outro site, troque os caminhos relativos por absolutos. Em imagens com *lazy-load*, use a URL real de `data-lazy-src` ou do `<noscript>` (não o placeholder).</Tip>
+  </Accordion>
+
+  <Accordion title="Mantenha a página leve" icon="gauge-high">
+    Páginas enxutas **carregam mais rápido** e salvam na hora. Para o melhor desempenho, mantenha o conteúdo em uma faixa saudável:
+
+    - até **~1 MB** de dados por página;
+    - até **500 elementos**.
+
+    Em vez de trazer um site externo inteiro, prefira **fragmentos enxutos** — o resultado fica mais rápido para o seu visitante.
+  </Accordion>
+
+  <Accordion title="Para clonar, use 'Criar Página → Clonar site'" icon="clone">
+    O fluxo **Criar Página → Clonar site** já faz uma limpeza do HTML e costuma dar o melhor resultado. O atalho **Clonar página** dentro do editor traz o HTML do site como está e substitui a página atual — use quando quiser justamente o código bruto.
+  </Accordion>
+
+  <Accordion title="Prefira scripts que manipulam o DOM" icon="wand-magic-sparkles">
+    Em blocos HTML, os scripts rodam encapsulados. Para um comportamento consistente, prefira manipular o DOM (`querySelector`, `appendChild`, `addEventListener`) em vez de `document.write`.
+  </Accordion>
+
+  <Accordion title="Confira antes de trocar de sub-página" icon="rotate-left">
+    O histórico de **Desfazer/Refazer** é por etapa — ao mudar de sub-página, ele reinicia. Vale conferir suas alterações antes de trocar de step.
+  </Accordion>
+</AccordionGroup>
+
+## Checklist antes de publicar
+
+<Card title="Confira" icon="clipboard-check">
+  - [ ] Abri o **Preview** e está igual ao editor
+  - [ ] O CSS colado está **com escopo** no wrapper
+  - [ ] Imagens e links são **https absolutos**
+  - [ ] A página tem **nome**
+  - [ ] Pixels estão nos **Scripts** (Head)
+  - [ ] A página está **leve** (salvando na hora)
+</Card>
+
+<Note>
+Publicar promove o rascunho e recalcula o status das campanhas ligadas — uma campanha "Pendente" por causa de página em rascunho pode virar **Ativa** sozinha.
+</Note>

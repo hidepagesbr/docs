@@ -1,0 +1,75 @@
+---
+title: "Webhook genérico com N8N"
+icon: "circle-nodes"
+description: "Use o N8N para reenviar vendas de qualquer gateway ao HidePages quando não houver integração nativa."
+---
+
+Quando o seu gateway **não tem integração nativa** (ou você quer controle total do fluxo), use a plataforma **N8N** como ponte: ela recebe a venda do gateway e reenvia para o HidePages no formato esperado.
+
+## Como funciona
+
+<Steps>
+  <Step title="O parâmetro é injetado como hp1_...">
+    O parâmetro que você escolher na integração é injetado nas suas páginas carregando a chave `hp1_...`. **Use o mesmo nome de parâmetro no checkout do gateway**, para que o valor `hp1_...` seja gravado no pedido.
+  </Step>
+  <Step title="O N8N recebe a venda do gateway">
+    Crie um workflow no N8N que receba o **webhook/IPN** do seu gateway quando houver uma venda.
+  </Step>
+  <Step title="O N8N faz um POST para o HidePages">
+    Adicione um nó **HTTP Request** com **POST** para a **URL de webhook** da tabela de integrações (o token de autenticação já vem na URL).
+  </Step>
+  <Step title="Mapeie os campos no corpo JSON">
+    No body, mapeie o valor `hp1_...` recebido do gateway para **`conversion_key`** (veja o exemplo abaixo).
+  </Step>
+</Steps>
+
+## A requisição
+
+- **Método:** `POST`
+- **Autenticação:** o `?token=...` fica **na URL** do webhook — **não** envie no JSON.
+- **Content-Type:** `application/json`
+
+## Corpo (JSON) — exemplo
+
+```json
+{
+  "conversion_key": "hp1_ab12cd.34ef56",
+  "amount_cents": 4990,
+  "category": "sale",
+  "order_id": "PEDIDO-12345",
+  "currency": "USD",
+  "email": "cliente@exemplo.com"
+}
+```
+
+## Campos
+
+| Campo | Obrigatório | Descrição |
+|-------|:---:|-----------|
+| `conversion_key` | ✅ | O valor `hp1_...` capturado do parâmetro do gateway. **Sempre** enviado como `conversion_key` no JSON (não com o nome do parâmetro do gateway). É o que atribui campanha e página. |
+| `amount_cents` | ⬜ | Valor **em centavos** (ex.: `4990` = US$ 49,90). |
+| `amount` | ⬜ | Alternativa a `amount_cents`. ⚠️ Sem o sufixo `_cents`, o valor é interpretado em **dólares**, não em centavos. |
+| `category` | ⬜ | Use `initial_sale` ou `sale`. Outros valores (refund, upsell…) são ignorados. Se omitido, é aceito como venda. |
+| `order_id` | ⬜ | ID do pedido (alternativa: `transaction_id`). **Recomendado** para evitar duplicatas. |
+| `currency` | ⬜ | Padrão `USD`. |
+| `product_name`, `product_id` | ⬜ | Informações do produto. |
+| `email` / `customer_email` | ⬜ | E-mail do comprador. |
+
+<Warning>
+Atenção ao valor: **`amount_cents: 4990`** = US$ 49,90. Se usar **`amount: 4990`** (sem `_cents`), o HidePages entende **US$ 4.990,00**. Na dúvida, use sempre `amount_cents`.
+</Warning>
+
+## Template pronto
+
+No painel de **Conversions**, ao configurar a integração N8N, você pode:
+
+- **Baixar o template N8N** já com a **URL** e o **parâmetro** preenchidos, e importá-lo no N8N em **⋮ → Import from file**.
+- Ver o botão **"Ver instruções do webhook N8N"** com o payload de exemplo e o passo a passo.
+
+<Tip>
+Gere a **URL do webhook** na tabela de integrações **antes** de baixar o template — a URL precisa existir para ser embutida no arquivo.
+</Tip>
+
+## Testando
+
+Dispare uma venda de teste no seu gateway (ou execute o workflow manualmente no N8N com um `conversion_key` real). Se o POST retornar sucesso, a integração passa a **"Integrado"** e a conversão aparece no painel.

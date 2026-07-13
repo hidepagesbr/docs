@@ -1,0 +1,78 @@
+---
+title: "Vídeo e delay de oferta"
+icon: "stopwatch"
+description: "Adicione o player VTurb e configure o delay de oferta de forma nativa no Builder V2 — sem precisar de HTML."
+---
+
+No Builder V2, o **delay de oferta** é **nativo**: você não precisa mais colar aquele script de HTML das 3 camadas do V1. É tudo por um painel.
+
+<Info>
+**A grande diferença do V1:** no V1 o delay era feito com HTML/JS na mão. No V2 você seleciona o elemento, escolhe o modo e pronto — o HidePages cuida do resto.
+</Info>
+
+## 1. Adicione o vídeo (VTurb)
+
+<Steps>
+  <Step title="Arraste o bloco Vídeo para a página" />
+  <Step title="Abra as Configurações de vídeo">
+    Com o vídeo selecionado, na aba **Configurações** você tem:
+    - **Nome do vídeo** — um nome para identificar este player (aparece depois na lista do delay).
+    - **Provedor** — **VTurb**.
+    - **Código de incorporação VTurb** — cole o **código completo** do VTurb aqui. O **ID do vídeo** e o **ID da conta** são **detectados automaticamente**.
+  </Step>
+</Steps>
+
+<Tip>
+Dê um **Nome do vídeo** claro (ex.: "VSL principal"). É por esse nome que você vincula o delay ao player certo.
+</Tip>
+
+## 2. Configure o delay de oferta
+
+O delay funciona em **qualquer elemento/seção** (a oferta, um botão, um contêiner com os preços) — exceto o cabeçalho.
+
+<Steps>
+  <Step title="Selecione o elemento da oferta">
+    Clique na seção/bloco que deve ficar **escondido** até a hora certa (ex.: o bloco DTC de preços, ou o contêiner com os botões).
+  </Step>
+  <Step title="Abra Configurações de atraso">
+    Na aba **Configurações**, abra a seção **Configurações de atraso**. (Elementos com atraso mostram um selo **Atraso** no canvas, que leva direto pra cá.)
+  </Step>
+  <Step title="Escolha o Atraso de visibilidade">
+    No seletor **Atraso de visibilidade**, escolha um dos modos:
+
+    | Modo | O que faz |
+    |---|---|
+    | **Sem atraso** | O elemento fica sempre visível. |
+    | **Cronômetro personalizado** | Revela após X segundos de relógio. Aparece o campo **Atraso (segundos)**. |
+    | **Progresso do vídeo** | Revela quando o vídeo chega em X. Aparecem **Vídeo** e **Revelar em (segundos)**. |
+  </Step>
+  <Step title="No modo Progresso do vídeo, vincule o player">
+    - **Vídeo** — escolha o player VTurb (pelo **Nome do vídeo** que você deu).
+    - **Revelar em (segundos)** — o tempo **de vídeo assistido** em que a oferta aparece (ex.: `2400` = 40 min de VSL).
+  </Step>
+  <Step title="(Opcional) Rolar ao revelar">
+    Ligue **Rolar ao revelar** para a página **rolar automaticamente** até a oferta no momento em que ela aparece.
+  </Step>
+</Steps>
+
+## Como fica o fluxo de uma VSL
+
+<Steps>
+  <Step title="Vídeo no topo">
+    Bloco **Vídeo** com o VTurb colado e um **Nome do vídeo**.
+  </Step>
+  <Step title="Oferta com delay">
+    Seção da oferta (preços/botões) com **Atraso de visibilidade → Progresso do vídeo**, vinculada ao vídeo, com **Revelar em** no momento do pitch e **Rolar ao revelar** ligado.
+  </Step>
+  <Step title="Publique e teste">
+    Publique e confira no **Preview**: a oferta deve aparecer (e a página rolar até ela) quando o vídeo chega no tempo definido.
+  </Step>
+</Steps>
+
+<Note>
+Para ver o elemento **enquanto edita** (mesmo com delay), use **Revelar elementos** nas [Configurações da Página](/builder-v2/pagina-e-scripts) — isso mostra os elementos escondidos só dentro do editor.
+</Note>
+
+<Card title="Sub-páginas e navegação" icon="diagram-project" href="/builder-v2/sub-paginas-e-navegacao" horizontal>
+  Monte um funil e ligue uma página na outra.
+</Card>

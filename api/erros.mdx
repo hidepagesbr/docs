@@ -27,7 +27,7 @@ incluem também `retryAfter` (segundos).
 | 400 | `VALIDATION_ERROR` | Corpo malformado, parâmetro/header ausente ou inválido, propriedade de ordenação inválida, valor de enum inválido |
 | 401 | — | `X-API-Key` ausente ou inválida |
 | 403 | `FORBIDDEN` | Autenticado, mas sem permissão (ex.: um workspace que não é seu) |
-| 403 | `SUBSCRIPTION_INACTIVE` | A assinatura da conta não está `active`/`past_due` (apenas chaves CLIENT) |
+| 403 | `SUBSCRIPTION_INACTIVE` | A assinatura da conta não está ativa |
 | 404 | `RESOURCE_NOT_FOUND` | Recurso inexistente, que não é seu, ou rota desconhecida |
 | 405 | `METHOD_NOT_ALLOWED` | Método HTTP não suportado nesse caminho |
 | 409 | `CONFLICT` | Violação de unicidade, ou um recurso referenciado não existe |

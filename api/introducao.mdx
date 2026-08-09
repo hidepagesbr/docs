@@ -53,8 +53,8 @@ Todos os caminhos da referência são relativos a essa base.
 </Steps>
 
 <Warning>
-Chaves criadas pelo app são do tipo **CLIENT** e ficam vinculadas à sua conta. Elas só
-funcionam enquanto sua **assinatura está ativa** — veja [Autenticação](/api/autenticacao).
+As chaves geradas pelo app ficam vinculadas à sua conta e só funcionam enquanto sua
+**assinatura está ativa** — veja [Autenticação](/api/autenticacao).
 </Warning>
 
 ## Formato da chave
@@ -73,8 +73,3 @@ curl -s https://api.hidepages.com/v1/pages \
   -H "X-API-Key: hp_live_..." \
   -H "Accept: application/json"
 ```
-
-<Note>
-Documentação interativa (Swagger UI) e o spec OpenAPI ficam disponíveis no próprio
-serviço em `/(swagger-ui.html|v3/api-docs)` quando a API está publicada.
-</Note>

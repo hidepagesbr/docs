@@ -1,0 +1,345 @@
+---
+title: "Páginas e conteúdo"
+icon: "layer-group"
+description: "Endpoints de páginas, elementos, pastas, templates e tags."
+---
+
+<Note>
+Gerado a partir do spec OpenAPI da API (`/v3/api-docs`). Base: `https://api.hidepages.com/v1`. Toda requisição precisa do header `X-API-Key`.
+</Note>
+
+## Pages
+
+### `GET /v1/pages`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+| `search` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/pages`
+
+**Corpo da requisição** (`CreatePageRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `slug` | string | sim |
+| `description` | string | não |
+| `workspaceId` | string | não |
+| `folderId` | string | não |
+| `color` | string | não |
+| `elements` | JsonNode | não |
+| `style` | JsonNode | não |
+| `settings` | JsonNode | não |
+| `scripts` | JsonNode | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/pages/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/pages/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/pages/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdatePageRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `slug` | string | não |
+| `description` | string | não |
+| `folderId` | string | não |
+| `color` | string | não |
+| `elements` | JsonNode | não |
+| `style` | JsonNode | não |
+| `settings` | JsonNode | não |
+| `scripts` | JsonNode | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/pages/{id}/publish`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/pages/{id}/rollback`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+## Elements
+
+### `GET /v1/elements`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+
+**Resposta** `200`
+
+---
+
+## Folders
+
+### `GET /v1/folders`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+| `search` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/folders`
+
+**Corpo da requisição** (`CreateFolderRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `workspaceId` | string | não |
+| `parentId` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/folders/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/folders/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateFolderRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `parentId` | string | não |
+
+**Resposta** `200`
+
+---
+
+## Templates
+
+### `GET /v1/templates`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/templates`
+
+**Corpo da requisição** (`CreateTemplateRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `description` | string | não |
+| `preview` | string | não |
+| `category` | string | sim |
+| `elements` | JsonNode | não |
+| `style` | JsonNode | não |
+| `settings` | JsonNode | não |
+| `isActive` | boolean | não |
+| `order` | integer (int32) | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/templates/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/templates/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/templates/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateTemplateRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `description` | string | não |
+| `preview` | string | não |
+| `category` | string | não |
+| `elements` | JsonNode | não |
+| `style` | JsonNode | não |
+| `settings` | JsonNode | não |
+| `isActive` | boolean | não |
+| `order` | integer (int32) | não |
+
+**Resposta** `200`
+
+---
+
+## Tags
+
+### `GET /v1/tags`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+| `search` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/tags`
+
+**Corpo da requisição** (`CreateTagRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `color` | string | não |
+| `workspaceId` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/tags/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/tags/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateTagRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `color` | string | não |
+
+**Resposta** `200`
+
+---
+

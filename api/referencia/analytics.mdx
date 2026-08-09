@@ -1,0 +1,87 @@
+---
+title: "Analytics"
+icon: "chart-line"
+description: "Métricas agregadas de tráfego (white/black/gray/bots) por período e campanha."
+---
+
+<Note>
+Gerado a partir do spec OpenAPI da API (`/v3/api-docs`). Base: `https://api.hidepages.com/v1`. Toda requisição precisa do header `X-API-Key`.
+</Note>
+
+## Analytics
+
+### `GET /v1/analytics/campaign/summary`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `from` | string (date) | sim |
+| `to` | string (date) | sim |
+| `campaignId` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/analytics/campaigns/bulk-summary`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `from` | string (date) | não |
+| `to` | string (date) | não |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/analytics/chart`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `from` | string (date) | sim |
+| `to` | string (date) | sim |
+| `campaignId` | string | não |
+| `pageType` | string | não |
+| `device` | string | não |
+| `country` | string | não |
+| `domain` | string | não |
+| `ip` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/analytics/funnel-steps`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `from` | string (date) | não |
+| `to` | string (date) | não |
+| `campaignId` | string | não |
+| `pageId` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/analytics/summary`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `from` | string (date) | sim |
+| `to` | string (date) | sim |
+| `campaignId` | string | não |
+
+**Resposta** `200`
+
+---
+

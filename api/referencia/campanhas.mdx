@@ -1,0 +1,508 @@
+---
+title: "Campanhas"
+icon: "rocket"
+description: "Campanhas, etapas de funil, testes A/B, domínios e integrações de conversão."
+---
+
+<Note>
+Gerado a partir do spec OpenAPI da API (`/v3/api-docs`). Base: `https://api.hidepages.com/v1`. Toda requisição precisa do header `X-API-Key`.
+</Note>
+
+## Campaigns
+
+### `GET /v1/campaigns`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+| `search` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/campaigns`
+
+**Corpo da requisição** (`CreateCampaignRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `slug` | string | sim |
+| `workspaceId` | string | não |
+| `domainId` | string | sim |
+| `whitePageId` | string | não |
+| `blackPageId` | string | não |
+| `grayPageId` | string | não |
+| `whiteMirrorUrl` | string | não |
+| `blackMirrorUrl` | string | não |
+| `grayMirrorUrl` | string | não |
+| `whiteRedirectUrl` | string | não |
+| `blackRedirectUrl` | string | não |
+| `grayRedirectUrl` | string | não |
+| `rules` | JsonNode | não |
+| `whitePageScripts` | JsonNode | não |
+| `blackPageScripts` | JsonNode | não |
+| `grayPageScripts` | JsonNode | não |
+| `metaTitle` | string | não |
+| `metaDescription` | string | não |
+| `description` | string | não |
+| `conversionConfig` | JsonNode | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/campaigns/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/campaigns/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/campaigns/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateCampaignRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `slug` | string | não |
+| `whitePageId` | string | não |
+| `blackPageId` | string | não |
+| `grayPageId` | string | não |
+| `whiteMirrorUrl` | string | não |
+| `blackMirrorUrl` | string | não |
+| `grayMirrorUrl` | string | não |
+| `whiteRedirectUrl` | string | não |
+| `blackRedirectUrl` | string | não |
+| `grayRedirectUrl` | string | não |
+| `rules` | JsonNode | não |
+| `whitePageScripts` | JsonNode | não |
+| `blackPageScripts` | JsonNode | não |
+| `grayPageScripts` | JsonNode | não |
+| `metaTitle` | string | não |
+| `metaDescription` | string | não |
+| `description` | string | não |
+| `conversionConfig` | JsonNode | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/campaigns/{id}/activate`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/campaigns/{id}/block`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`BlockCampaignRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `reason` | string | sim |
+
+**Resposta** `200`
+
+---
+
+## Funnel Steps
+
+### `GET /v1/campaigns/{campaignId}/funnel-steps`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `campaignId` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/campaigns/{campaignId}/funnel-steps`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `campaignId` | string | sim |
+
+**Corpo da requisição** (`CreateFunnelStepRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `slug` | string | sim |
+| `name` | string | sim |
+| `type` | string | sim |
+| `order` | integer (int32) | não |
+| `whitePageId` | string | não |
+| `blackPageId` | string | não |
+| `grayPageId` | string | não |
+| `whiteMirrorUrl` | string | não |
+| `blackMirrorUrl` | string | não |
+| `grayMirrorUrl` | string | não |
+| `whiteRedirectUrl` | string | não |
+| `blackRedirectUrl` | string | não |
+| `grayRedirectUrl` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/funnel-steps/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/funnel-steps/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/funnel-steps/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateFunnelStepRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `type` | string | não |
+| `order` | integer (int32) | não |
+| `whitePageId` | string | não |
+| `blackPageId` | string | não |
+| `grayPageId` | string | não |
+| `whiteMirrorUrl` | string | não |
+| `blackMirrorUrl` | string | não |
+| `grayMirrorUrl` | string | não |
+| `whiteRedirectUrl` | string | não |
+| `blackRedirectUrl` | string | não |
+| `grayRedirectUrl` | string | não |
+| `isActive` | boolean | não |
+
+**Resposta** `200`
+
+---
+
+## A/B Tests
+
+### `GET /v1/ab-tests`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+| `search` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/ab-tests`
+
+**Corpo da requisição** (`CreateAbTestRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `workspaceId` | string | não |
+| `mode` | string | não |
+| `webhookConfig` | JsonNode | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/ab-tests/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/ab-tests/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/ab-tests/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateAbTestRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `status` | string | não |
+| `webhookConfig` | JsonNode | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/ab-tests/{id}/rules`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`CreateAbTestRuleRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `param` | string | sim |
+| `operator` | string | não |
+| `argument` | string | sim |
+| `order` | integer (int32) | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/ab-tests/{id}/variants`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`CreateAbTestVariantRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `ruleId` | string | não |
+| `pageId` | string | sim |
+| `name` | string | sim |
+| `weight` | integer (int32) | sim |
+| `order` | integer (int32) | não |
+
+**Resposta** `200`
+
+---
+
+## Domains
+
+### `GET /v1/domains`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+| `search` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/domains`
+
+**Corpo da requisição** (`CreateDomainRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `workspaceId` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/domains/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/domains/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/domains/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateDomainRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `status` | `ok` \| `pending` \| `blocked_subscription` \| `blocked_quota` \| `blocked_pricing` \| `verification_needed` | não |
+
+**Resposta** `200`
+
+---
+
+## Conversion Integrations
+
+### `GET /v1/conversion-integrations`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+| `search` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/conversion-integrations`
+
+**Corpo da requisição** (`CreateConversionIntegrationRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `platform` | string | sim |
+| `paramSlot` | string | sim |
+| `redtrackParamSlot` | string | não |
+| `clickbankSecretKey` | string | não |
+| `workspaceId` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/conversion-integrations/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/conversion-integrations/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/conversion-integrations/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateConversionIntegrationRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `paramSlot` | string | não |
+| `redtrackParamSlot` | string | não |
+| `clickbankSecretKey` | string | não |
+| `status` | string | não |
+
+**Resposta** `200`
+
+---
+

@@ -1,0 +1,48 @@
+---
+title: "Autenticação"
+icon: "key"
+description: "Toda requisição usa uma chave de API no header X-API-Key. Chaves CLIENT dependem de assinatura ativa."
+---
+
+Toda requisição precisa enviar sua chave no header **`X-API-Key`**:
+
+```bash
+curl https://api.hidepages.com/v1/pages \
+  -H "X-API-Key: hp_live_a1b2c3d4e5f6..." \
+  -H "Accept: application/json"
+```
+
+A chave é guardada apenas como **hash SHA-256** — o texto puro nunca é persistido e não
+pode ser recuperado. Se perder uma chave, **revogue** e crie outra.
+
+## Assinatura ativa (chaves CLIENT)
+
+<Warning>
+Chaves **CLIENT** só autenticam enquanto a conta tem uma **assinatura operacional**
+(`active` ou `past_due`). Se o plano estiver `canceled`, `unpaid` ou incompleto, a chave
+**para de autenticar na hora** e as requisições retornam **403 `SUBSCRIPTION_INACTIVE`**
+até você reativar.
+</Warning>
+
+A verificação é **ao vivo**: quando o status muda (por exemplo, um webhook do Stripe
+confirmando cancelamento), o bloqueio vale já na próxima requisição — não há cache. Chaves
+**ADMIN** e **SUPPORT** são internas e **não** dependem de assinatura.
+
+## Papéis
+
+| Papel | Acesso |
+|---|---|
+| `CLIENT` | Só os próprios recursos. É o tipo das chaves geradas pelo app. |
+| `SUPPORT` | CRUD em páginas, campanhas, domínios e testes A/B entre contas. Sem gestão de usuários/planos. |
+| `ADMIN` | Acesso total a todos os recursos e contas, além de usuários, planos e assinaturas. |
+
+<Note>
+Ao tentar acessar um recurso que não é seu, a API responde **404** (e não 403), para nunca
+vazar a existência do recurso.
+</Note>
+
+## Revogar uma chave
+
+Pelo app, em **API Keys**, clique no ícone de lixeira da chave. A revogação é imediata: a
+chave para de autenticar na próxima requisição. Você também pode gerenciar chaves pelos
+endpoints [`/api-keys`](/api/referencia/contas).

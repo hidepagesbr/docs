@@ -1,0 +1,335 @@
+---
+title: "Contas e chaves"
+icon: "user-gear"
+description: "Chaves de API, usuários, workspaces, assinaturas, planos e health check."
+---
+
+<Note>
+Gerado a partir do spec OpenAPI da API (`/v3/api-docs`). Base: `https://api.hidepages.com/v1`. Toda requisição precisa do header `X-API-Key`.
+</Note>
+
+## API Keys
+
+### `GET /v1/api-keys`
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/api-keys`
+
+**Corpo da requisição** (`CreateApiKeyRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `role` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/api-keys/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/api-keys/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateApiKeyRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `isActive` | boolean | não |
+| `name` | string | não |
+
+**Resposta** `200`
+
+---
+
+## Users
+
+### `GET /v1/users`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+| `search` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/users`
+
+**Corpo da requisição** (`CreateUserRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `email` | string (email) | sim |
+| `name` | string | não |
+| `password` | string | não |
+| `timezone` | string | não |
+| `whatsapp` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/users/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/users/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/users/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateUserRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+| `image` | string | não |
+| `timezone` | string | não |
+| `whatsapp` | string | não |
+| `activeWorkspaceId` | string | não |
+
+**Resposta** `200`
+
+---
+
+## Workspaces
+
+### `POST /v1/workspaces`
+
+**Corpo da requisição** (`CreateWorkspaceRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/workspaces/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/workspaces/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/workspaces/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateWorkspaceRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | não |
+
+**Resposta** `200`
+
+---
+
+## Subscriptions
+
+### `GET /v1/subscriptions`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/subscriptions/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/subscriptions/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdateSubscriptionRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `planId` | string | não |
+| `status` | string | não |
+| `cancelAtPeriodEnd` | boolean | não |
+
+**Resposta** `200`
+
+---
+
+## Plans
+
+### `GET /v1/plans`
+
+**Parâmetros de query:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `page` | integer (int32) | não |
+| `pageSize` | integer (int32) | não |
+| `sortBy` | string | não |
+| `sortDir` | string | não |
+
+**Resposta** `200`
+
+---
+
+### `POST /v1/plans`
+
+**Corpo da requisição** (`CreatePlanRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `name` | string | sim |
+| `displayName` | string | sim |
+| `priceMonthly` | number | sim |
+| `maxCampaigns` | integer (int32) | sim |
+| `maxPages` | integer (int32) | sim |
+| `maxDomains` | integer (int32) | sim |
+| `maxRequestsMonthly` | integer (int32) | sim |
+| `extraRequestsPrice` | number | não |
+| `suspiciousConnection` | boolean | não |
+| `hasFunnelAccess` | boolean | não |
+
+**Resposta** `200`
+
+---
+
+### `DELETE /v1/plans/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `GET /v1/plans/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Resposta** `200`
+
+---
+
+### `PATCH /v1/plans/{id}`
+
+**Parâmetros de caminho:**
+
+| Nome | Tipo | Obrigatório |
+|---|---|---|
+| `id` | string | sim |
+
+**Corpo da requisição** (`UpdatePlanRequest`):
+| Campo | Tipo | Obrigatório |
+|---|---|---|
+| `displayName` | string | não |
+| `priceMonthly` | number | não |
+| `maxCampaigns` | integer (int32) | não |
+| `maxPages` | integer (int32) | não |
+| `maxDomains` | integer (int32) | não |
+| `maxRequestsMonthly` | integer (int32) | não |
+| `extraRequestsPrice` | number | não |
+| `suspiciousConnection` | boolean | não |
+| `hasFunnelAccess` | boolean | não |
+| `isActive` | boolean | não |
+
+**Resposta** `200`
+
+---
+
+## Health
+
+### `GET /health`
+
+**Resposta** `200`
+
+---
+

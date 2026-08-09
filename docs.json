@@ -89,6 +89,29 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "API",
+        "groups": [
+          {
+            "group": "Primeiros passos",
+            "pages": [
+              "api/introducao",
+              "api/autenticacao",
+              "api/erros",
+              "api/paginacao"
+            ]
+          },
+          {
+            "group": "Referência",
+            "pages": [
+              "api/referencia/paginas",
+              "api/referencia/campanhas",
+              "api/referencia/analytics",
+              "api/referencia/contas"
+            ]
+          }
+        ]
       }
     ]
   },

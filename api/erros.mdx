@@ -1,0 +1,41 @@
+---
+title: "Erros"
+icon: "triangle-exclamation"
+description: "Todo erro usa o mesmo envelope JSON com código, mensagem e campo."
+---
+
+Todo erro usa o mesmo envelope:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Required parameter 'from' is missing",
+    "field": "from",
+    "timestamp": "2026-08-08T21:57:36Z"
+  }
+}
+```
+
+`field` aparece quando o erro pode ser atribuído a uma entrada específica. Respostas **429**
+incluem também `retryAfter` (segundos).
+
+## Códigos
+
+| HTTP | `code` | Quando |
+|---|---|---|
+| 400 | `VALIDATION_ERROR` | Corpo malformado, parâmetro/header ausente ou inválido, propriedade de ordenação inválida, valor de enum inválido |
+| 401 | — | `X-API-Key` ausente ou inválida |
+| 403 | `FORBIDDEN` | Autenticado, mas sem permissão (ex.: um workspace que não é seu) |
+| 403 | `SUBSCRIPTION_INACTIVE` | A assinatura da conta não está `active`/`past_due` (apenas chaves CLIENT) |
+| 404 | `RESOURCE_NOT_FOUND` | Recurso inexistente, que não é seu, ou rota desconhecida |
+| 405 | `METHOD_NOT_ALLOWED` | Método HTTP não suportado nesse caminho |
+| 409 | `CONFLICT` | Violação de unicidade, ou um recurso referenciado não existe |
+| 415 | `UNSUPPORTED_MEDIA_TYPE` | `Content-Type` diferente de `application/json` numa escrita |
+| 422 | `QUOTA_EXCEEDED` | Um limite do plano (páginas, domínios, requisições) foi atingido |
+| 500 | `INTERNAL_ERROR` | Erro inesperado no servidor |
+
+<Note>
+Mensagens de erro nunca expõem stack trace nem detalhes internos — apenas o código, uma
+mensagem legível e, quando aplicável, o campo.
+</Note>

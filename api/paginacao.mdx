@@ -1,0 +1,40 @@
+---
+title: "Paginação"
+icon: "list"
+description: "Endpoints de listagem aceitam page, pageSize, sortBy e sortDir, e devolvem os itens envelopados."
+---
+
+Os endpoints de listagem aceitam `page`, `pageSize`, `sortBy`, `sortDir` e, onde houver
+suporte, `search`:
+
+```bash
+curl "https://api.hidepages.com/v1/pages?page=1&pageSize=20&sortBy=createdAt&sortDir=desc" \
+  -H "X-API-Key: hp_live_..."
+```
+
+## Formato da resposta
+
+```json
+{
+  "data": [ /* itens */ ],
+  "pagination": {
+    "page": 1,
+    "pageSize": 20,
+    "totalItems": 137,
+    "totalPages": 7,
+    "hasNext": true,
+    "hasPrev": false
+  }
+}
+```
+
+<Note>
+`page` começa em **1** e é limitado a ≥ 1; `pageSize` tem teto de **100**. Um `sortBy`
+inválido retorna **400**, não 500.
+</Note>
+
+## Convenções gerais
+
+- Corpos de requisição e resposta são JSON. Em escritas, envie `Content-Type: application/json`.
+- IDs são strings no estilo CUID (ex.: `clx0a1b2c3...`).
+- Datas/horas são ISO-8601 em UTC (ex.: `2026-08-08T21:56:15Z`).

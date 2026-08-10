@@ -1,0 +1,32 @@
+---
+title: "Autenticação"
+icon: "key"
+description: "Toda requisição usa uma chave de API no header X-API-Key. A chave funciona enquanto sua assinatura está ativa."
+---
+
+Toda requisição precisa enviar sua chave no header **`X-API-Key`**:
+
+```bash
+curl https://api.hidepages.com/v1/pages \
+  -H "X-API-Key: hp_live_a1b2c3d4e5f6..." \
+  -H "Accept: application/json"
+```
+
+A chave é guardada apenas como **hash** — o texto puro nunca é armazenado e não pode ser
+recuperado. Se perder uma chave, **revogue** e crie outra.
+
+Sua chave acessa **apenas os recursos da sua conta**.
+
+## Assinatura
+
+<Warning>
+Sua chave funciona enquanto a conta tem uma **assinatura ativa**. Se a assinatura ficar
+inativa, as requisições passam a retornar **403 `SUBSCRIPTION_INACTIVE`** até você reativar
+o plano.
+</Warning>
+
+## Revogar uma chave
+
+Pelo app, em **API Keys**, clique no ícone de lixeira da chave. A revogação é imediata: a
+chave para de funcionar nas requisições seguintes. Você também pode gerenciar suas chaves
+pelos endpoints [`/api-keys`](/api/referencia/contas).

@@ -1,0 +1,75 @@
+---
+title: "Introdução à API"
+icon: "code"
+description: "Acesse a plataforma HidePages de forma programática — páginas, campanhas, domínios, testes A/B e analytics — por uma API REST autenticada com chave."
+---
+
+A **API do HidePages** dá acesso programático à plataforma por uma interface REST/JSON,
+autenticada com **chaves de API**. Com ela você automatiza o que hoje faz pelo painel:
+criar e publicar páginas, montar campanhas, gerenciar domínios, rodar testes A/B e ler
+analytics.
+
+<CardGroup cols={2}>
+  <Card title="Autenticação" icon="key" href="/api/autenticacao">
+    Header `X-API-Key`, papéis e o vínculo com sua assinatura.
+  </Card>
+  <Card title="Erros" icon="triangle-exclamation" href="/api/erros">
+    Envelope de erro padrão e a tabela de códigos.
+  </Card>
+  <Card title="Paginação" icon="list" href="/api/paginacao">
+    `page`, `pageSize`, `sortBy`, `sortDir` e o formato das listas.
+  </Card>
+  <Card title="Referência de endpoints" icon="book" href="/api/referencia/paginas">
+    Cada endpoint com parâmetros, corpo e resposta.
+  </Card>
+</CardGroup>
+
+## Base URL
+
+<CodeGroup>
+```text Produção
+https://api.hidepages.com/v1
+```
+```text Local
+http://localhost:8080/v1
+```
+</CodeGroup>
+
+Todos os caminhos da referência são relativos a essa base.
+
+## Como gerar uma chave
+
+<Steps>
+  <Step title="Abra API Keys no app">
+    No menu lateral, grupo **Avançado**, clique em **API Keys**.
+  </Step>
+  <Step title="Crie a chave">
+    Clique em **New API Key**, dê um nome que te ajude a reconhecê-la depois e confirme.
+  </Step>
+  <Step title="Copie na hora">
+    A chave é exibida **uma única vez**. Copie e guarde em local seguro — ela não pode
+    ser recuperada depois (o sistema guarda só o hash).
+  </Step>
+</Steps>
+
+<Warning>
+As chaves geradas pelo app ficam vinculadas à sua conta e só funcionam enquanto sua
+**assinatura está ativa** — veja [Autenticação](/api/autenticacao).
+</Warning>
+
+## Formato da chave
+
+```text
+hp_live_<32 caracteres alfanuméricos>
+```
+
+O prefixo `hp_live_` é o que o painel mostra para você diferenciar as chaves; a chave
+completa só aparece no momento da criação.
+
+## Primeira chamada
+
+```bash
+curl -s https://api.hidepages.com/v1/pages \
+  -H "X-API-Key: hp_live_..." \
+  -H "Accept: application/json"
+```

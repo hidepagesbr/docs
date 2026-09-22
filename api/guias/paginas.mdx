@@ -1,0 +1,104 @@
+---
+title: "Páginas e publicação"
+icon: "file-lines"
+description: "Rascunho e publicado, o formato do conteúdo, imagens re-hospedadas e o que a resposta do publish te conta."
+---
+
+Uma página tem dois estados, e confundir os dois é a dúvida mais comum de quem integra.
+
+| | Onde vive | Quem vê |
+|---|---|---|
+| **Publicado** | a página em si | os visitantes, no seu domínio |
+| **Rascunho** | uma cópia de trabalho | ninguém, até você publicar |
+
+- `PATCH /v1/pages/{id}` escreve **no rascunho**. Não muda o que o visitante vê.
+- `GET /v1/pages/{id}` e a própria resposta do `PATCH` devolvem **o rascunho por cima do
+  publicado**, então você confere a escrita na hora.
+- `POST /v1/pages/{id}/publish` promove o rascunho a publicado.
+- `POST /v1/pages/{id}/rollback` descarta o rascunho e volta ao publicado.
+
+Uma página criada no painel pode não ter rascunho ainda; o primeiro `PATCH` cria um a partir
+do conteúdo publicado e aplica só o que você mandou. Fora isso, **cada campo é substituído
+por inteiro**: envie o objeto completo, não um pedaço.
+
+## O formato do conteúdo
+
+```json
+{
+  "name": "Oferta",
+  "slug": "oferta",
+  "elements": {
+    "pages": {
+      "blk1MainPage0001": {
+        "html": "<body>...</body>",
+        "css": "body{margin:0}",
+        "name": "Home",
+        "type": "main"
+      }
+    }
+  },
+  "settings": { "version": "2", "firstPageID": "blk1MainPage0001", "subPagesEnabled": false },
+  "scripts": { "blk1MainPage0001": { "head": "", "body": "", "footer": "" } }
+}
+```
+
+- `elements.pages` é o conjunto de sub-páginas, cada uma com `html`, `css`, `name` e `type`
+  (`main`, `basic`, `backredirect` ou `presell`).
+- `settings.version` é sempre `"2"`. Se você omitir, a API preenche; se mandar outro valor, é
+  400. A plataforma só serve páginas do editor atual.
+- `scripts` usa as mesmas chaves de `elements.pages`, com injeções de `head`, `body` e `footer`.
+- `slug` é validado, não corrigido: `Minha Página!` é 400, não `minha-pagina`.
+
+## Imagens
+
+Ao criar ou atualizar, a API varre o conteúdo e **re-hospeda as imagens** que apontam para
+fora, gravando a cópia no armazenamento da plataforma e reescrevendo a URL. É a mesma proteção
+que o painel aplica ao clonar uma página: uma imagem em servidor de terceiro é uma página que
+quebra no dia em que aquele servidor sai do ar.
+
+Se alguma imagem não puder ser copiada, a página **salva mesmo assim**, a URL original fica, e a
+resposta é **207** com um relatório em `imageRehosting`:
+
+```json
+{ "status": "partial", "detected": 4, "rehosted": 3, "failed": 1, "failedUrls": ["https://..."] }
+```
+
+## Publicar
+
+Publicar faz três coisas além de copiar o rascunho:
+
+1. Reescreve elementos com `data-external-url` em links reais, para que os scripts de
+   rastreamento os enxerguem.
+2. Recalcula o status de toda campanha que serve a página. Publicar a última página pendente
+   é o que tira uma campanha de **pending** para **ok**.
+3. Remove a página de todos os caches que ficam entre a plataforma e o visitante.
+
+### Propagação
+
+A resposta do publish traz `propagation`:
+
+```json
+{ "propagation": { "status": "complete" } }
+```
+
+`complete`, com **200**, quer dizer que o visitante já recebe a versão nova. `pending`, com
+**207**, quer dizer que um dos caches ainda não confirmou; a plataforma tenta de novo sozinha e
+`retryAfterSeconds` diz por quanto tempo a versão anterior ainda pode aparecer no pior caso.
+Nada precisa ser refeito em nenhum dos dois casos.
+
+<Warning>
+Trate qualquer 2xx como sucesso. Um cliente que só aceita 200 vai republicar uma página que já
+foi publicada.
+</Warning>
+
+## Backup
+
+`POST /v1/pages/{id}/backup` copia a página, com o conteúdo do rascunho, para uma página nova
+sua, com o nome `<original> (backup YYYY-MM-DD HH:mm)`. É o único desfazer que sobrevive a um
+publish. Conta contra o limite de páginas do plano.
+
+## Preview
+
+Toda página responde `previewUrl`, um link para o preview do painel que renderiza o rascunho.
+Ele autentica com a sessão do app, não com a chave: é para abrir no navegador, não para um
+script buscar.

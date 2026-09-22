@@ -1,55 +1,44 @@
-# Mintlify Starter Kit
+# Documentação do HidePages
 
-Use the starter kit to get your docs deployed and ready to customize.
+Site de documentação do HidePages, publicado em [docs.hidepages.com](https://docs.hidepages.com)
+com [Mintlify](https://mintlify.com). Duas abas:
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+- **Guia**, em português, para quem usa o painel: páginas, domínios, campanhas, conversões,
+  testes A/B e os conceitos por trás do cloaking.
+- **API**, para quem integra: guias em português e a referência de endpoints, gerada da
+  especificação OpenAPI da própria API (`api/openapi.json`).
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+## Estrutura
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+```
+docs.json          navegação, tema, links
+index.mdx          página inicial
+primeiros-passos.mdx
+builder-v2/ paginas/ dominios/ campanhas/ conversoes/ conceitos/ testes-ab/   guia
+api/               aba de API: introdução, autenticação, erros, paginação, guias/
+api/openapi.json   a especificação; a referência é gerada dela
+images/ logo/      assets
+```
 
-## AI-assisted writing
-
-Set up your AI coding tool to work with Mintlify:
+## Rodar localmente
 
 ```bash
-npx skills add https://mintlify.com/docs
-```
-
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
-
-See the [AI tools guides](/ai-tools) for tool-specific setup.
-
-## Development
-
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
 npm i -g mint
+mint dev            # preview em http://localhost:3000
+mint validate       # build estrito: falha em aviso
+mint broken-links   # links quebrados
 ```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+## Atualizar a referência da API
 
-```
-mint dev
-```
+A referência não é escrita à mão. Quando a API muda, gere a especificação nova no repositório
+`api` (o roteiro está em `docs/AGENTS.md` lá) e substitua `api/openapi.json` aqui. O
+`docs.json` lista os endpoints por grupo; um endpoint novo precisa ser adicionado à lista
+para aparecer na navegação.
 
-View your local preview at `http://localhost:3000`.
+Endpoints reservados à equipe (contas, planos, bloqueio por cobrança) ficam fora da
+especificação publicada.
 
-## Publishing changes
+## Publicação
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
-
-## Need help?
-
-### Troubleshooting
-
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
-
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+Cada merge em `main` publica automaticamente pela integração do Mintlify com o GitHub.

@@ -1,41 +1,36 @@
 ---
 title: "Introdução à API"
 icon: "code"
-description: "Acesse a plataforma HidePages de forma programática — páginas, campanhas, domínios, testes A/B e analytics — por uma API REST autenticada com chave."
+description: "Tudo o que o painel faz, por REST e JSON: páginas, campanhas, domínios, funis, testes A/B, conversões e analytics."
 ---
 
-A **API do HidePages** dá acesso programático à plataforma por uma interface REST/JSON,
-autenticada com **chaves de API**. Com ela você automatiza o que hoje faz pelo painel:
-criar e publicar páginas, montar campanhas, gerenciar domínios, rodar testes A/B e ler
-analytics.
+A **API do HidePages** expõe a plataforma por uma interface REST autenticada com chave de
+API. O que você faz no painel, você faz por ela: criar e publicar páginas, conectar domínios,
+montar campanhas e funis, rodar testes A/B, gerenciar integrações de conversão e ler os
+mesmos números do dashboard.
 
 <CardGroup cols={2}>
   <Card title="Autenticação" icon="key" href="/api/autenticacao">
-    Header `X-API-Key`, papéis e o vínculo com sua assinatura.
+    O header `X-API-Key`, o formato da chave e o vínculo com a assinatura.
   </Card>
-  <Card title="Erros" icon="triangle-exclamation" href="/api/erros">
-    Envelope de erro padrão e a tabela de códigos.
+  <Card title="Erros e limites" icon="triangle-exclamation" href="/api/erros">
+    O envelope de erro, todos os códigos, e os limites de requisições e de plano.
   </Card>
-  <Card title="Paginação" icon="list" href="/api/paginacao">
-    `page`, `pageSize`, `sortBy`, `sortDir` e o formato das listas.
+  <Card title="Guias" icon="book-open" href="/api/guias/paginas">
+    Rascunho e publicação, domínios, campanhas e analytics explicados antes da referência.
   </Card>
-  <Card title="Referência de endpoints" icon="book" href="/api/referencia/paginas">
-    Cada endpoint com parâmetros, corpo e resposta.
+  <Card title="Referência de endpoints" icon="list" href="/api/referencia/pages/list-pages">
+    Cada endpoint com parâmetros, corpo, respostas e exemplos, gerada da própria API.
   </Card>
 </CardGroup>
 
 ## Base URL
 
-<CodeGroup>
-```text Produção
+```text
 https://api.hidepages.com/v1
 ```
-```text Local
-http://localhost:8080/v1
-```
-</CodeGroup>
 
-Todos os caminhos da referência são relativos a essa base.
+Todos os caminhos da referência são relativos a essa base. A API responde apenas por HTTPS.
 
 ## Como gerar uma chave
 
@@ -44,32 +39,54 @@ Todos os caminhos da referência são relativos a essa base.
     No menu lateral, grupo **Avançado**, clique em **API Keys**.
   </Step>
   <Step title="Crie a chave">
-    Clique em **New API Key**, dê um nome que te ajude a reconhecê-la depois e confirme.
+    Clique em **New API Key**, dê um nome que identifique a integração e confirme. Uma conta
+    pode manter até **três** chaves ativas.
   </Step>
   <Step title="Copie na hora">
-    A chave é exibida **uma única vez**. Copie e guarde em local seguro — ela não pode
-    ser recuperada depois (o sistema guarda só o hash).
+    A chave aparece **uma única vez**. Guarde em um cofre de segredos; o sistema armazena só o
+    hash e não consegue mostrá-la de novo.
   </Step>
 </Steps>
-
-<Warning>
-As chaves geradas pelo app ficam vinculadas à sua conta e só funcionam enquanto sua
-**assinatura está ativa** — veja [Autenticação](/api/autenticacao).
-</Warning>
-
-## Formato da chave
-
-```text
-hp_live_<32 caracteres alfanuméricos>
-```
-
-O prefixo `hp_live_` é o que o painel mostra para você diferenciar as chaves; a chave
-completa só aparece no momento da criação.
 
 ## Primeira chamada
 
 ```bash
 curl -s https://api.hidepages.com/v1/pages \
-  -H "X-API-Key: hp_live_..." \
+  -H "X-API-Key: hp_live_SUA_CHAVE" \
   -H "Accept: application/json"
 ```
+
+A resposta é uma lista paginada das páginas do seu workspace ativo:
+
+```json
+{
+  "data": [
+    {
+      "id": "cl9cab4c7c25db40658d3222",
+      "name": "Black Page | Oferta",
+      "slug": "oferta",
+      "isPublished": true,
+      "createdAt": "2026-09-01T12:00:00Z",
+      "updatedAt": "2026-09-20T18:30:00Z"
+    }
+  ],
+  "pagination": { "page": 1, "pageSize": 20, "totalItems": 1, "totalPages": 1, "hasNext": false, "hasPrev": false }
+}
+```
+
+## Convenções
+
+- Corpos de requisição e resposta são **JSON**. Em escritas, envie `Content-Type: application/json`.
+- Campos desconhecidos numa escrita são **recusados com 400**, não ignorados. Um nome de campo
+  errado nunca passa em silêncio.
+- IDs são strings opacas. Não infira nada do formato.
+- Datas e horas são **ISO 8601 em UTC**, exceto onde a referência diz o contrário (as janelas de
+  analytics usam o fuso da conta).
+- A API é versionada pelo caminho. Mudanças que quebram compatibilidade só chegam em um `/v2`;
+  dentro do `/v1` as mudanças são aditivas.
+
+## Ferramentas
+
+A referência é gerada da especificação OpenAPI da API. Você pode baixá-la em
+[`/api/openapi.json`](/api/openapi.json) para gerar um cliente na sua linguagem ou importar no
+Postman e no Insomnia.

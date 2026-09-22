@@ -1,0 +1,80 @@
+---
+title: "Domínios"
+icon: "globe"
+description: "Adicionar, criar os registros de DNS, verificar. O que cada status quer dizer e por que uma campanha depende disso."
+---
+
+Um domínio criado pela API é o mesmo que um criado no painel: a plataforma o registra, decide
+onde ele é servido e devolve os registros de DNS que você precisa criar.
+
+<Steps>
+  <Step title="Adicione o domínio">
+    ```bash
+    curl -X POST https://api.hidepages.com/v1/domains \
+      -H "X-API-Key: hp_live_SUA_CHAVE" -H "Content-Type: application/json" \
+      -d '{"name": "ofertas.exemplo.com"}'
+    ```
+    A resposta já traz os registros, em `dns`:
+    ```json
+    {
+      "id": "…", "name": "ofertas.exemplo.com", "status": "pending",
+      "dns": {
+        "type": "subdomain",
+        "instructions": [{ "type": "CNAME", "name": "ofertas", "value": "…" }],
+        "apexName": "exemplo.com",
+        "verification": []
+      }
+    }
+    ```
+  </Step>
+  <Step title="Crie os registros no seu provedor de DNS">
+    Um **subdomínio** leva um `CNAME`; um **domínio raiz** leva um registro `A`. Use exatamente
+    o `value` da resposta. Se `dns.verification` vier preenchido, crie também esses registros
+    `TXT`: é a prova de propriedade que a plataforma pede para um hostname que outra conta já
+    usou.
+  </Step>
+  <Step title="Verifique">
+    ```bash
+    curl -X POST https://api.hidepages.com/v1/domains/{id}/verify -H "X-API-Key: hp_live_SUA_CHAVE"
+    ```
+    Pode chamar quantas vezes quiser enquanto o DNS propaga. Quando a plataforma enxergar os
+    registros, o status vira **ok**.
+  </Step>
+</Steps>
+
+`GET /v1/domains/{id}/dns` devolve os mesmos registros a qualquer momento.
+
+## Status
+
+| Status | Significa |
+|---|---|
+| `pending` | Os registros ainda não apontam para a plataforma |
+| `verification_needed` | Falta o registro `TXT` de propriedade; veja `dns.verification` |
+| `ok` | Servindo. As campanhas nesse domínio podem ficar ativas |
+| `blocked_*` | Bloqueado por cobrança. Só a reativação do plano resolve |
+
+<Note>
+O status é decidido pela verificação de DNS. A API não aceita que um cliente defina o status
+diretamente.
+</Note>
+
+## O que depende do domínio
+
+Uma campanha só fica **ok** quando o domínio está **ok** e todas as páginas dela estão
+publicadas. Verificar um domínio recalcula as campanhas que estão nele; um domínio que sai de
+`ok` leva as campanhas de volta para `pending`.
+
+## Renomear e apagar
+
+- **Renomear** (`PATCH` com `name`) registra o hostname novo e devolve os registros dele. O
+  domínio volta para `pending`, porque o nome novo tem o próprio DNS a provar.
+- **Apagar** é recusado com **409** enquanto uma campanha ainda usa o domínio. Mova ou apague
+  as campanhas primeiro.
+
+## Regras para o nome
+
+Hostnames são normalizados para minúsculas. Um nome que já existe na plataforma, em qualquer
+conta, é **409**. Nomes da própria plataforma são recusados com **400**.
+
+Se um domínio responder **503 `DOMAIN_SERVICE_UNAVAILABLE`**, o serviço de domínios não
+respondeu à API e nada foi alterado. Tente de novo depois do `Retry-After`.

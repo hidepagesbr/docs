@@ -1,32 +1,65 @@
 ---
 title: "Autenticação"
 icon: "key"
-description: "Toda requisição usa uma chave de API no header X-API-Key. A chave funciona enquanto sua assinatura está ativa."
+description: "Toda requisição leva uma chave de API no header X-API-Key. A chave é da conta, e funciona enquanto a assinatura está ativa."
 ---
 
-Toda requisição precisa enviar sua chave no header **`X-API-Key`**:
+Toda requisição precisa do header **`X-API-Key`**:
 
 ```bash
-curl https://api.hidepages.com/v1/pages \
-  -H "X-API-Key: hp_live_a1b2c3d4e5f6..." \
-  -H "Accept: application/json"
+curl https://api.hidepages.com/v1/campaigns \
+  -H "X-API-Key: hp_live_SUA_CHAVE"
 ```
 
-A chave é guardada apenas como **hash** — o texto puro nunca é armazenado e não pode ser
-recuperado. Se perder uma chave, **revogue** e crie outra.
+Sem o header, ou com uma chave inválida, revogada ou expirada, a resposta é **401
+`UNAUTHORIZED`**.
 
-Sua chave acessa **apenas os recursos da sua conta**.
+## Formato da chave
+
+```text
+hp_live_<32 caracteres>
+```
+
+O prefixo `hp_live_` é o que o painel mostra para você distinguir as chaves; o restante só
+aparece no momento da criação. A chave é guardada apenas como hash e **não pode ser
+recuperada**. Se perder uma, revogue e crie outra.
+
+## O que a chave alcança
+
+A chave é da **conta**, e o que ela enxerga é o **workspace ativo** da conta. Listas são
+sempre do workspace ativo; um recurso individual é alcançável quando pertence à sua conta ou
+a um workspace do qual você é membro com nível suficiente — **view** para ler, **edit** para
+escrever.
+
+<Note>
+Um recurso que você não pode alcançar responde **404**, nunca 403. Um 403 confirmaria que o
+id existe, e a API não confirma a existência do que não é seu.
+</Note>
+
+Convidado num workspace de outra conta? A chave lê e escreve o que os seus níveis permitem
+naquele workspace, e os números de analytics são os da conta que te convidou.
 
 ## Assinatura
 
 <Warning>
-Sua chave funciona enquanto a conta tem uma **assinatura ativa**. Se a assinatura ficar
-inativa, as requisições passam a retornar **403 `SUBSCRIPTION_INACTIVE`** até você reativar
-o plano.
+A chave funciona enquanto a conta tem uma **assinatura ativa** ou em atraso dentro do prazo.
+Fora disso toda requisição responde **403 `SUBSCRIPTION_INACTIVE`** até a reativação. Criar
+uma chave nova não resolve.
 </Warning>
 
-## Revogar uma chave
+## Manutenção
 
-Pelo app, em **API Keys**, clique no ícone de lixeira da chave. A revogação é imediata: a
-chave para de funcionar nas requisições seguintes. Você também pode gerenciar suas chaves
-pelos endpoints [`/api-keys`](/api/referencia/contas).
+Durante uma janela de manutenção a API responde **403 `MAINTENANCE_MODE`** para todas as
+chaves de clientes. É raro e anunciado; se acontecer, aguarde e tente de novo.
+
+## Gerenciar chaves
+
+Pelo painel, em **API Keys**, você cria, renomeia, desativa e revoga. Pela API, os mesmos
+endpoints estão em [`/v1/api-keys`](/api/referencia/api-keys/list-the-callers-own-keys). Uma
+conta mantém até **três** chaves ativas, o suficiente para rotacionar sem parar a integração e
+separar ambientes.
+
+<Tip>
+Para rotacionar: crie a chave nova, troque na integração, revogue a antiga. Nunca reutilize uma
+chave em mais de um sistema; se vazar, você não saberá qual desligar.
+</Tip>

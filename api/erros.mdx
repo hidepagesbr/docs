@@ -1,7 +1,7 @@
 ---
-title: "Erros"
+title: "Erros e limites"
 icon: "triangle-exclamation"
-description: "Todo erro usa o mesmo envelope JSON com código, mensagem e campo."
+description: "Um envelope, códigos estáveis para você tratar, e os limites que a API e a borda aplicam."
 ---
 
 Todo erro usa o mesmo envelope:
@@ -10,32 +10,80 @@ Todo erro usa o mesmo envelope:
 {
   "error": {
     "code": "VALIDATION_ERROR",
-    "message": "Required parameter 'from' is missing",
-    "field": "from",
-    "timestamp": "2026-08-08T21:57:36Z"
+    "message": "pageType must be one of [black, white, gray]",
+    "field": "pageType",
+    "timestamp": "2026-09-22T17:15:06Z"
   }
 }
 ```
 
-`field` aparece quando o erro pode ser atribuído a uma entrada específica. Respostas **429**
-incluem também `retryAfter` (segundos).
+Trate pelo **`code`**, que é estável. A `message` é para pessoas e pode mudar. `field` nomeia
+o campo da requisição em falta, quando o erro é sobre um campo.
 
 ## Códigos
 
 | HTTP | `code` | Quando |
 |---|---|---|
-| 400 | `VALIDATION_ERROR` | Corpo malformado, parâmetro/header ausente ou inválido, propriedade de ordenação inválida, valor de enum inválido |
-| 401 | — | `X-API-Key` ausente ou inválida |
-| 403 | `FORBIDDEN` | Autenticado, mas sem permissão (ex.: um workspace que não é seu) |
+| 400 | `VALIDATION_ERROR` | Corpo malformado, campo desconhecido, parâmetro ausente ou fora do formato, valor de enum inválido |
+| 401 | `UNAUTHORIZED` | `X-API-Key` ausente, inválida, revogada ou expirada |
+| 403 | `FORBIDDEN` | Autenticado, mas sem permissão para a ação nesse workspace |
 | 403 | `SUBSCRIPTION_INACTIVE` | A assinatura da conta não está ativa |
-| 404 | `RESOURCE_NOT_FOUND` | Recurso inexistente, que não é seu, ou rota desconhecida |
+| 403 | `MAINTENANCE_MODE` | Janela de manutenção |
+| 404 | `RESOURCE_NOT_FOUND` | O recurso não existe, ou não é alcançável pela sua chave |
 | 405 | `METHOD_NOT_ALLOWED` | Método HTTP não suportado nesse caminho |
-| 409 | `CONFLICT` | Violação de unicidade, ou um recurso referenciado não existe |
-| 415 | `UNSUPPORTED_MEDIA_TYPE` | `Content-Type` diferente de `application/json` numa escrita |
-| 422 | `QUOTA_EXCEEDED` | Um limite do plano (páginas, domínios, requisições) foi atingido |
-| 500 | `INTERNAL_ERROR` | Erro inesperado no servidor |
+| 409 | `CONFLICT` | Unicidade violada (slug, hostname), ou o recurso ainda está em uso por outro |
+| 415 | `UNSUPPORTED_MEDIA_TYPE` | Escrita sem `Content-Type: application/json` |
+| 422 | `QUOTA_EXCEEDED` | Um limite do plano foi atingido; `field` diz qual (`max_pages`, `max_domains`, `max_campaigns`) |
+| 429 | `RATE_LIMIT_EXCEEDED` | Limite de requisições ou de tentativas de autenticação; veja abaixo |
+| 503 | `ANALYTICS_UNAVAILABLE` | O armazém de analytics não respondeu. Nunca substituído por zeros |
+| 503 | `DOMAIN_SERVICE_UNAVAILABLE` | O serviço de domínios não respondeu; nada foi alterado |
+| 500 | `INTERNAL_ERROR` | Falha inesperada. Nunca expõe detalhes internos |
 
-<Note>
-Mensagens de erro nunca expõem stack trace nem detalhes internos — apenas o código, uma
-mensagem legível e, quando aplicável, o campo.
-</Note>
+Toda resposta **503** traz o header `Retry-After` em segundos. Todo **429** traz `Retry-After`
+e o campo `retryAfter` no corpo.
+
+## Respostas 207
+
+Duas escritas podem responder **207 Multi-Status**: a operação principal foi feita, e uma parte
+secundária não.
+
+- `POST /v1/pages` e `PATCH /v1/pages/{id}`: a página foi salva, mas uma ou mais imagens não
+  puderam ser re-hospedadas. O corpo traz `imageRehosting` dizendo quais.
+- `POST /v1/pages/{id}/publish`: a página foi publicada, mas um dos caches que ficam entre a
+  plataforma e o visitante ainda não confirmou. O corpo traz `propagation` com
+  `retryAfterSeconds`. Veja [Páginas e publicação](/api/guias/paginas#propagacao).
+
+<Tip>
+Trate **qualquer 2xx como sucesso**. Um cliente que só aceita 200 vai tratar um 207 como falha
+e refazer uma operação que já deu certo.
+</Tip>
+
+## Limites de requisições
+
+Há dois limites, e eles respondem de forma diferente:
+
+| Onde | Limite | Como responde |
+|---|---|---|
+| A API, por chave | 120 requisições por minuto, disponíveis de uma vez | 429 em JSON com `RATE_LIMIT_EXCEEDED` e `retryAfter` |
+| A borda, por endereço IP | 60 requisições a cada 10 segundos | 429 em HTML, sem envelope JSON |
+
+Um dashboard ou um script que dispara muitas chamadas de uma vez encosta primeiro no limite da
+borda. Espalhe as chamadas, e trate o 429 lendo o `Content-Type`: se não for JSON, é a borda.
+
+Há ainda um limite de **tentativas de autenticação**: dez falhas de chave num intervalo de
+cinco minutos, vindas do mesmo endereço, bloqueiam o endereço pelo resto do intervalo, mesmo
+para chaves válidas. O corpo diz "Too many failed authentication attempts". Uma integração que
+insiste com uma chave revogada bloqueia a si mesma.
+
+## Limites do plano
+
+Páginas, domínios e campanhas contam contra a **conta**, não contra o workspace. Ao atingir o
+limite, a criação responde **422 `QUOTA_EXCEEDED`** com `field` nomeando o limite. O painel de
+planos mostra o uso atual.
+
+## Tamanho de corpo
+
+O conteúdo de uma página (HTML e CSS dentro de `elements`) pode ser grande, e é aceito. Uma
+página costuma ficar bem abaixo de alguns megabytes; se a sua passa disso, o problema
+normalmente é uma imagem em `data:` URI, que a API re-hospeda para você quando você a envia
+como URL.

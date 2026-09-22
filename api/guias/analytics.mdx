@@ -1,0 +1,95 @@
+---
+title: "Analytics"
+icon: "chart-line"
+description: "Os mesmos números do dashboard, pela API: tráfego, connect rate, conversões, receita, funil, testes A/B e o log de visitas."
+---
+
+Os endpoints de `/v1/analytics` leem o **mesmo armazém que o dashboard**. Um número aqui é o
+número que a tela mostra para a mesma conta e a mesma janela.
+
+## Janela e fuso
+
+`from` e `to` são datas `YYYY-MM-DD`, **ambas inclusivas**, interpretadas no **fuso da conta**
+(o mesmo configurado no painel; `America/Sao_Paulo` por padrão). A janela pode ter até 400
+dias.
+
+## Escopo é a conta
+
+Os eventos registram a conta dona da campanha, não o workspace. Sem `campaignId`, um endpoint
+responde sobre a conta dona do seu workspace ativo. Com `campaignId`, responde sobre aquela
+campanha, que precisa ser alcançável pela sua chave; senão é **404**.
+
+## Endpoints
+
+| Endpoint | Traz |
+|---|---|
+| `GET /v1/analytics/summary` | requests, black, white, gray, bots, e loads e views por superfície |
+| `GET /v1/analytics/chart` | série por dia, ou por hora até dois dias, com filtros |
+| `GET /v1/analytics/campaign/summary` | views, connect rate, conversões, taxa de conversão, receita |
+| `GET /v1/analytics/campaigns/bulk-summary` | views, conversões e receita de todas as campanhas do workspace |
+| `GET /v1/analytics/funnel-steps` | views por etapa do funil |
+| `GET /v1/analytics/logs` | uma linha por visita |
+| `GET /v1/analytics/ab-tests/{id}/summary` | totais do teste e de cada variante |
+| `GET /v1/analytics/ab-tests/{id}/chart` | visitas por variante ao longo do tempo |
+| `GET /v1/analytics/ab-tests/{id}/logs` | as visitas que o teste decidiu, cada uma atribuída à variante |
+| `GET /v1/analytics/ab-tests/bulk-summary` | views, conversões e receita por teste |
+
+## O que cada campo significa
+
+| Campo | Significa |
+|---|---|
+| `totalRequests` | visitas que o cloaker decidiu, **sem** os bots |
+| `validAccess` | visitas enviadas para a **black**, o comprador |
+| `blockedAccess` | visitas enviadas para a **white**, filtradas por uma regra |
+| `botsDetected` | reconhecidas como bot; contadas à parte, fora do total |
+| `grayAccess` | enviadas para a gray |
+| `blackLoads`, `whiteLoads`, `grayLoads` | páginas que o navegador de fato carregou, por superfície, deduplicadas por sessão |
+| `blackViews`, `whiteViews`, `grayViews` | visitas por superfície, deduplicadas por sessão; o denominador do connect rate |
+
+**Taxas são percentuais**, de 0 a 100 com duas casas. O connect rate é `loads / views` com
+dedup por sessão; a taxa de conversão é `conversions / views`. Receita é em USD.
+
+<Note>
+Conversões e receita dependem de uma integração de conversão funcionando. Zeros com tráfego
+saudável significam que o postback não está chegando, não que ninguém comprou.
+</Note>
+
+## Filtros
+
+`chart`, `logs` e os logs de A/B aceitam os mesmos filtros. Um valor fora do formato é **400**
+nomeando o campo.
+
+| Filtro | Aceita |
+|---|---|
+| `pageType` | `black`, `white` ou `gray` |
+| `device` | `mobile` ou `desktop` |
+| `country` | códigos ISO 3166-1 alpha-2, separados por vírgula: `BR,US` |
+| `domain` | um hostname, ou uma URL da qual o hostname é extraído |
+| `ip` | um endereço ou um prefixo: `203.0.` |
+
+## O log de visitas
+
+`logs` devolve uma linha por visita, da mais recente para a mais antiga, com `limit` de 1 a
+100 e `offset`. Cada linha traz a hora no fuso da conta, campanha, domínio, slug, IP, país,
+superfície servida, o motivo da decisão, dispositivo e, se um teste A/B escolheu a página, o
+teste, a regra e a variante.
+
+## Testes A/B
+
+O `summary` de um teste traz os totais e cada variante, com views, views únicas, connect rate,
+conversões, taxa e receita. `variantId` restringe a uma variante; `campaignId` a uma campanha.
+
+Uma visita é atribuída a uma variante pela página servida e, num teste por regras, pela regra
+que a escolheu. Uma visita cujo par não bate com nenhuma variante atual do teste **não conta
+em nenhuma**, e o total do teste é a soma das variantes. Por isso um teste que teve as
+variantes trocadas no meio pode mostrar menos visitas que a campanha em que roda. É a mesma
+regra do dashboard.
+
+## Cache e indisponibilidade
+
+Perguntas idênticas são respondidas da memória por alguns segundos, então um número pode
+atrasar alguns segundos em relação a um polling agressivo.
+
+Se o armazém não responder, a resposta é **503 `ANALYTICS_UNAVAILABLE`** com `Retry-After`.
+A API **nunca** devolve zeros no lugar de um erro: zeros significam que não houve tráfego na
+janela.

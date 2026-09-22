@@ -1,0 +1,80 @@
+---
+title: "Campanhas, funis e testes A/B"
+icon: "bullseye"
+description: "As três superfícies, o status calculado, as regras montadas pela plataforma, e como funis e testes A/B se encaixam."
+---
+
+Uma campanha amarra um domínio, um slug e até três **superfícies**: **white** para
+moderadores e tráfego filtrado, **black** para o comprador, e **gray**, opcional, para tráfego
+suspeito. Cada superfície é servida de uma de três formas: uma página do HidePages
+(`whitePageId`), um espelho (`whiteMirrorUrl`) ou um redirect (`whiteRedirectUrl`). White e
+black são obrigatórias.
+
+```bash
+curl -X POST https://api.hidepages.com/v1/campaigns \
+  -H "X-API-Key: hp_live_SUA_CHAVE" -H "Content-Type: application/json" \
+  -d '{
+    "name": "Oferta BR", "slug": "oferta", "domainId": "…",
+    "whitePageId": "…", "blackPageId": "…",
+    "rules": { "trafficSource": "meta", "device": ["mobile", "desktop"], "allowedCountries": ["BR"] }
+  }'
+```
+
+## O status é calculado
+
+Você não define o status de uma campanha. Ele é derivado:
+
+| Status | Quando |
+|---|---|
+| `ok` | O domínio está `ok` **e** toda página referenciada está publicada |
+| `pending` | Falta uma das duas condições |
+| `blocked_*` | Cobrança. Não volta sozinho |
+
+Publicar a última página pendente, ou verificar o domínio, é o que move uma campanha para
+`ok`. Nada mais precisa ser chamado.
+
+## As regras são montadas, não guardadas como você enviou
+
+`rules` é validado e completado pela plataforma segundo a **fonte de tráfego**. Alguns
+exemplos do que acontece no salvamento:
+
+- A verificação de conexão suspeita é **forçada** em toda fonte que não seja Meta. Enviar
+  `false` não a desliga.
+- A superfície **gray** só existe para Meta. Em outra fonte, a página gray, o espelho e o
+  redirect são limpos silenciosamente.
+- Uma lista de dispositivos vazia é recusada: vazio não significa "qualquer um".
+- Scripts de rastreamento passam por uma lista de fornecedores permitidos. Um script fora da
+  lista é **400**, nunca descartado em silêncio, porque ele iria para uma página que tráfego
+  real vê.
+
+Leia a campanha de volta depois de escrever: o que a API guardou é o que vale.
+
+## Páginas só do editor atual
+
+Uma campanha ou etapa de funil não aceita uma página construída no editor antigo. A resposta
+é **400** nomeando a superfície. Migre a página no painel antes de apontar para ela.
+
+## Funis
+
+`POST /v1/campaigns/{campaignId}/funnel-steps` adiciona uma etapa. Cada etapa tem o próprio
+slug, as próprias superfícies e os próprios scripts; **nada é herdado da campanha**. Uma etapa
+com só a página black responde 404 a todo visitante que o cloaker manda para white, inclusive
+você testando de um terminal.
+
+Uma etapa só serve quando a campanha está `ok`, a etapa está `isActive` e as páginas dela
+estão publicadas. Publicar a última página de uma campanha pendente ativa as etapas cujas
+páginas já estão publicadas.
+
+## Testes A/B
+
+Um teste A/B roda na superfície **black**. Crie o teste, adicione as variantes (cada uma uma
+página, com peso) e, se for um teste por regras, as regras; depois **anexe** o teste à campanha
+com `PATCH /v1/campaigns/{id}` e `blackAbTestId`. Sem o anexo, o teste existe e não roda.
+
+<Warning>
+As variantes são adicionadas uma a uma, e a API não consegue checar a soma dos pesos. Leia
+`GET /v1/ab-tests/{id}/variants` de volta e some: um teste montado com pesos que não fecham
+100 roda torto sem nenhum erro.
+</Warning>
+
+Os números de cada variante estão em [Analytics](/api/guias/analytics#testes-a-b).

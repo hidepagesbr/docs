@@ -1,15 +1,15 @@
 ---
-title: "Paginação"
+title: "Paginação e listas"
 icon: "list"
-description: "Endpoints de listagem aceitam page, pageSize, sortBy e sortDir, e devolvem os itens envelopados."
+description: "Endpoints de listagem aceitam page, pageSize, sortBy, sortDir e search, e devolvem os itens num envelope."
 ---
 
 Os endpoints de listagem aceitam `page`, `pageSize`, `sortBy`, `sortDir` e, onde houver
 suporte, `search`:
 
 ```bash
-curl "https://api.hidepages.com/v1/pages?page=1&pageSize=20&sortBy=createdAt&sortDir=desc" \
-  -H "X-API-Key: hp_live_..."
+curl "https://api.hidepages.com/v1/pages?page=1&pageSize=20&sortBy=createdAt&sortDir=desc&search=oferta" \
+  -H "X-API-Key: hp_live_SUA_CHAVE"
 ```
 
 ## Formato da resposta
@@ -28,13 +28,15 @@ curl "https://api.hidepages.com/v1/pages?page=1&pageSize=20&sortBy=createdAt&sor
 }
 ```
 
+- `page` começa em **1**. `pageSize` tem teto de **100**.
+- `sortBy` aceita qualquer campo da resposta; um campo inexistente é **400**.
+- `search` compara com o nome, sem diferenciar maiúsculas.
+- A ordenação segue a collation do banco: maiúsculas vêm antes de minúsculas.
+
 <Note>
-`page` começa em **1** e é limitado a ≥ 1; `pageSize` tem teto de **100**. Um `sortBy`
-inválido retorna **400**, não 500.
+Listas são sempre do **workspace ativo** da conta. Para listar outro workspace do qual você é
+membro, troque o ativo com `POST /v1/workspaces/{id}/switch`.
 </Note>
 
-## Convenções gerais
-
-- Corpos de requisição e resposta são JSON. Em escritas, envie `Content-Type: application/json`.
-- IDs são strings no estilo CUID (ex.: `clx0a1b2c3...`).
-- Datas/horas são ISO-8601 em UTC (ex.: `2026-08-08T21:56:15Z`).
+A única exceção ao envelope é `GET /v1/api-keys`, que responde uma lista simples, porque uma
+conta tem no máximo três chaves.

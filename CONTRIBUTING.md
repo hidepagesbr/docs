@@ -1,34 +1,22 @@
-> **Customize this file**: Tailor this template to your project by noting specific contribution types you're looking for, adding a Code of Conduct, or adjusting the writing guidelines to match your style.
+# Contribuir com a documentação
 
-# Contribute to the documentation
+## Editar
 
-Thank you for your interest in contributing to our documentation! This guide will help you get started.
+1. Abra a página no GitHub e clique no lápis, ou clone o repositório e edite localmente.
+2. Rode `mint dev` para ver o resultado e `mint validate` antes de abrir o PR.
+3. Abra o pull request contra `main`. O merge publica.
 
-## How to contribute
+## Escrever
 
-### Option 1: Edit directly on GitHub
+- Fale com quem lê: "você", voz ativa, uma ideia por frase.
+- Comece pelo objetivo. "Para verificar o domínio, chame `verify`", não "O endpoint `verify`
+  pode ser chamado para verificar".
+- Um termo por conceito. Veja a terminologia em `AGENTS.md`.
+- Mostre um exemplo real, curto e completo.
+- Nada de URL local, chave de exemplo com cara de chave real, hostname interno ou nome de
+  fornecedor de infraestrutura.
 
-1. Navigate to the page you want to edit
-2. Click the "Edit this file" button (the pencil icon)
-3. Make your changes and submit a pull request
+## A referência da API
 
-### Option 2: Local development
-
-1. Fork and clone this repository
-2. Install the Mintlify CLI: `npm i -g mint`
-3. Create a branch for your changes
-4. Make changes
-5. Navigate to the docs directory and run `mint dev`
-6. Preview your changes at `http://localhost:3000`
-7. Commit your changes and submit a pull request
-
-For more details on local development, see our [development guide](development.mdx).
-
-## Writing guidelines
-
-- **Use active voice**: "Run the command" not "The command should be run"
-- **Address the reader directly**: Use "you" instead of "the user"
-- **Keep sentences concise**: Aim for one idea per sentence
-- **Lead with the goal**: Start instructions with what the user wants to accomplish
-- **Use consistent terminology**: Don't alternate between synonyms for the same concept
-- **Include examples**: Show, don't just tell
+É gerada de `api/openapi.json`. Para mudar a descrição de um endpoint, mude no código da API
+(as anotações OpenAPI) e regenere a especificação; não edite o JSON à mão.

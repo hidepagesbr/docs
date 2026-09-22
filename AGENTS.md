@@ -6,9 +6,9 @@ Site Mintlify. Páginas são MDX com frontmatter YAML; a navegação vive em `do
 ## Sobre o projeto
 
 - Documentação pública do HidePages: guia do painel e API. Idioma: **português do Brasil**.
-- A referência de endpoints da aba API é **gerada de `api/openapi.json`**. Não escreva páginas
-  de endpoint à mão; atualize a especificação a partir do repositório `api` e, se o endpoint
-  for novo, adicione-o à lista do grupo certo em `docs.json`.
+- A referência de endpoints da aba API é **gerada** por `scripts/gen-referencia.py` a partir da
+  especificação bruta da API. Não escreva páginas de endpoint à mão nem edite `api/openapi.json`;
+  rode o script (README explica) e ele refaz spec, páginas e grupos em `docs.json`.
 - As descrições dentro da especificação estão em inglês, porque vêm do código da API. Os guias
   em volta dela são em português.
 
@@ -31,7 +31,8 @@ Site Mintlify. Páginas são MDX com frontmatter YAML; a navegação vive em `do
 
 ## Limites de conteúdo
 
-- Não documente endpoints reservados à equipe (contas de terceiros, planos, bloqueio por
-  cobrança, vínculo direto de membros). Eles não entram em `api/openapi.json`.
+- Só entra na doc o que uma chave de **cliente** consegue chamar. Operação que exige
+  ADMIN/SUPPORT, campo aceito só de staff, ou ação que deixa a conta em estado que só a equipe
+  conserta (apagar o único workspace) ficam em `EXCLUIR`/`CAMPOS_STAFF` no script.
 - Não descreva a infraestrutura por trás da plataforma. O usuário usa a ferramenta; qual edge
   serve a página dele não é assunto da documentação.

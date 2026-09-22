@@ -3,12 +3,15 @@
   "info": {
     "title": "HidePages API",
     "description": "Programmatic access to the HidePages platform: pages, campaigns, domains, funnel steps, A/B tests, conversion integrations and analytics — everything the panel does, over REST and JSON.\n\n## Authenticating\n\nSend an API key as the `X-API-Key` header. A key belongs to an account and works while that account holds an active or past-due subscription. Keys are issued in the panel or with the create-key endpoint, shown once, and stored only as a hash.\n\n## What a caller can reach\n\nA workspace is the dataset of its owner. Lists are scoped to the caller's active workspace, and a single resource is reachable when the caller owns the account it belongs to, or is a member of its workspace holding a sufficient level on that kind of resource — view to read, edit to write.\n\nAsking for a resource the caller cannot reach answers **404, never 403** — a 403 would confirm that the id exists.\n\n## Errors\n\nEvery failure answers an object with a single `error` member holding a code, a message, an optional field and a timestamp. Switch on the code; the message is for people and its wording may change. The field names the offending request field when the failure is about one. A 503 carries a `Retry-After` header.\n\n## Lists\n\nCollections answer a `data` array alongside a `pagination` object. Page numbers are 1-based and the page size is clamped to a maximum. Listing API keys is the one exception: it answers a bare array, because a caller holds only a handful of keys.\n\n## Pages\n\nPages are authored in the current editor's content shape, and only that one: `settings.version` is `2`. Pages have a published row and a working draft. A PATCH writes the draft, and both a GET and the PATCH's own answer return the draft merged over the published row. Publishing promotes one to the other; until it runs visitors keep getting the published content. A publish reports `propagation`: whether every visitor-facing cache has the new version yet.\n\n## Domains\n\nA domain made here is the same as one made in the panel: the platform registers it, decides which edge serves it, and hands back the DNS records to create. Add it, create the records, verify.\n\n## Analytics\n\nThe figures the dashboard shows, from the same store, per account, per campaign, per funnel step and per A/B test, plus the visit log. Never zeros in place of an error: a store that does not answer is a 503.",
+    "contact": {
+      "name": "HidePages",
+      "url": "https://app.hidepages.test"
+    },
     "version": "v1"
   },
   "servers": [
     {
-      "url": "https://api.hidepages.com",
-      "description": "Produção"
+      "url": "https://api.hidepages.com"
     }
   ],
   "security": [
@@ -5100,110 +5103,6 @@
           }
         }
       },
-      "delete": {
-        "tags": [
-          "Workspaces"
-        ],
-        "summary": "Delete a workspace",
-        "description": "Everything in it is deleted by cascade — pages, campaigns, domains. Its members lose access\nbut their accounts are untouched.\n",
-        "operationId": "deleteWorkspace",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted."
-          },
-          "401": {
-            "description": "No API key, an unknown or revoked key, or an invalid token.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "Unauthorized": {
-                    "$ref": "#/components/examples/Unauthorized"
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "The key's role does not permit this, the caller lacks the level this workspace resource requires, the account's subscription is inactive (SUBSCRIPTION_INACTIVE), or the API is in maintenance mode (MAINTENANCE_MODE). The three are told apart by the code, not by the status.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "Forbidden": {
-                    "$ref": "#/components/examples/Forbidden"
-                  },
-                  "SubscriptionInactive": {
-                    "$ref": "#/components/examples/SubscriptionInactive"
-                  },
-                  "MaintenanceMode": {
-                    "$ref": "#/components/examples/MaintenanceMode"
-                  }
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded. Honour the Retry-After header; the retryAfter field carries the same value in seconds.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "RateLimited": {
-                    "$ref": "#/components/examples/RateLimited"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected failure. Safe to retry.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "InternalError": {
-                    "$ref": "#/components/examples/InternalError"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No such resource, or one the caller cannot reach. The two are deliberately indistinguishable.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "NotFound": {
-                    "$ref": "#/components/examples/NotFound"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "patch": {
         "tags": [
           "Workspaces"
@@ -7597,7 +7496,7 @@
           "Domains"
         ],
         "summary": "Rename a domain, or set its status",
-        "description": "Renaming sends the domain back to pending however verified the old hostname was: the new\none has its own DNS to prove and its own certificate to be issued. The old certificate is\npurged so it is not renewed for a hostname nobody serves.\n\n`status` is accepted from **staff only** and is ignored for a client — the DNS answer is what\ndecides, which is the point of `/verify`. A status change is pushed down to every campaign on\nthe domain, since a domain that says ok while its campaigns sit at pending serves nothing.\n",
+        "description": "Renaming sends the domain back to pending however verified the old hostname was: the new\none has its own DNS to prove and its own certificate to be issued. The old certificate is\npurged so it is not renewed for a hostname nobody serves.\n",
         "operationId": "updateDomain",
         "parameters": [
           {
@@ -8623,157 +8522,6 @@
                 "examples": {
                   "NotFound": {
                     "$ref": "#/components/examples/NotFound"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "API keys"
-        ],
-        "summary": "Rename or deactivate a key",
-        "description": "Staff only. `isActive: false` stops the key working on the next request, without deleting it.\nA customer revokes their own key by deleting it.\n",
-        "operationId": "updateApiKey",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateApiKeyRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiKeyResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "No API key, an unknown or revoked key, or an invalid token.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "Unauthorized": {
-                    "$ref": "#/components/examples/Unauthorized"
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "The key's role does not permit this, the caller lacks the level this workspace resource requires, the account's subscription is inactive (SUBSCRIPTION_INACTIVE), or the API is in maintenance mode (MAINTENANCE_MODE). The three are told apart by the code, not by the status.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "Forbidden": {
-                    "$ref": "#/components/examples/Forbidden"
-                  },
-                  "SubscriptionInactive": {
-                    "$ref": "#/components/examples/SubscriptionInactive"
-                  },
-                  "MaintenanceMode": {
-                    "$ref": "#/components/examples/MaintenanceMode"
-                  }
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded. Honour the Retry-After header; the retryAfter field carries the same value in seconds.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "RateLimited": {
-                    "$ref": "#/components/examples/RateLimited"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected failure. Safe to retry.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "InternalError": {
-                    "$ref": "#/components/examples/InternalError"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No such resource, or one the caller cannot reach. The two are deliberately indistinguishable.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "NotFound": {
-                    "$ref": "#/components/examples/NotFound"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "The body is malformed, carries a field the endpoint does not accept, or fails validation. The error names the field when one is at fault.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "ValidationError": {
-                    "$ref": "#/components/examples/ValidationError"
-                  }
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "The Content-Type is not application/json.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                },
-                "examples": {
-                  "UnsupportedMediaType": {
-                    "$ref": "#/components/examples/UnsupportedMediaType"
                   }
                 }
               }
@@ -11767,22 +11515,6 @@
   },
   "components": {
     "schemas": {
-      "CreateWorkspaceRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "ownerId": {
-            "type": "string",
-            "description": "The account that will own the workspace. Staff only, and the reason the endpoint exists: a workspace made for a customer has to belong to them, not to the key that created it. Defaults to the caller."
-          }
-        },
-        "required": [
-          "name"
-        ]
-      },
       "WorkspaceResponse": {
         "type": "object",
         "properties": {
@@ -11850,21 +11582,6 @@
             "format": "date-time"
           }
         }
-      },
-      "CreateWorkspaceMemberRequest": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "minLength": 1
-          },
-          "role": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "userId"
-        ]
       },
       "WorkspaceMemberResponse": {
         "type": "object",
@@ -11958,31 +11675,6 @@
           "token"
         ]
       },
-      "CreateUserRequest": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "minLength": 1
-          },
-          "name": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "timezone": {
-            "type": "string"
-          },
-          "whatsapp": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "email"
-        ]
-      },
       "UserResponse": {
         "type": "object",
         "properties": {
@@ -12016,68 +11708,6 @@
             "format": "date-time"
           }
         }
-      },
-      "CreateTemplateRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "description": {
-            "type": "string"
-          },
-          "preview": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string",
-            "minLength": 1
-          },
-          "elements": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "The sub-pages, keyed by a 16-character sub-page id. Each holds `html` and `css` strings, a `name` for the editor sidebar, and a `type` of main, basic, backredirect or presell. Send the object whole: a write replaces it rather than merging into it.",
-            "example": {
-              "pages": {
-                "blk1MainPage0001": {
-                  "html": "<body>...</body>",
-                  "css": "body{margin:0}",
-                  "name": "Home",
-                  "type": "main"
-                }
-              }
-            }
-          },
-          "style": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Legacy, and in practice always an empty object. Kept because the column exists.",
-            "example": {}
-          },
-          "settings": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "`version` must be the string 2, or absent — sending 1 is rejected. `firstPageID` names the sub-page that renders first, and `subPagesEnabled` is true when there is more than one. `backredirect` is optional. Send it whole, as with elements.",
-            "example": {
-              "version": "2",
-              "firstPageID": "blk1MainPage0001",
-              "subPagesEnabled": false,
-              "videos": []
-            }
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "order": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "required": [
-          "category",
-          "name"
-        ]
       },
       "TemplateResponse": {
         "type": "object",
@@ -12191,62 +11821,6 @@
             "format": "date-time"
           }
         }
-      },
-      "CreatePlanRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "displayName": {
-            "type": "string",
-            "minLength": 1
-          },
-          "priceMonthly": {
-            "type": "number"
-          },
-          "maxCampaigns": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "maxPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "maxDomains": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "maxRequestsMonthly": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "extraRequestsPrice": {
-            "type": "number"
-          },
-          "trafficSource": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "suspiciousConnection": {
-            "type": "boolean"
-          },
-          "hasFunnelAccess": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "displayName",
-          "maxCampaigns",
-          "maxDomains",
-          "maxPages",
-          "maxRequestsMonthly",
-          "name",
-          "priceMonthly"
-        ]
       },
       "PlanResponse": {
         "type": "object",
@@ -12936,18 +12510,6 @@
           }
         }
       },
-      "BlockCampaignRequest": {
-        "type": "object",
-        "properties": {
-          "reason": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "reason"
-        ]
-      },
       "CreateFunnelStepRequest": {
         "type": "object",
         "properties": {
@@ -13087,9 +12649,6 @@
           "name": {
             "type": "string",
             "minLength": 1
-          },
-          "role": {
-            "type": "string"
           }
         },
         "required": [
@@ -13350,85 +12909,6 @@
           }
         }
       },
-      "UpdateUserRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "image": {
-            "type": "string"
-          },
-          "timezone": {
-            "type": "string"
-          },
-          "whatsapp": {
-            "type": "string"
-          },
-          "activeWorkspaceId": {
-            "type": "string"
-          }
-        }
-      },
-      "UpdateTemplateRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "preview": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "elements": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "The sub-pages, keyed by a 16-character sub-page id. Each holds `html` and `css` strings, a `name` for the editor sidebar, and a `type` of main, basic, backredirect or presell. Send the object whole: a write replaces it rather than merging into it.",
-            "example": {
-              "pages": {
-                "blk1MainPage0001": {
-                  "html": "<body>...</body>",
-                  "css": "body{margin:0}",
-                  "name": "Home",
-                  "type": "main"
-                }
-              }
-            }
-          },
-          "style": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Legacy, and in practice always an empty object. Kept because the column exists.",
-            "example": {}
-          },
-          "settings": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "`version` must be the string 2, or absent — sending 1 is rejected. `firstPageID` names the sub-page that renders first, and `subPagesEnabled` is true when there is more than one. `backredirect` is optional. Send it whole, as with elements.",
-            "example": {
-              "version": "2",
-              "firstPageID": "blk1MainPage0001",
-              "subPagesEnabled": false,
-              "videos": []
-            }
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "order": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "UpdateTagRequest": {
         "type": "object",
         "properties": {
@@ -13437,20 +12917,6 @@
           },
           "color": {
             "type": "string"
-          }
-        }
-      },
-      "UpdateSubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "planId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          },
-          "cancelAtPeriodEnd": {
-            "type": "boolean"
           }
         }
       },
@@ -13502,51 +12968,6 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
-          }
-        }
-      },
-      "UpdatePlanRequest": {
-        "type": "object",
-        "properties": {
-          "displayName": {
-            "type": "string"
-          },
-          "priceMonthly": {
-            "type": "number"
-          },
-          "maxCampaigns": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "maxPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "maxDomains": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "maxRequestsMonthly": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "extraRequestsPrice": {
-            "type": "number"
-          },
-          "trafficSource": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "suspiciousConnection": {
-            "type": "boolean"
-          },
-          "hasFunnelAccess": {
-            "type": "boolean"
-          },
-          "isActive": {
-            "type": "boolean"
           }
         }
       },
@@ -13687,18 +13108,6 @@
         "properties": {
           "name": {
             "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ok",
-              "pending",
-              "blocked_subscription",
-              "blocked_quota",
-              "blocked_pricing",
-              "verification_needed",
-              "proxy_active"
-            ]
           }
         }
       },
@@ -13799,17 +13208,6 @@
           "blackAbTestId": {
             "type": "string",
             "description": "An A/B test to rotate over the black surface, standing in for the single black page while it is attached. The test must belong to this campaign's workspace and hold at least one default-rotation variant on a page the edge can render, or the surface would serve nothing. Not available on a Digistore24 upsell campaign. Sending `blackPageId` **detaches** the test, so the two cannot be sent together."
-          }
-        }
-      },
-      "UpdateApiKeyRequest": {
-        "type": "object",
-        "properties": {
-          "isActive": {
-            "type": "boolean"
-          },
-          "name": {
-            "type": "string"
           }
         }
       },
@@ -13995,20 +13393,6 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
-          }
-        }
-      },
-      "PaginatedResponseUserResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UserResponse"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/PaginationMeta"
           }
         }
       },
@@ -14685,21 +14069,6 @@
           },
           "pagination": {
             "$ref": "#/components/schemas/PaginationMeta"
-          }
-        }
-      },
-      "HealthResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string"
-          },
-          "database": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },

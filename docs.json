@@ -238,7 +238,6 @@
               "api/referencia/workspaces/accept-invite",
               "api/referencia/workspaces/get-workspace",
               "api/referencia/workspaces/update-workspace",
-              "api/referencia/workspaces/delete-workspace",
               "api/referencia/workspaces/list-invites",
               "api/referencia/workspaces/create-invite",
               "api/referencia/workspaces/revoke-invite",
@@ -255,7 +254,6 @@
             "pages": [
               "api/referencia/api-keys/list-api-keys",
               "api/referencia/api-keys/create-api-key",
-              "api/referencia/api-keys/update-api-key",
               "api/referencia/api-keys/delete-api-key"
             ]
           },

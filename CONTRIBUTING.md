@@ -18,5 +18,7 @@
 
 ## A referência da API
 
-É gerada de `api/openapi.json`. Para mudar a descrição de um endpoint, mude no código da API
-(as anotações OpenAPI) e regenere a especificação; não edite o JSON à mão.
+É gerada de `api/openapi.json` por `scripts/gen-referencia.py`. Para mudar a descrição de
+um endpoint, mude no código da API (as anotações OpenAPI), gere a especificação bruta e rode
+o script; não edite o JSON nem as páginas de `api/referencia/` à mão. Só publique o que uma
+chave de cliente consegue chamar: operação que exige ADMIN/SUPPORT vai para `EXCLUIR`.

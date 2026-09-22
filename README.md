@@ -31,13 +31,18 @@ mint broken-links   # links quebrados
 
 ## Atualizar a referência da API
 
-A referência não é escrita à mão. Quando a API muda, gere a especificação nova no repositório
-`api` (o roteiro está em `docs/AGENTS.md` lá) e substitua `api/openapi.json` aqui. O
-`docs.json` lista os endpoints por grupo; um endpoint novo precisa ser adicionado à lista
-para aparecer na navegação.
+A referência não é escrita à mão. Quando a API muda, gere a especificação bruta no
+repositório `api` (o roteiro está em `docs/AGENTS.md` lá) e rode o gerador aqui:
 
-Endpoints reservados à equipe (contas, planos, bloqueio por cobrança) ficam fora da
-especificação publicada.
+```bash
+python3 scripts/gen-referencia.py /caminho/openapi-bruto.json
+mint validate && mint broken-links
+```
+
+O script filtra a especificação (remove o que só a equipe pode chamar, campos aceitos só de
+staff e schemas órfãos), escreve `api/openapi.json`, recria `api/referencia/**` e refaz os
+grupos de referência da aba API em `docs.json`. Endpoint novo com tag nova exige uma entrada
+em `GRUPOS` no script; operação nova reservada à equipe exige uma entrada em `EXCLUIR`.
 
 ## Publicação
 

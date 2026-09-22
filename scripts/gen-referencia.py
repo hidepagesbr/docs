@@ -35,6 +35,50 @@ EXCLUIR = {
 CAMPOS_STAFF = {("CreateApiKeyRequest", "role"), ("UpdateDomainRequest", "status")}
 # Parágrafos de descrição que só fazem sentido com esses campos.
 PARAGRAFOS_STAFF = [re.compile(r"\n*`status` is accepted from \*\*staff only\*\*.*?(?=\n\n|\Z)", re.S)]
+# Frases das descrições que falam do que uma chave de staff faz. A API continua tendo os
+# papéis; a doc pública não fala deles. Texto exato do spec -> substituto (vazio = apagar).
+FRASES_STAFF = [
+    (" A staff key sees every workspace on\nthe deployment.", ""),
+    (" Staff see every account's pages.", ""),
+    ("So staff backing up a customer's page get it in their own\npages and the customer's is untouched — nothing here writes to the source.",
+     "So a member backing up a shared page gets it in their own\npages and the source is untouched — nothing here writes to it."),
+    (" `role` is clamped to `CLIENT`\nunless the caller is `ADMIN`, so a client cannot escalate by asking for one.", ""),
+    ("**An account may hold three `CLIENT` keys.**", "**An account may hold three keys.**"),
+    (" `ADMIN` and `SUPPORT` keys are not counted and\nnot limited.", ""),
+    ("Readable by its owner, by any member of it, and by staff.", "Readable by its owner and by any member of it."),
+    ("Owner or staff.", "The owner, or an admin member."),
+    ("An account may read itself; staff may read any.", "An account may read itself."),
+    ("whether a `CLIENT` key authenticates", "whether a key authenticates"),
+    ("\n\nThis is the one resource a `SUPPORT` key may write, because repairing a customer's page is\nwhat support is for.", ""),
+    (" Without `campaignId` an endpoint reports on the owner of the caller's active\nworkspace, which for a staff key is the staff account itself — pass `campaignId` to read a\ncustomer's numbers.",
+     " Without `campaignId` an endpoint reports on the owner of the caller's active\nworkspace."),
+    ("Platform accounts. Mostly staff-only.", "The caller's own account."),
+    (" Null for a staff key listing a workspace it does not belong to.", ""),
+    (" `ADMIN` may still write.", ""),
+]
+# Nada disso pode sobrar na doc publicada; se a API ganhar uma frase nova, o script para aqui.
+PROIBIDO = re.compile(r"\b(staff|Staff|SUPPORT|ADMIN)\b")
+
+
+def limpar_texto(texto):
+    if not isinstance(texto, str):
+        return texto
+    for antigo, novo in FRASES_STAFF:
+        texto = texto.replace(antigo, novo)
+    return texto
+
+
+def limpar_descricoes(obj):
+    """Aplica FRASES_STAFF a todo `description`/`summary` do spec, em qualquer profundidade."""
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k in ("description", "summary"):
+                obj[k] = limpar_texto(v)
+            else:
+                limpar_descricoes(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            limpar_descricoes(v)
 
 # Tag do spec -> (grupo em PT-BR, ordem). A pasta é o slug da tag.
 GRUPOS = [
@@ -85,6 +129,11 @@ def filtrar(spec):
             del schemas[n]
     tags_usadas = {op["tags"][0] for ops in spec["paths"].values() for op in ops.values()}
     spec["tags"] = [t for t in spec.get("tags", []) if t["name"] in tags_usadas]
+    limpar_descricoes(spec)
+    sobras = sorted({m.group(0) for m in PROIBIDO.finditer(json.dumps(spec, ensure_ascii=False))})
+    if sobras:
+        sys.exit(f"menção a papel de equipe sobrou na doc pública ({', '.join(sobras)}); "
+                 "acrescente a frase a FRASES_STAFF ou a operação a EXCLUIR")
     return spec
 
 

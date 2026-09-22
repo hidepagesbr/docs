@@ -42,7 +42,7 @@
     },
     {
       "name": "Analytics",
-      "description": "Traffic, connect rate, conversions and revenue — the same figures the dashboard shows, from the\nsame store. Read-only. Every date is `YYYY-MM-DD` and is interpreted in the account's timezone\n(`users.timezone`, defaulting to America/Sao_Paulo), both ends inclusive.\n\nFigures are scoped by **account**, not by workspace: events record the account that owns the\ncampaign. Without `campaignId` an endpoint reports on the owner of the caller's active\nworkspace, which for a staff key is the staff account itself — pass `campaignId` to read a\ncustomer's numbers.\n\nA `503 ANALYTICS_UNAVAILABLE` means the store did not answer; the figures are never replaced by\nzeros. Answers are reused for a few seconds per identical question, so a value can lag a poll\nby that much.\n"
+      "description": "Traffic, connect rate, conversions and revenue — the same figures the dashboard shows, from the\nsame store. Read-only. Every date is `YYYY-MM-DD` and is interpreted in the account's timezone\n(`users.timezone`, defaulting to America/Sao_Paulo), both ends inclusive.\n\nFigures are scoped by **account**, not by workspace: events record the account that owns the\ncampaign. Without `campaignId` an endpoint reports on the owner of the caller's active\nworkspace.\n\nA `503 ANALYTICS_UNAVAILABLE` means the store did not answer; the figures are never replaced by\nzeros. Answers are reused for a few seconds per identical question, so a value can lag a poll\nby that much.\n"
     },
     {
       "name": "Domains",
@@ -66,7 +66,7 @@
     },
     {
       "name": "Users",
-      "description": "Platform accounts. Mostly staff-only."
+      "description": "The caller's own account."
     },
     {
       "name": "Subscriptions",
@@ -92,7 +92,7 @@
           "Workspaces"
         ],
         "summary": "List the workspaces the caller can work in",
-        "description": "A customer's own workspace plus every one they have accepted an invite into — the\nlist the app's workspace switcher is built from. A staff key sees every workspace on\nthe deployment.\n\n`role` is the caller's own role here, `isOwn` says whether their account owns it, and\n`isActive` marks the one every other list is scoped to. `search` matches the name.\n",
+        "description": "A customer's own workspace plus every one they have accepted an invite into — the\nlist the app's workspace switcher is built from.\n\n`role` is the caller's own role here, `isOwn` says whether their account owns it, and\n`isActive` marks the one every other list is scoped to. `search` matches the name.\n",
         "operationId": "listWorkspaces",
         "parameters": [
           {
@@ -1642,7 +1642,7 @@
           "Pages"
         ],
         "summary": "List pages",
-        "description": "Scoped to the caller's **active** workspace — not to every workspace the account owns.\nSwitching workspace is how you reach the rest. Staff see every account's pages.\n\n`search` matches the name, case-insensitively. `sortBy` accepts any field of the response;\nthe ordering is the database's collation, in which uppercase sorts before lowercase.\n",
+        "description": "Scoped to the caller's **active** workspace — not to every workspace the account owns.\nSwitching workspace is how you reach the rest.\n\n`search` matches the name, case-insensitively. `sortBy` accepts any field of the response;\nthe ordering is the database's collation, in which uppercase sorts before lowercase.\n",
         "operationId": "listPages",
         "parameters": [
           {
@@ -2195,7 +2195,7 @@
           "Pages"
         ],
         "summary": "Copy the page into a new one",
-        "description": "A snapshot to keep. The copy takes the **draft** content, which is usually the work worth\nprotecting, and is named `<original> (backup YYYY-MM-DD HH:mm)` with a matching slug.\n\nThe copy belongs to **the caller**, not to the source's owner, and starts unpublished with\nno folder and no share code. So staff backing up a customer's page get it in their own\npages and the customer's is untouched — nothing here writes to the source.\n",
+        "description": "A snapshot to keep. The copy takes the **draft** content, which is usually the work worth\nprotecting, and is named `<original> (backup YYYY-MM-DD HH:mm)` with a matching slug.\n\nThe copy belongs to **the caller**, not to the source's owner, and starts unpublished with\nno folder and no share code. So a member backing up a shared page gets it in their own\npages and the source is untouched — nothing here writes to it.\n",
         "operationId": "backupPage",
         "parameters": [
           {
@@ -4058,7 +4058,7 @@
           "API keys"
         ],
         "summary": "Issue a key",
-        "description": "**The plaintext key is in this response and nowhere else** — only its SHA-256 hash is\nstored, so it cannot be shown again. If it is lost, delete the key and issue another.\n\nSelf-service: any authenticated caller may mint one for itself. `role` is clamped to `CLIENT`\nunless the caller is `ADMIN`, so a client cannot escalate by asking for one.\n\n**An account may hold three `CLIENT` keys.** A fourth is refused with `422 QUOTA_EXCEEDED`\non `max_client_keys` — delete one first. Deactivated keys still occupy a slot, because\nthey are one flag away from working again. `ADMIN` and `SUPPORT` keys are not counted and\nnot limited.\n",
+        "description": "**The plaintext key is in this response and nowhere else** — only its SHA-256 hash is\nstored, so it cannot be shown again. If it is lost, delete the key and issue another.\n\nSelf-service: any authenticated caller may mint one for itself.\n\n**An account may hold three keys.** A fourth is refused with `422 QUOTA_EXCEEDED`\non `max_client_keys` — delete one first. Deactivated keys still occupy a slot, because\nthey are one flag away from working again.\n",
         "operationId": "createApiKey",
         "requestBody": {
           "content": {
@@ -4997,7 +4997,7 @@
           "Workspaces"
         ],
         "summary": "Get one workspace",
-        "description": "Readable by its owner, by any member of it, and by staff.\n",
+        "description": "Readable by its owner and by any member of it.\n",
         "operationId": "getWorkspace",
         "parameters": [
           {
@@ -5108,7 +5108,7 @@
           "Workspaces"
         ],
         "summary": "Rename a workspace",
-        "description": "Owner or staff.\n",
+        "description": "The owner, or an admin member.\n",
         "operationId": "updateWorkspace",
         "parameters": [
           {
@@ -5534,7 +5534,7 @@
           "Users"
         ],
         "summary": "Get one account",
-        "description": "An account may read itself; staff may read any. The password hash is never serialised.\n",
+        "description": "An account may read itself. The password hash is never serialised.\n",
         "operationId": "getUser",
         "parameters": [
           {
@@ -6017,7 +6017,7 @@
           "Subscriptions"
         ],
         "summary": "Get one subscription",
-        "description": "`status` decides whether a `CLIENT` key authenticates at all: `active` and `past_due` pass,\neverything else is refused with `SUBSCRIPTION_INACTIVE`.\n\n`requestsUsed` is the metered counter for the current period.\n",
+        "description": "`status` decides whether a key authenticates at all: `active` and `past_due` pass,\neverything else is refused with `SUBSCRIPTION_INACTIVE`.\n\n`requestsUsed` is the metered counter for the current period.\n",
         "operationId": "getSubscription",
         "parameters": [
           {
@@ -6473,7 +6473,7 @@
           "Pages"
         ],
         "summary": "Update a page's draft",
-        "description": "Content fields (`name`, `slug`, `description`, `elements`, `style`, `settings`, `scripts`)\nare written to the **draft**. Only `folderId` and `color` touch the published row.\n\n**The response is the draft merged over the published row** — the same representation `GET`\nreturns, so the write can be verified from its own answer. It is still only a draft: visitors\nkeep getting the published content until `POST /v1/pages/{id}/publish`.\n\nA page created outside this API has no draft row; the first update creates one seeded from\nthe published content, so fields the request omits keep their current values. Every field\nis replaced wholesale rather than merged: send the whole object.\n\nThis is the one resource a `SUPPORT` key may write, because repairing a customer's page is\nwhat support is for.\n",
+        "description": "Content fields (`name`, `slug`, `description`, `elements`, `style`, `settings`, `scripts`)\nare written to the **draft**. Only `folderId` and `color` touch the published row.\n\n**The response is the draft merged over the published row** — the same representation `GET`\nreturns, so the write can be verified from its own answer. It is still only a draft: visitors\nkeep getting the published content until `POST /v1/pages/{id}/publish`.\n\nA page created outside this API has no draft row; the first update creates one seeded from\nthe published content, so fields the request omits keep their current values. Every field\nis replaced wholesale rather than merged: send the whole object.\n",
         "operationId": "updatePage",
         "parameters": [
           {
@@ -8271,7 +8271,7 @@
         },
         "responses": {
           "409": {
-            "description": "The slug is taken on that domain, or the campaign is blocked by billing. A blocked campaign refuses the whole edit: every write recomputes the status, so letting one through would either lose the block or store a status that contradicts the content. `ADMIN` may still write.",
+            "description": "The slug is taken on that domain, or the campaign is blocked by billing. A blocked campaign refuses the whole edit: every write recomputes the status, so letting one through would either lose the block or store a status that contradicts the content.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11558,7 +11558,7 @@
           },
           "role": {
             "type": "string",
-            "description": "The caller's role here: owner, admin or member. Null for a staff key listing a workspace it does not belong to."
+            "description": "The caller's role here: owner, admin or member."
           },
           "memberCount": {
             "type": "integer",

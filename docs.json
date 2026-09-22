@@ -115,168 +115,168 @@
             "group": "Páginas",
             "pages": [
               "api/referencia/pages/list-pages",
-              "api/referencia/pages/create-a-page",
-              "api/referencia/pages/get-one-page-with-its-draft-merged-in",
-              "api/referencia/pages/update-a-pages-draft",
-              "api/referencia/pages/delete-a-page",
-              "api/referencia/pages/copy-the-page-into-a-new-one",
-              "api/referencia/pages/publish-the-draft",
-              "api/referencia/pages/discard-the-draft"
+              "api/referencia/pages/create-page",
+              "api/referencia/pages/get-page",
+              "api/referencia/pages/update-page",
+              "api/referencia/pages/delete-page",
+              "api/referencia/pages/backup-page",
+              "api/referencia/pages/publish-page",
+              "api/referencia/pages/rollback-page"
             ]
           },
           {
             "group": "Domínios",
             "pages": [
               "api/referencia/domains/list-domains",
-              "api/referencia/domains/add-a-domain",
-              "api/referencia/domains/get-one-domain",
-              "api/referencia/domains/rename-a-domain-or-set-its-status",
-              "api/referencia/domains/delete-a-domain",
-              "api/referencia/domains/the-dns-records-to-create",
-              "api/referencia/domains/check-dns-and-update-the-status"
+              "api/referencia/domains/create-domain",
+              "api/referencia/domains/get-domain",
+              "api/referencia/domains/update-domain",
+              "api/referencia/domains/delete-domain",
+              "api/referencia/domains/get-dns-instructions",
+              "api/referencia/domains/verify-domain"
             ]
           },
           {
             "group": "Campanhas",
             "pages": [
               "api/referencia/campaigns/list-campaigns",
-              "api/referencia/campaigns/create-a-campaign",
-              "api/referencia/campaigns/get-one-campaign",
-              "api/referencia/campaigns/update-a-campaign",
-              "api/referencia/campaigns/delete-a-campaign",
-              "api/referencia/campaigns/bring-a-campaign-up-by-hand"
+              "api/referencia/campaigns/create-campaign",
+              "api/referencia/campaigns/get-campaign",
+              "api/referencia/campaigns/update-campaign",
+              "api/referencia/campaigns/delete-campaign",
+              "api/referencia/campaigns/activate-campaign"
             ]
           },
           {
             "group": "Etapas de funil",
             "pages": [
-              "api/referencia/funnel-steps/list-a-campaigns-funnel-in-order",
-              "api/referencia/funnel-steps/add-a-step-to-a-campaigns-funnel",
-              "api/referencia/funnel-steps/get-one-funnel-step",
-              "api/referencia/funnel-steps/update-a-funnel-step",
-              "api/referencia/funnel-steps/delete-a-funnel-step"
+              "api/referencia/funnel-steps/list-by-campaign",
+              "api/referencia/funnel-steps/create-funnel-step",
+              "api/referencia/funnel-steps/get-funnel-step",
+              "api/referencia/funnel-steps/update-funnel-step",
+              "api/referencia/funnel-steps/delete-funnel-step"
             ]
           },
           {
             "group": "Testes A/B",
             "pages": [
-              "api/referencia/a-b-tests/list-a-b-tests",
-              "api/referencia/a-b-tests/create-an-a-b-test",
-              "api/referencia/a-b-tests/get-one-a-b-test",
-              "api/referencia/a-b-tests/update-an-a-b-test",
-              "api/referencia/a-b-tests/delete-an-a-b-test",
-              "api/referencia/a-b-tests/list-a-tests-rules",
-              "api/referencia/a-b-tests/add-a-rule-to-an-a-b-test",
-              "api/referencia/a-b-tests/update-a-rule",
-              "api/referencia/a-b-tests/delete-a-rule",
-              "api/referencia/a-b-tests/list-a-tests-variants",
-              "api/referencia/a-b-tests/add-a-variant-to-an-a-b-test",
-              "api/referencia/a-b-tests/update-a-variant",
-              "api/referencia/a-b-tests/delete-a-variant"
+              "api/referencia/a-b-tests/list-ab-tests",
+              "api/referencia/a-b-tests/create-ab-test",
+              "api/referencia/a-b-tests/get-ab-test",
+              "api/referencia/a-b-tests/update-ab-test",
+              "api/referencia/a-b-tests/delete-ab-test",
+              "api/referencia/a-b-tests/list-rules",
+              "api/referencia/a-b-tests/add-rule",
+              "api/referencia/a-b-tests/update-rule",
+              "api/referencia/a-b-tests/delete-rule",
+              "api/referencia/a-b-tests/list-variants",
+              "api/referencia/a-b-tests/add-variant",
+              "api/referencia/a-b-tests/update-variant",
+              "api/referencia/a-b-tests/delete-variant"
             ]
           },
           {
             "group": "Integrações de conversão",
             "pages": [
-              "api/referencia/conversion-integrations/list-conversion-integrations",
-              "api/referencia/conversion-integrations/create-a-conversion-integration",
-              "api/referencia/conversion-integrations/get-one-conversion-integration",
-              "api/referencia/conversion-integrations/update-a-conversion-integration",
-              "api/referencia/conversion-integrations/delete-a-conversion-integration"
+              "api/referencia/conversion-integrations/list",
+              "api/referencia/conversion-integrations/create",
+              "api/referencia/conversion-integrations/get",
+              "api/referencia/conversion-integrations/update",
+              "api/referencia/conversion-integrations/delete"
             ]
           },
           {
             "group": "Analytics",
             "pages": [
-              "api/referencia/analytics/totals-per-a-b-test-in-one-request",
-              "api/referencia/analytics/an-a-b-tests-visits-per-variant-over-time",
-              "api/referencia/analytics/the-visits-an-a-b-test-decided-newest-first",
-              "api/referencia/analytics/an-a-b-tests-totals-and-each-variants",
-              "api/referencia/analytics/totals-for-one-campaign",
-              "api/referencia/analytics/totals-per-campaign-in-one-request",
-              "api/referencia/analytics/a-series-for-charting",
-              "api/referencia/analytics/totals-per-funnel-step",
-              "api/referencia/analytics/individual-visits-newest-first",
-              "api/referencia/analytics/totals-across-every-campaign"
+              "api/referencia/analytics/get-ab-test-bulk-summary",
+              "api/referencia/analytics/get-ab-test-chart",
+              "api/referencia/analytics/get-ab-test-logs",
+              "api/referencia/analytics/get-ab-test-summary",
+              "api/referencia/analytics/get-campaign-summary",
+              "api/referencia/analytics/get-bulk-summary",
+              "api/referencia/analytics/get-chart",
+              "api/referencia/analytics/get-funnel-steps",
+              "api/referencia/analytics/get-logs",
+              "api/referencia/analytics/get-summary"
             ]
           },
           {
             "group": "Pastas",
             "pages": [
               "api/referencia/folders/list-folders",
-              "api/referencia/folders/create-a-folder",
-              "api/referencia/folders/rename-or-move-a-folder",
-              "api/referencia/folders/delete-a-folder"
+              "api/referencia/folders/create-folder",
+              "api/referencia/folders/update-folder",
+              "api/referencia/folders/delete-folder"
             ]
           },
           {
             "group": "Tags",
             "pages": [
               "api/referencia/tags/list-tags",
-              "api/referencia/tags/create-a-tag",
-              "api/referencia/tags/rename-or-recolour-a-tag",
-              "api/referencia/tags/delete-a-tag"
+              "api/referencia/tags/create-tag",
+              "api/referencia/tags/update-tag",
+              "api/referencia/tags/delete-tag"
             ]
           },
           {
             "group": "Templates",
             "pages": [
               "api/referencia/templates/list-templates",
-              "api/referencia/templates/get-one-template"
+              "api/referencia/templates/get-template"
             ]
           },
           {
             "group": "Elementos",
             "pages": [
-              "api/referencia/elements/list-the-element-library"
+              "api/referencia/elements/list-elements"
             ]
           },
           {
             "group": "Workspaces e membros",
             "pages": [
-              "api/referencia/workspaces/list-the-workspaces-the-caller-can-work-in",
-              "api/referencia/workspaces/accept-an-invitation",
-              "api/referencia/workspaces/get-one-workspace",
-              "api/referencia/workspaces/rename-a-workspace",
-              "api/referencia/workspaces/delete-a-workspace",
-              "api/referencia/workspaces/list-pending-invitations",
-              "api/referencia/workspaces/invite-an-email-address",
-              "api/referencia/workspaces/revoke-an-invitation",
-              "api/referencia/workspaces/re-issue-an-invitations-token",
-              "api/referencia/workspaces/leave-a-workspace",
-              "api/referencia/workspaces/list-a-workspaces-members",
-              "api/referencia/workspaces/change-a-members-role-or-levels",
-              "api/referencia/workspaces/remove-a-member",
-              "api/referencia/workspaces/switch-the-callers-active-workspace"
+              "api/referencia/workspaces/list-workspaces",
+              "api/referencia/workspaces/accept-invite",
+              "api/referencia/workspaces/get-workspace",
+              "api/referencia/workspaces/update-workspace",
+              "api/referencia/workspaces/delete-workspace",
+              "api/referencia/workspaces/list-invites",
+              "api/referencia/workspaces/create-invite",
+              "api/referencia/workspaces/revoke-invite",
+              "api/referencia/workspaces/create-invite-link",
+              "api/referencia/workspaces/leave-workspace",
+              "api/referencia/workspaces/list-members",
+              "api/referencia/workspaces/update-member",
+              "api/referencia/workspaces/remove-member",
+              "api/referencia/workspaces/switch-workspace"
             ]
           },
           {
             "group": "Chaves de API",
             "pages": [
-              "api/referencia/api-keys/list-the-callers-own-keys",
-              "api/referencia/api-keys/issue-a-key",
-              "api/referencia/api-keys/rename-or-deactivate-a-key",
-              "api/referencia/api-keys/delete-a-key"
+              "api/referencia/api-keys/list-api-keys",
+              "api/referencia/api-keys/create-api-key",
+              "api/referencia/api-keys/update-api-key",
+              "api/referencia/api-keys/delete-api-key"
             ]
           },
           {
             "group": "Assinatura",
             "pages": [
-              "api/referencia/subscriptions/list-the-callers-own-subscription",
-              "api/referencia/subscriptions/get-one-subscription"
+              "api/referencia/subscriptions/list-subscriptions",
+              "api/referencia/subscriptions/get-subscription"
             ]
           },
           {
             "group": "Planos",
             "pages": [
               "api/referencia/plans/list-plans",
-              "api/referencia/plans/get-one-plan"
+              "api/referencia/plans/get-plan"
             ]
           },
           {
             "group": "Conta",
             "pages": [
-              "api/referencia/users/get-one-account"
+              "api/referencia/users/get-user"
             ]
           }
         ]

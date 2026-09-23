@@ -1,69 +1,74 @@
 ---
 title: "Sub-páginas e navegação"
 icon: "diagram-project"
-description: "Monte um funil dentro da mesma página e ligue uma página na outra no Builder V2."
+description: "Monte um funil dentro de uma página, com pré-venda, oferta e backredirect, e ligue uma etapa na outra sem trocar de URL."
 ---
 
-As **sub-páginas** deixam você montar um **funil inteiro dentro da mesma página** — pré-venda, oferta, upsell, downsell, obrigado — com a navegação acontecendo *por dentro*, sem trocar de URL.
+import { Print } from '/snippets/print.mdx';
 
-## Ativar e organizar sub-páginas
+Uma página do Builder pode ter várias **sub-páginas**: uma pré-venda, a oferta, uma página de saída. O visitante passa de uma para outra **sem trocar de URL**, o que mantém o funil inteiro na mesma estrutura.
 
-Na aba **Subpáginas**, ligue o **Ativar subpáginas**. As páginas ficam organizadas por tipo:
+## O painel Páginas
 
-| Tipo | Papel |
+<Print src="builder/painel-paginas" alt="Painel Páginas com as sub-páginas Pré-venda e Oferta e as ferramentas" />
+
+- A lista mostra as sub-páginas. Os selos indicam o papel de cada uma: **Principal**, **Inicial**, **Pré-venda**, **Upsell**, **Downsell** e **Backredirect**.
+- **Adicionar página** cria uma nova sub-página.
+- A **Inicial** é a primeira que o visitante vê.
+
+O menu **⋯** de cada sub-página tem:
+
+| Opção | O que faz |
 |---|---|
-| **Página de vendas (principal)** | Sua página principal. |
-| **Pré-venda** | Uma etapa antes da oferta (advertorial, quiz…). |
-| **Upsell / Downsell** | Ofertas depois da compra. |
-| **Redirecionamento de retorno** | Aparece quando o visitante tenta sair (botão voltar). |
-| **Páginas básicas** | Páginas extras do funil. |
+| **Renomear** | Troca o nome. |
+| **Duplicar** | Cria uma cópia da sub-página. |
+| **Clonar nesta página** | Substitui o conteúdo pelo de um site ou de outra página sua. |
+| **Copiar ID da página** | Copia o ID, usado na navegação por código. |
+| **Definir como página inicial** | Faz dela a primeira página. |
+| **Excluir** | Remove a sub-página. |
 
-Use **Adicionar subpágina** para criar uma **Página básica** ou uma **Página de redirecionamento**. Em cada linha você tem: **Renomear**, **Duplicar**, **Copiar ID da página**, **Definir como página inicial**, **Definir como redirecionamento**, **Definir como página básica** e **Excluir**.
+Em **Ferramentas**, **Análise de etapas** mostra quantos visitantes passam de uma sub-página para a próxima, por campanha.
 
-<Info>
-A **página inicial** é a primeira que o visitante vê. Você pode trocá-la a qualquer momento (opção **Definir como página inicial**, ou em **Configurações da Página → Página inicial**).
-</Info>
-
-## Como ligar uma página na outra
-
-Esta é a parte mais importante: fazer um botão (ou imagem, ou texto) **levar para outra página** do funil.
+## Ligar uma sub-página na outra
 
 <Steps>
-  <Step title="Selecione o componente (botão, imagem, texto…)" />
-  <Step title="Abra Configurações → Navegação">
-    Na aba **Configurações**, abra **Navegação**.
-  </Step>
-  <Step title="Escolha o Destino">
-    Em **Destino**, selecione **outra página do funil** — ou **URL externa** para mandar o visitante para um endereço de fora (ex.: o checkout).
+  <Step title="Selecione o botão, imagem ou texto" />
+  <Step title="Abra Ajustes → Navegação" />
+  <Step title="Em Destino, escolha a sub-página">
+    <Print src="builder/navegacao" alt="Destino da navegação apontando para a sub-página Oferta" />
   </Step>
 </Steps>
 
 <Tip>
-Um funil típico: na **pré-venda**, o botão de CTA tem **Destino = a página de oferta**; na **oferta**, o botão leva ao **checkout** (URL externa). Tudo no mesmo lugar, sem redirect.
+Um funil comum: na **pré-venda**, o botão leva para a sub-página **Oferta**. Na oferta, o botão de compra usa **URL externa** com o link do checkout.
 </Tip>
 
-## Redirecionamento de retorno (back redirect)
+<Info>
+**Trocar links em massa**, em **Página atual**, troca de uma vez todos os links que apontam para um destino, por exemplo o link antigo do checkout pelo novo.
+</Info>
 
-As páginas de **Redirecionamento de retorno** aparecem quando o visitante **clica em voltar** no navegador — em vez de perder o clique, ele cai numa página que você controla. Qualquer página desse tipo pode ser definida como destino nas configurações da página.
+## Backredirect
 
-## Navegação avançada (HTML/JavaScript)
+O **backredirect** mostra uma sub-página quando o visitante tenta sair: botão de voltar do navegador e, com **Intenção de saída** ligada, o cursor indo para fechar a aba.
 
-Se você usa um bloco **HTML** e quer disparar a navegação pelo seu próprio código, dá para navegar entre páginas assim:
+<Print src="builder/backredirect" alt="Seção Backredirect em Página atual, com o destino e a opção Intenção de saída" />
+
+Configure em **Página atual → Backredirect**: escolha a sub-página de destino e ligue ou desligue a **Intenção de saída**.
+
+## Navegação por código
+
+Num widget **HTML**, você navega entre sub-páginas pelo ID:
 
 ```html
-<!-- Em um link/botão dentro de um bloco HTML -->
 <a data-page-link="ID_DA_PAGINA">Continuar</a>
 ```
 
 ```js
-// Ou via JavaScript
 pageNavigator.goTo("ID_DA_PAGINA");
 ```
 
-<Note>
-Você encontra o **ID da página** nas configurações de cada sub-página (opção **Copiar ID da página**).
-</Note>
+O ID está em **Página atual → ID da página** ou em **Copiar ID da página**, no menu da sub-página.
 
-<Card title="Configurações da página e scripts" icon="gear" href="/builder-v2/pagina-e-scripts" horizontal>
-  Página inicial, back redirect, compartilhamento e pixels.
+<Card title="Próximo: página e scripts" icon="gear" href="/builder-v2/pagina-e-scripts" horizontal>
+  Layout, código-fonte, compartilhamento e pixels.
 </Card>

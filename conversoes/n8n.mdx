@@ -1,44 +1,45 @@
 ---
 title: "Webhook genérico com N8N"
 icon: "circle-nodes"
-description: "Use o N8N para reenviar vendas de qualquer gateway ao HidePages quando não houver integração nativa."
+description: "Use o N8N para reenviar ao HidePages as vendas de um gateway sem integração pronta."
 ---
 
-Quando o seu gateway **não tem integração nativa** (ou você quer controle total do fluxo), use a plataforma **N8N** como ponte: ela recebe a venda do gateway e reenvia para o HidePages no formato esperado.
+import { Print } from '/snippets/print.mdx';
 
-## Como funciona
+Quando o seu gateway **não está na lista**, use o **N8N** como ponte: ele recebe a venda do gateway e reenvia ao HidePages no formato abaixo.
+
+## Configurar
 
 <Steps>
-  <Step title="O parâmetro é injetado como hp1_...">
-    O parâmetro que você escolher na integração é injetado nas suas páginas carregando a chave `hp1_...`. **Use o mesmo nome de parâmetro no checkout do gateway**, para que o valor `hp1_...` seja gravado no pedido.
+  <Step title="Adicione a integração N8N (Generic Webhook)">
+    Em **Conversões → Adicionar integração**. No passo de parâmetros, **digite** o nome do parâmetro que o seu gateway aceita no link de checkout e devolve na venda (ex.: `subid4`).
   </Step>
-  <Step title="O N8N recebe a venda do gateway">
-    Crie um workflow no N8N que receba o **webhook/IPN** do seu gateway quando houver uma venda.
+  <Step title="Abra as instruções">
+    Na tabela de integrações, clique no **?** ao lado de **N8N (Generic Webhook)**.
+
+    <Print src="conversoes/n8n-instrucoes" alt="Diálogo Webhook N8N com o template para baixar, o body JSON de exemplo e a lista de campos" />
   </Step>
-  <Step title="O N8N faz um POST para o HidePages">
-    Adicione um nó **HTTP Request** com **POST** para a **URL de webhook** da tabela de integrações (o token de autenticação já vem na URL).
+  <Step title="Baixe o template">
+    **Baixar template N8N** gera um workflow com a URL e o parâmetro já preenchidos. No N8N, importe em **⋮ → Import from file**.
   </Step>
-  <Step title="Mapeie os campos no corpo JSON">
-    No body, mapeie o valor `hp1_...` recebido do gateway para **`conversion_key`** (veja o exemplo abaixo).
+  <Step title="Ligue o gateway ao N8N">
+    O workflow recebe o webhook do gateway e, num nó **HTTP Request**, faz um `POST` para a URL da integração.
   </Step>
 </Steps>
 
 ## A requisição
 
-- **Método:** `POST`
-- **Autenticação:** o `?token=...` fica **na URL** do webhook — **não** envie no JSON.
-- **Content-Type:** `application/json`
-
-## Corpo (JSON) — exemplo
+- **Método:** `POST`, com `Content-Type: application/json`.
+- **Autenticação:** o `?token=...` já está na URL. Não envie no JSON.
 
 ```json
 {
-  "conversion_key": "hp1_ab12cd.34ef56",
-  "amount_cents": 4990,
-  "category": "sale",
-  "order_id": "PEDIDO-12345",
+  "conversion_key": "hp1_...",
+  "order_amount_cents": 4990,
   "currency": "USD",
-  "email": "cliente@exemplo.com"
+  "product_name": "Product Name",
+  "category": "initial_sale",
+  "order_id": "ORD-123"
 }
 ```
 
@@ -46,30 +47,18 @@ Quando o seu gateway **não tem integração nativa** (ou você quer controle to
 
 | Campo | Obrigatório | Descrição |
 |-------|:---:|-----------|
-| `conversion_key` | ✅ | O valor `hp1_...` capturado do parâmetro do gateway. **Sempre** enviado como `conversion_key` no JSON (não com o nome do parâmetro do gateway). É o que atribui campanha e página. |
-| `amount_cents` | ⬜ | Valor **em centavos** (ex.: `4990` = US$ 49,90). |
-| `amount` | ⬜ | Alternativa a `amount_cents`. ⚠️ Sem o sufixo `_cents`, o valor é interpretado em **dólares**, não em centavos. |
-| `category` | ⬜ | Use `initial_sale` ou `sale`. Outros valores (refund, upsell…) são ignorados. Se omitido, é aceito como venda. |
-| `order_id` | ⬜ | ID do pedido (alternativa: `transaction_id`). **Recomendado** para evitar duplicatas. |
-| `currency` | ⬜ | Padrão `USD`. |
-| `product_name`, `product_id` | ⬜ | Informações do produto. |
-| `email` / `customer_email` | ⬜ | E-mail do comprador. |
+| `conversion_key` | ✅ | O valor `hp1_...` que o gateway devolveu no seu parâmetro. Envie sempre com o nome `conversion_key`, não com o nome do parâmetro. |
+| `order_amount_cents` | — | Valor em **centavos**: `4990` = US$ 49,90. Também aceita `amount_cents`. |
+| `category` | — | `initial_sale` ou `sale`. Outros valores (reembolso, upsell…) são ignorados. Se omitido, conta como venda. |
+| `order_id` | — | ID do pedido, ou `transaction_id`. Recomendado, para não contar a mesma venda duas vezes. |
+| `currency` | — | Padrão `USD`. |
+| `product_name`, `product_id` | — | Dados do produto. |
+| `email` ou `customer_email` | — | E-mail do comprador. |
 
 <Warning>
-Atenção ao valor: **`amount_cents: 4990`** = US$ 49,90. Se usar **`amount: 4990`** (sem `_cents`), o HidePages entende **US$ 4.990,00**. Na dúvida, use sempre `amount_cents`.
+Cuidado com o valor. `order_amount_cents: 4990` é US$ 49,90. Um campo `amount`, sem `_cents`, é lido em **dólares**: `amount: 4990` vira US$ 4.990,00.
 </Warning>
 
-## Template pronto
+## Testar
 
-No painel de **Conversions**, ao configurar a integração N8N, você pode:
-
-- **Baixar o template N8N** já com a **URL** e o **parâmetro** preenchidos, e importá-lo no N8N em **⋮ → Import from file**.
-- Ver o botão **"Ver instruções do webhook N8N"** com o payload de exemplo e o passo a passo.
-
-<Tip>
-Gere a **URL do webhook** na tabela de integrações **antes** de baixar o template — a URL precisa existir para ser embutida no arquivo.
-</Tip>
-
-## Testando
-
-Dispare uma venda de teste no seu gateway (ou execute o workflow manualmente no N8N com um `conversion_key` real). Se o POST retornar sucesso, a integração passa a **"Integrado"** e a conversão aparece no painel.
+Execute o workflow no N8N com uma chave `hp1_...` real, copiada de um link de checkout da sua Black Page. Se o POST responder com sucesso, a integração passa para **Integrado**.

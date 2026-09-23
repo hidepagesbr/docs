@@ -27,25 +27,12 @@
             ]
           },
           {
-            "group": "Builder V2",
+            "group": "Conceitos",
             "pages": [
-              "builder-v2/visao-geral",
-              "builder-v2/blocos",
-              "builder-v2/estilo-e-configuracoes",
-              "builder-v2/video-e-delay",
-              "builder-v2/sub-paginas-e-navegacao",
-              "builder-v2/pagina-e-scripts"
-            ]
-          },
-          {
-            "group": "Páginas (Builder V1)",
-            "pages": [
-              "paginas/visao-geral",
-              "paginas/boas-praticas",
-              "paginas/clonar-e-importar",
-              "paginas/html-e-scripts",
-              "paginas/delay-de-oferta",
-              "paginas/sub-paginas"
+              "conceitos/cloaking",
+              "conceitos/como-decide",
+              "conceitos/modos-de-entrega",
+              "conceitos/estrutura-vs-redirect"
             ]
           },
           {
@@ -56,29 +43,25 @@
             ]
           },
           {
+            "group": "Builder",
+            "pages": [
+              "builder-v2/visao-geral",
+              "builder-v2/criar-pagina",
+              "builder-v2/blocos",
+              "builder-v2/estilo-e-configuracoes",
+              "builder-v2/video-e-delay",
+              "builder-v2/sub-paginas-e-navegacao",
+              "builder-v2/pagina-e-scripts"
+            ]
+          },
+          {
             "group": "Campanhas",
             "pages": [
               "campanhas/criar",
               "campanhas/hpid",
               "campanhas/fontes-de-trafego",
-              "campanhas/funil"
-            ]
-          },
-          {
-            "group": "Conversões e rastreamento",
-            "pages": [
-              "conversoes/visao-geral",
-              "conversoes/integrar-gateway",
-              "conversoes/n8n",
-              "conversoes/redtrack"
-            ]
-          },
-          {
-            "group": "Conceitos",
-            "pages": [
-              "conceitos/cloaking",
-              "conceitos/estrutura-vs-redirect",
-              "conceitos/como-decide"
+              "campanhas/funil",
+              "campanhas/upsell"
             ]
           },
           {
@@ -86,6 +69,23 @@
             "pages": [
               "testes-ab/visao-geral",
               "testes-ab/rules-manager"
+            ]
+          },
+          {
+            "group": "Conversões",
+            "pages": [
+              "conversoes/visao-geral",
+              "conversoes/integrar-gateway",
+              "conversoes/redtrack",
+              "conversoes/n8n"
+            ]
+          },
+          {
+            "group": "Painel e conta",
+            "pages": [
+              "painel/dashboard",
+              "conta/workspace",
+              "conta/conta-e-faturamento"
             ]
           }
         ]
@@ -321,5 +321,31 @@
         "python"
       ]
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/paginas/visao-geral",
+      "destination": "/builder-v2/visao-geral"
+    },
+    {
+      "source": "/paginas/boas-praticas",
+      "destination": "/builder-v2/visao-geral"
+    },
+    {
+      "source": "/paginas/clonar-e-importar",
+      "destination": "/builder-v2/criar-pagina"
+    },
+    {
+      "source": "/paginas/html-e-scripts",
+      "destination": "/builder-v2/pagina-e-scripts"
+    },
+    {
+      "source": "/paginas/delay-de-oferta",
+      "destination": "/builder-v2/video-e-delay"
+    },
+    {
+      "source": "/paginas/sub-paginas",
+      "destination": "/builder-v2/sub-paginas-e-navegacao"
+    }
+  ]
 }

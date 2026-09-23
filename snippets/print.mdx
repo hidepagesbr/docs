@@ -1,0 +1,6 @@
+export const Print = ({ src, alt, caption }) => (
+  <Frame caption={caption}>
+    <img className="block dark:hidden" src={`/images/${src}-light.webp`} alt={alt} />
+    <img className="hidden dark:block" src={`/images/${src}-dark.webp`} alt={alt} />
+  </Frame>
+);

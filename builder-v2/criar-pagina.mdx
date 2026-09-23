@@ -1,0 +1,84 @@
+---
+title: "Criar uma página"
+icon: "file-circle-plus"
+description: "Os quatro jeitos de começar uma página no Builder: em branco, importando por código, clonando um site ou a partir de um template."
+---
+
+import { Print } from '/snippets/print.mdx';
+
+Em **Páginas → Criar Página**, você escolhe como começar.
+
+<Print src="builder/criar-opcoes" alt="Tela Criar Página com as opções Página em Branco, Importar, Clonar Site e Templates" />
+
+<Note>
+O número de páginas depende do seu plano. Ao atingir o limite, o painel recusa a criação.
+</Note>
+
+## Página em Branco
+
+Começa do zero, com o canvas vazio.
+
+<Print src="builder/criar-branco" alt="Diálogo Criar página em branco com Nome da Página e Descrição" />
+
+<Steps>
+  <Step title="Dê um nome">
+    **Nome da Página** é obrigatório. O slug da página é gerado a partir dele.
+  </Step>
+  <Step title="(Opcional) Descreva">
+    A **Descrição** é só para você se organizar.
+  </Step>
+  <Step title="Criar Página">
+    O editor abre em seguida, com a página vazia e as opções **Adicionar elementos** ou **Clonar/importar página**.
+  </Step>
+</Steps>
+
+## Importar
+
+Traz uma página de outra conta por um **código de compartilhamento**, com todas as sub-páginas.
+
+<Print src="builder/criar-importar" alt="Diálogo Importar Página com o campo Código de compartilhamento" />
+
+Cole o código e clique em **Buscar** para ver a página antes de importar. Quem compartilha gera o código no próprio editor, em **Páginas → Compartilhar por código**. Veja [Página e scripts](/builder-v2/pagina-e-scripts#compartilhar-por-código).
+
+## Clonar Site
+
+Transforma uma página publicada na internet em uma página editável do Builder.
+
+<Print src="builder/criar-clonar" alt="Diálogo Clonar Site com URL do site e a opção Aprimoramento por IA" />
+
+<Steps>
+  <Step title="Informe a URL do site e clique em Buscar" />
+  <Step title="Revise o nome e a descrição" />
+  <Step title="(Opcional) Aprimoramento por IA">
+    Liga uma passada de IA que melhora a estrutura da página clonada.
+  </Step>
+  <Step title="Clonar Página" />
+</Steps>
+
+<Info>
+Sites montados com JavaScript (aplicações que só aparecem depois de carregar) são detectados e renderizados antes de clonar, para trazer o conteúdo visível e não uma página vazia.
+</Info>
+
+### Limpeza depois de clonar
+
+O HTML de outros sites costuma trazer peso que a sua página não precisa. Vale remover no **Código-fonte**:
+
+- bibliotecas e construtores que vieram junto (jQuery, Elementor, WP Rocket);
+- scripts de tradução, mapas de calor e beacons do site original;
+- o CSS gigante de temas WordPress;
+- a tag `<base href="...">`, que atrapalha os caminhos de imagem;
+- trackers duplicados que conflitam com os seus.
+
+E confira se todas as imagens usam `https://` absoluto. Em imagens com *lazy-load*, use a URL real, não a do placeholder.
+
+## Templates
+
+Começa a partir de um modelo pronto do catálogo do HidePages, que você personaliza no editor. Quando não há templates publicados no momento, a tela avisa **Nenhum template disponível no momento**.
+
+## Duplicar uma página
+
+Na lista de páginas, use **Duplicate** no menu do cartão para criar uma cópia com todo o conteúdo e as sub-páginas. É o jeito mais rápido de criar uma variante para um [Teste A/B](/testes-ab/visao-geral).
+
+<Card title="Próximo: widgets e camadas" icon="shapes" href="/builder-v2/blocos" horizontal>
+  Monte o conteúdo da página.
+</Card>

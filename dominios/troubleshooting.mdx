@@ -11,10 +11,10 @@ Reunimos aqui os problemas mais comuns com domínios e como resolver cada um.
     Quase sempre é o DNS. Verifique:
 
     1. **O registro certo existe?** Raiz → registro **A**; subdomínio → registro **CNAME**.
-    2. **O valor está exato?** Compare com o que aparece no diálogo de **Instruções DNS** (use os botões de copiar).
+    2. **O valor está exato?** Compare com o diálogo **Configuração DNS** (ícone **Instruções DNS** na linha do domínio). Use os botões de copiar.
     3. **O proxy está desligado?** Na Cloudflare, o registro precisa estar como **"DNS only"** (nuvem cinza).
     4. **Já propagou?** Pode levar até **48h**. Cheque em [whatsmydns.net](https://www.whatsmydns.net).
-    5. Clique em **Verificar Status** para forçar uma nova checagem.
+    5. Use o ícone **Verificar Status** na linha do domínio para forçar uma nova checagem.
   </Accordion>
 
   <Accordion title="Aparece 'Verificação Necessária'" icon="shield-halved">
@@ -29,9 +29,9 @@ Reunimos aqui os problemas mais comuns com domínios e como resolver cada um.
   <Accordion title="Não consigo excluir o domínio" icon="trash-can">
     Um domínio **não pode ser excluído enquanto tiver campanhas associadas**. A mensagem é:
 
-    > *"Não é possível excluir o domínio. Existem N campanhas associadas… exclua ou reatribua as campanhas primeiro."*
+    > *"Não é Possível Excluir o Domínio" — o domínio possui campanha(s) associada(s).*
 
-    Exclua (ou mova para outro domínio) todas as campanhas que usam esse domínio e tente de novo.
+    Exclua as campanhas que usam esse domínio e tente de novo.
   </Accordion>
 
   <Accordion title="Editei o nome do domínio e as campanhas voltaram para 'Pendente'" icon="pen">
@@ -39,7 +39,7 @@ Reunimos aqui os problemas mais comuns com domínios e como resolver cada um.
   </Accordion>
 
   <Accordion title="Minha campanha está 'Pendente' e o domínio está OK" icon="circle-exclamation">
-    Se o domínio já está **OK**, o problema costuma ser **página em rascunho**. A campanha só fica **Ativa** quando **todas** as páginas dela (White, Black e a Gray, se houver) estão **publicadas**. Publique cada página e a campanha reativa.
+    Se o domínio já está **OK**, o problema costuma ser **página em rascunho**. A campanha só fica **Ativa** quando **todas** as páginas **Nativas** dela estão **publicadas**. Páginas em Mirror ou Redirect não precisam de publicação. Publique cada página nativa e a campanha reativa sozinha.
   </Accordion>
 
   <Accordion title="Existem outros registros no mesmo nome (conflito)" icon="triangle-exclamation">

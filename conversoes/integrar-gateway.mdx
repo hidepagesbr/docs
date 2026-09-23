@@ -1,84 +1,95 @@
 ---
 title: "Integrar um gateway de pagamento"
 icon: "plug"
-description: "Conecte Hotmart, CartPanda, Digistore24, BuyGoods ou ClickBank para rastrear conversões automaticamente."
+description: "Os gateways suportados, o parâmetro que cada um aceita e onde colar a URL gerada pelo HidePages."
 ---
 
-O fluxo é o mesmo para todos: **escolher a plataforma → escolher o parâmetro → copiar a URL gerada e colar no gateway**. Cada gateway tem particularidades (parâmetros aceitos e tipo de integração) descritas abaixo.
+import { Print } from '/snippets/print.mdx';
 
-## Fluxo geral
+O caminho é o mesmo para todos: **escolher a plataforma → escolher o parâmetro → copiar a URL e colar no gateway**. O que muda de um gateway para outro é a lista de parâmetros e o tipo de integração.
+
+## Tipos de integração
+
+| Tipo | Como o gateway avisa |
+|------|---------------------|
+| **Webhook / IPN** | O gateway envia os dados da venda para a URL do HidePages. Você cola a URL e pronto. |
+| **Postback S2S** | O gateway chama uma URL com os dados da venda na própria URL. O HidePages já monta a URL com as variáveis do gateway (valor, pedido, moeda), então é só colar. |
+
+## Gateways e parâmetros
+
+| Plataforma | Tipo | Parâmetros aceitos | Parâmetro RedTrack |
+|------------|------|--------------------|:---:|
+| **Hotmart** | Webhook / IPN | `src`, `sck`, `xcod` | ✅ |
+| **CartPanda Advertiser** | Webhook / IPN | `src`, `sid2` a `sid5` | ✅ |
+| **CartPanda Affiliate** | Postback S2S | `src`, `sid2` a `sid5` | ✅ |
+| **BuyGoods Advertiser** | Postback S2S | `subid`, `subid2` a `subid5` | ✅ |
+| **BuyGoods Affiliate** | Postback S2S | `subid`, `subid2` a `subid5` | ✅ |
+| **Digistore24** | Postback S2S | `sid1` a `sid5` | ✅ |
+| **ClickBank** | Webhook / IPN | `vtid`, `unique_aff_sub2` a `unique_aff_sub5` | ✅ |
+| **Explodely** | Webhook / IPN | `custom1` a `custom5` | — |
+| **Explodely Affiliate** | Webhook / IPN | `affcup`, `tid` | — |
+| **Perfect Pay** | Webhook / IPN | `src`, `sck` | — |
+| **JVZoo** | Webhook / IPN | `tid` | — |
+| **Payt** | Webhook / IPN | `src`, `sck`, `xcod`, `custom1` a `custom5` | ✅ |
+| **N8N (Generic Webhook)** | Webhook | qualquer nome, digitado por você | — |
+
+<Info>
+A coluna **Parâmetro RedTrack** indica as plataformas que aceitam também um parâmetro `sub1` a `sub20` para o RedTrack no mesmo campo. Veja [RedTrack](/conversoes/redtrack#parâmetro-redtrack-na-integração).
+</Info>
+
+## Passo a passo
 
 <Steps>
-  <Step title="Conversions → Adicionar integração">
-    Selecione a(s) plataforma(s). Máximo de **4 integrações** na conta.
+  <Step title="Conversões → Adicionar integração">
+    Selecione até 4 plataformas e clique em **Continuar**.
   </Step>
-  <Step title="Escolha o parâmetro do gateway">
-    Escolha um parâmetro que **aquele gateway aceita e devolve** na venda (veja a tabela de cada um abaixo). É nele que a chave `hp1_...` vai viajar. Cada parâmetro deve ser **único** entre as integrações.
+  <Step title="Escolha o parâmetro">
+    Um que o gateway **aceite no link de checkout e devolva na venda**. Um parâmetro só pode ser usado por uma integração.
+
+    <Print src="conversoes/parametros" alt="Tela de parâmetros com um seletor por plataforma" />
   </Step>
   <Step title="Copie a URL gerada">
-    O HidePages monta a **URL de Webhook/Postback** já com o `?token=...`. Copie-a com o botão da tabela.
+    Use o botão de copiar da coluna **URL Webhook**.
   </Step>
   <Step title="Cole no gateway">
-    Vá na área de **Webhook / IPN / Postback** do gateway e cole a URL. É isso que faz o gateway avisar o HidePages a cada venda.
+    Na área de **Webhook**, **IPN** ou **Postback** do gateway, com o evento de venda aprovada.
   </Step>
 </Steps>
 
-## Detalhes por gateway
+## Observações por gateway
 
 <AccordionGroup>
-  <Accordion title="Hotmart — Webhook / IPN" icon="h">
-    - **Tipo:** Webhook / IPN
-    - **Parâmetros suportados:** `src`, `sck`, `xcod`
-    - **Eventos de venda considerados:** compra completa/aprovada.
-    - **Onde colar:** área de **Webhook** (notificação de eventos) do Hotmart, apontando para a URL gerada.
-
-    Escolha, por exemplo, `sck` como parâmetro no HidePages e garanta que o mesmo `sck` é o que carrega a chave no checkout.
+  <Accordion title="Hotmart">
+    Cole a URL em **Ferramentas → Webhook**, com o evento de compra aprovada. `sck` é o parâmetro mais comum.
   </Accordion>
-
-  <Accordion title="CartPanda — Advertiser (Webhook)" icon="cart-shopping">
-    - **Tipo:** Webhook
-    - **Parâmetros suportados:** `src`, `sid2`, `sid3`, `sid4`, `sid5`
-    - **Eventos:** `order_paid`, `order_approved`.
-    - **Onde colar:** configuração de **webhooks** da loja CartPanda.
+  <Accordion title="CartPanda">
+    **Advertiser** é para quem vende o próprio produto: cole a URL nos webhooks da loja. **Affiliate** é para quem promove: cole a URL de postback na área de afiliado.
   </Accordion>
-
-  <Accordion title="CartPanda — Affiliate (Postback S2S)" icon="cart-shopping">
-    - **Tipo:** Postback S2S
-    - Use a **URL de postback** gerada na configuração de afiliado/postback.
+  <Accordion title="BuyGoods">
+    Cole a URL de postback. As variáveis de valor, pedido e tipo de conversão já vêm na URL e são preenchidas pela BuyGoods. Na versão Affiliate, o valor registrado é a comissão.
   </Accordion>
-
-  <Accordion title="Digistore24 — Postback S2S" icon="cart-shopping">
-    - **Tipo:** Postback S2S (IPN)
-    - **Eventos:** pagamento concluído; transações de **teste** (`is_test`) são ignoradas.
-    - **Onde colar:** no Digistore24, em **IPN/Postback**, cole a URL gerada. Escolha o parâmetro (ex.: `sid1`) que carrega a chave.
-
-    <Note>Para **upsell dentro do checkout** do Digistore24, veja também a fonte de tráfego **Digistore24 (Upsell)** na campanha.</Note>
+  <Accordion title="Digistore24">
+    Cole a URL em **IPN / Postback**. Transações de teste são ignoradas. Para upsell dentro do checkout, veja a fonte [Digistore24 (Upsell)](/campanhas/upsell).
   </Accordion>
-
-  <Accordion title="BuyGoods — Advertiser / Affiliate (Postback S2S)" icon="bag-shopping">
-    - **Tipo:** Postback S2S
-    - Cole a **URL de postback** gerada no painel do BuyGoods (as macros de valor/ordem são preenchidas pelo próprio gateway).
+  <Accordion title="ClickBank">
+    O ClickBank envia os dados criptografados. Informe a **Secret Key** do ClickBank ao criar a integração. Se ela for apagada depois, a integração fica em **Key pendente** até você informar de novo.
   </Accordion>
-
-  <Accordion title="ClickBank — Webhook (criptografado)" icon="c">
-    - **Tipo:** Webhook (payload **criptografado**)
-    - **Passo extra obrigatório:** informe a **Secret Key (INSS)** do ClickBank no HidePages — sem ela, o webhook não pode ser descriptografado e a integração não ativa.
-    - **Parâmetros suportados:** `vtid`, `unique_aff_sub2`…`unique_aff_sub5`.
+  <Accordion title="Payt">
+    A Payt devolve qualquer parâmetro do link de checkout, por isso aceita a lista mais longa.
+  </Accordion>
+  <Accordion title="Outro gateway">
+    Use o [N8N](/conversoes/n8n) como ponte: ele recebe a venda do seu gateway e reenvia ao HidePages.
   </Accordion>
 </AccordionGroup>
 
 ## Boas práticas
 
 <Check>
-  - O **parâmetro** escolhido no HidePages precisa ser o **mesmo** que carrega a chave no checkout.
-  - Prefira enviar/mapear o **ID do pedido** quando possível — o HidePages **dedup**lica por ordem para não contar a mesma venda duas vezes.
-  - Transações de **teste** são descartadas automaticamente (não se assuste se um teste não aparecer).
+  - O parâmetro escolhido no HidePages é o **mesmo** que o gateway grava no pedido.
+  - Não use esse parâmetro para outra coisa na URL do anúncio: o HidePages sobrescreve o valor nos links de checkout.
+  - Vendas de teste podem ser descartadas. Uma venda real, mesmo de valor baixo, é o teste mais confiável.
 </Check>
 
 ## Como saber que funcionou
 
-Depois de colar a URL no gateway, faça uma **venda de teste real** (ou aguarde a primeira venda). O status da integração vai de **"Aguardando 1ª venda"** para **"Integrado"**, e a conversão aparece no **Dashboard** e nas **Métricas** da campanha.
-
-<Card title="Gateway sem integração nativa?" icon="diagram-project" href="/conversoes/n8n" horizontal>
-  Use o webhook genérico via N8N.
-</Card>
+Depois da primeira venda, o status passa de **Aguardando 1ª venda** para **Integrado**, e a conversão aparece no [Dashboard](/painel/dashboard) e nas métricas da campanha.

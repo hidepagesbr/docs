@@ -4,6 +4,8 @@ icon: "filter"
 description: "Os sinais que o filtro usa para separar comprador de moderador — o que é automático e o que você controla na campanha."
 ---
 
+import { Print } from '/snippets/print.mdx';
+
 A cada acesso, o HidePages faz uma pergunta central: **"esse visitante veio de verdade pelo seu anúncio pago, ou está inspecionando a página?"**. A resposta define se ele vê a **Black Page** (oferta), a **White Page** (segura) ou a **Gray Page** (suspeito).
 
 A decisão combina **sinais automáticos** (que já vêm prontos e são atualizados por nós) com as **suas regras** (que você define na campanha). Você não precisa entender cada detalhe técnico — mas conhecer os sinais ajuda a configurar campanhas que convertem sem tomar bloqueio.
@@ -29,7 +31,7 @@ Esses filtros funcionam sozinhos — você não configura nada. Eles existem par
     Robôs, crawlers e navegadores automatizados são reconhecidos automaticamente e enviados para a White — cobrindo tanto buscadores e ferramentas de scraping quanto automação de navegador.
   </Accordion>
   <Accordion title="Inteligência de IP: VPN, proxy e datacenter" icon="server">
-    IPs de **datacenter** (servidores de nuvem) e de **VPNs/proxies** não costumam ser de compradores comuns. Esse é o sinal por trás da regra **"Block Suspicious Connections"** (veja abaixo), que você ativa na campanha.
+    IPs de **datacenter** (servidores de nuvem) e de **VPNs/proxies** não costumam ser de compradores comuns. Esse é o sinal por trás da regra **Bloquear Conexões Suspeitas** (veja abaixo), que você ativa na campanha.
   </Accordion>
   <Accordion title="Ferramentas de verificação de anúncios" icon="shield-virus">
     As redes e empresas terceiras usam ferramentas para auditar campanhas. Esses acessos automatizados são reconhecidos e enviados para a White.
@@ -51,7 +53,7 @@ Aqui é onde você tem controle. Na criação/edição da campanha você define:
 | **Países** | Permitir **apenas** os países selecionados, ou **bloquear** os selecionados. Quem estiver fora da regra vai para a White. |
 | **Idiomas** | Mesma lógica de permitir/bloquear, baseada no idioma do navegador. |
 | **Dispositivo** | Mobile e/ou Desktop. Quem não estiver no dispositivo permitido vai para a White. |
-| **Block Suspicious Connections** | Manda VPNs, proxies e datacenters para a **Gray** (ou White). **Recomendado ligar** — e **obrigatório** para Google, YouTube, TikTok, Taboola, Outbrain e NewsBreak. |
+| **Bloquear Conexões Suspeitas** | Manda VPNs, proxies e datacenters para a **Gray** (ou White). **Recomendado ligar**, e travado em ligado para a maioria das fontes (veja [fontes de tráfego](/campanhas/fontes-de-trafego)). |
 | **Fonte de tráfego** | O HidePages verifica se o visitante realmente veio da rede que você declarou. Se não bater, o acesso é tratado como suspeito (Gray). |
 
 <Card title="Regras e exigências por fonte de tráfego" icon="sliders" href="/campanhas/fontes-de-trafego" horizontal>
@@ -74,7 +76,24 @@ Aqui é onde você tem controle. Na criação/edição da campanha você define:
 
 ## Você acompanha tudo nos logs
 
-Cada acesso vira uma linha nos **Logs de Acesso** do painel, com o **motivo** da decisão — por exemplo: `Bot`, `Automation`, `Suspicious headers`, `Missing param` (chegou sem o hash), `Country`, `Language`, `Device`, `Suspicious`, `Ad verification` ou `Approved` (foi para a Black). Isso deixa você **ajustar as regras com base em dados reais**, em vez de operar no escuro.
+Cada acesso vira uma linha nos **Logs de Acesso** do Dashboard, com a página servida (**Status**) e o **Motivo** da decisão.
+
+<Print src="painel/logs" alt="Logs de Acesso com visitas classificadas como White por Bot e Gray por Fonte de tráfego" />
+
+| Motivo | O que significa |
+|---|---|
+| **Aprovado** | Passou em tudo. Viu a Black Page. |
+| **Parâmetro ausente** | Chegou sem o hash HPID no link. |
+| **Bot** | Robô, crawler ou navegador automatizado. |
+| **Automação** | Sinais de automação de navegador. |
+| **Headers suspeitos** | Cabeçalhos da requisição que um navegador real não envia. |
+| **Região de bot** | Rede ou região associada a times de revisão. |
+| **Verificação de ad** | Ferramenta de verificação de anúncios. |
+| **Suspeito** | Conexão suspeita (VPN, proxy, datacenter) com a regra ligada. |
+| **Fonte de tráfego** | Não veio da rede declarada na campanha. |
+| **País**, **Idioma**, **Dispositivo** | Fora das regras que você configurou. |
+
+Isso deixa você **ajustar as regras com base em dados reais**. Veja como filtrar e ler os logs em [Dashboard e logs](/painel/dashboard).
 
 <Info>
 **E os navegadores "SamsungBrowser" e "Android 10"?** Hoje o Chrome no Android **reduz o próprio User-Agent** por privacidade (vira algo como `Android 10; K`), e o Samsung Internet é um navegador mainstream — ou seja, são **compradores reais**. Fique tranquilo: esses visitantes são tratados como **usuários reais**, não como bots. Se você já viu recomendações antigas de "bloquear" esses navegadores, ignore — bloqueá-los mataria conversão.

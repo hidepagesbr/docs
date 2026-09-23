@@ -1,141 +1,151 @@
 ---
 title: "Criar uma campanha"
 icon: "bullseye"
-description: "Passo a passo para amarrar domínio, páginas e regras de filtragem em uma campanha do HidePages."
+description: "Passo a passo do formulário de campanha: informações básicas, páginas com os três modos de entrega e as regras de filtragem."
 ---
 
-A **campanha** é o coração do HidePages: ela liga um **domínio + slug** às suas **páginas** (White/Black/Gray) e às **regras** de filtragem. É o que decide, a cada acesso, quem vê a oferta e quem vê a página segura.
+import { Print } from '/snippets/print.mdx';
+
+A **campanha** liga um **domínio + slug** às suas páginas (White, Black e Gray) e às **regras** de filtragem. É ela que decide, a cada acesso, quem vê a oferta e quem vê a página segura.
 
 <Note>
-**Antes de começar**, tenha: um **domínio com status OK** e suas páginas **publicadas**. Sem isso a campanha nasce (ou fica) em **Pendente**.
+**Antes de começar**, tenha um **domínio com status OK**. Se as páginas forem do Builder (modo Nativo), deixe-as **publicadas**: só páginas publicadas aparecem na lista.
 </Note>
 
-Em **Campaigns**, clique em **Criar Campanha**. O formulário é dividido em três blocos.
+Em **Campanhas**, clique em **Criar Campanha**. O formulário tem três cartões.
 
-## Bloco 1 — Informações básicas
+<Print src="campanhas/form-vazio" alt="Formulário Criar Campanha com os cartões Informações Básicas, Páginas e Regras" />
+
+## 1. Informações Básicas
+
+<Print src="campanhas/info-basicas" alt="Cartão Informações Básicas preenchido com nome, domínio, slug, fonte Meta, meta título e meta descrição" />
 
 <Steps>
   <Step title="Nome da Campanha (obrigatório)">
-    Um nome interno para você se organizar (ex.: *Dor Articular – Taboola BR*). Ao digitar, o **slug** é sugerido automaticamente.
+    Um nome para você se organizar. O **slug** é sugerido a partir dele.
   </Step>
   <Step title="Domínio (obrigatório)">
-    Escolha um dos seus domínios. Só aparecem domínios prontos — o domínio precisa estar **OK**. Há também um atalho **Adicionar Domínio** ali mesmo.
+    Só aparecem domínios com status **OK**, com o selo de uso (**Novo**, **Em uso**, **Usado**). O atalho **+ Adicionar Domínio** cadastra um domínio sem sair do formulário.
   </Step>
   <Step title="Slug (opcional)">
-    É o caminho depois do domínio: `dominio.com/{slug}`. Regras: apenas **letras minúsculas, números e hífens**, sem hífen no começo/fim, e **único por domínio**.
+    O caminho depois do domínio: `dominio.com/{slug}`. Só letras minúsculas, números e hífens, sem hífen no começo ou no fim, e único no domínio.
 
-    <Tip>Deixe o slug **em branco** para rodar a campanha na **raiz** do domínio (`dominio.com`).</Tip>
+    <Tip>Deixe o slug **vazio** para a campanha responder na **raiz** do domínio (`dominio.com`).</Tip>
   </Step>
   <Step title="Fonte de Tráfego (obrigatório)">
-    A rede de onde vem o tráfego: **Google, YouTube, Meta, TikTok, Outbrain, Taboola, NewsBreak, Mediago, MGID** ou **Digistore24** (modo Upsell). Essa escolha ativa filtros específicos e define quais regras são obrigatórias.
+    A rede de onde vem o tráfego. A escolha liga filtros específicos daquela rede e define quais regras ficam obrigatórias.
 
-    <Card title="Detalhes por fonte de tráfego" icon="sliders" href="/campanhas/fontes-de-trafego" horizontal>
-      Exigências e particularidades de cada rede.
+    <Print src="campanhas/fontes-lista" alt="Lista de fontes de tráfego com as redes de anúncios e as opções de Upsell" />
+
+    As opções marcadas **Upsell** são modos especiais para upsell pós-compra. Veja [Upsell](/campanhas/upsell).
+
+    <Card title="Exigências por fonte de tráfego" icon="sliders" href="/campanhas/fontes-de-trafego" horizontal>
+      O que cada rede exige e libera.
     </Card>
   </Step>
   <Step title="Meta Título e Meta Descrição (opcionais)">
-    Tags de SEO da página servida — **Meta Título** (até 70 caracteres, aparece na aba do navegador e na busca) e **Meta Descrição** (até 160 caracteres).
+    Os textos de SEO da página servida. **Meta Título** tem até 70 caracteres e aparece na aba do navegador. **Meta Descrição** tem até 160.
   </Step>
 </Steps>
 
-## Bloco 2 — Páginas
+## 2. Páginas
 
-Aqui você escolhe qual página cada público vai ver:
+Aqui você escolhe o que cada público vê.
 
-| Campo | Obrigatório? | O que é |
+<Print src="campanhas/paginas-nativo" alt="Cartão Páginas com a White Page e a Black Page em modo Nativo e a Gray Page vazia" />
+
+| Campo | Obrigatório | O que é |
 |-------|:---:|---------|
-| **White Page** | ✅ | A página **segura**, mostrada a moderadores, bots e suspeitos. |
-| **Black Page** | ✅ | A **oferta**. Pode ser uma página única **ou um Teste A/B**. |
-| **Gray Page** | ⬜ | Página intermediária para suspeitos. **Só aparece quando a fonte é Meta.** Se vazia, o suspeito cai na White. |
+| **White Page** | ✅ | A página **segura**, para moderadores, bots e suspeitos. |
+| **Black Page** | ✅ | A **oferta**. Pode ser uma página ou um **Teste A/B**. |
+| **Gray Page** | ⬜ | Página intermediária para suspeitos. **Só em campanhas Meta.** Vazia, o suspeito vai para a White. |
 
-<Warning>
-As páginas precisam ser **diferentes entre si**: White ≠ Black, e a Gray não pode ser igual à White nem à Black.
-</Warning>
+Cada página tem o seletor de **modo de entrega**:
 
-<Note>
-Só aparecem aqui **páginas do próprio HidePages**. Construa a White e a Black no editor (do zero, por template, importadas ou clonadas por URL) — é o que faz o cloaking, o rastreamento e o funil funcionarem. [Entenda por quê](/primeiros-passos#use-p%C3%A1ginas-do-pr%C3%B3prio-hidepages).
-</Note>
+- **Nativo**: uma página publicada do Builder. O botão de olho abre o preview.
+- **Mirror**: a URL de uma página publicada em outro endereço, servida sob o seu domínio.
+- **Redirect**: a URL para onde o visitante é redirecionado. O painel desaconselha esse modo.
 
-## Bloco 3 — Regras (os filtros)
+<Card title="Nativo, Mirror e Redirect" icon="shuffle" href="/conceitos/modos-de-entrega" horizontal>
+  O que cada modo faz e quando usar.
+</Card>
 
-São as regras que você controla. Elas rodam **além** dos filtros automáticos (bots, IP, verificadores).
+<Info>
+A mesma página pode ocupar mais de um campo. Na Black Page, os **Testes A/B** aparecem num grupo próprio da lista. Veja [Testes A/B](/testes-ab/visao-geral#usar-o-teste-na-campanha).
+</Info>
+
+## 3. Regras
+
+As regras que você controla. Elas rodam **além** dos filtros automáticos de bots, verificadores e IPs de revisão.
+
+<Print src="campanhas/regras" alt="Cartão Regras com países Brasil e Portugal, idioma Português, Mobile e Desktop marcados e Bloquear Conexões Suspeitas ligado" />
 
 <AccordionGroup>
   <Accordion title="Países" icon="earth-americas">
-    Multi-seleção com um botão que alterna entre **"Permitir apenas os selecionados"** e **"Bloquear os selecionados"**. Quem estiver fora da regra vai para a White.
+    Escolha os países e o modo com a chave: **Permitir apenas selecionados** ou **Bloquear selecionados**. Quem fica de fora da regra vai para a White.
   </Accordion>
   <Accordion title="Idiomas" icon="language">
-    Mesma lógica de permitir/bloquear, baseada no idioma do navegador do visitante.
+    A mesma lógica, pelo idioma do navegador do visitante.
   </Accordion>
   <Accordion title="Dispositivo (obrigatório)" icon="mobile-screen">
-    Marque **Mobile** e/ou **Desktop** (pelo menos um). Só o dispositivo permitido chega na oferta.
+    Marque **Mobile**, **Desktop** ou os dois. Os dois começam desmarcados, e ao menos um é obrigatório.
   </Accordion>
-  <Accordion title="Block Suspicious Connections" icon="shield-halved">
-    Bloqueia **VPNs, proxies e datacenters** (manda para Gray/White). **Recomendado ligar** e **obrigatório** para Google, YouTube, TikTok, Taboola, Outbrain e NewsBreak. É um recurso **dependente do plano**.
+  <Accordion title="Bloquear Conexões Suspeitas" icon="shield-halved">
+    Barra VPNs, proxies e datacenters. Vem ligado. Para a maioria das fontes fica **travado em ligado**; veja [fontes de tráfego](/campanhas/fontes-de-trafego). Ligado, a taxa de conexão pode cair um pouco, em troca de barrar bots que imitam gente. É um recurso do plano.
   </Accordion>
 </AccordionGroup>
 
-## Ao salvar: seu endereço e o hash HPID
+## 4. Salvar e pegar o link do anúncio
 
-Quando a campanha é criada, aparece a tela **"Campanha Criada com Sucesso!"** com duas informações essenciais:
+Clique em **Criar Campanha**. A tela de sucesso mostra o endereço da campanha e o **hash HPID**.
 
-<Steps>
-  <Step title="O endereço da campanha">
-    `https://seudominio.com/slug` — com botão de copiar. É a URL base.
-  </Step>
-  <Step title="O hash HPID">
-    Um código no formato `&hpid=xxxxxxxx`. **Você precisa anexá-lo ao link do anúncio.** Sem ele, o tráfego pago é tratado como White (segura) e você não vende.
+<Print src="campanhas/criada-sucesso" alt="Diálogo Campanha Criada com Sucesso mostrando o domínio da campanha e o HPID hash" />
 
-    <Card title="Como usar o hash HPID no link do anúncio" icon="key" href="/campanhas/hpid" horizontal>
-      Guia completo — leia antes de subir tráfego.
-    </Card>
-  </Step>
-</Steps>
+<Warning>
+**Anexe o hash ao link do anúncio.** Sem ele, todo o tráfego pago é tratado como White e você não vende. Veja [o hash HPID](/campanhas/hpid).
+</Warning>
 
-<Info>
-Campanhas **Digistore24 (Upsell)** não usam o hash HPID — nelas o bloco do HPID não aparece, e o link é instalado na configuração de upsell do próprio gateway.
-</Info>
+## Status da campanha
 
-## Por que a campanha fica "Pendente"?
+<Print src="campanhas/lista" alt="Lista de campanhas com a campanha Ativa, a coluna de funil e o HPID hash oculto" />
 
-O status da campanha é calculado automaticamente:
+O status é calculado sozinho. Não existe botão de ativar.
 
 | Status | Quando acontece |
 |--------|-----------------|
-| **Ativa** | Domínio **OK** **e** todas as páginas **publicadas**. Funcionando normalmente. |
-| **Pendente** | Falta o domínio ficar OK **ou** falta publicar alguma página. |
-| **Subscription Blocked / Quota Exceeded / Payment Pending** | Problemas de cobrança sobrepõem o status. |
+| **Ativa** | Domínio **OK** e todas as páginas **Nativas** publicadas. |
+| **Pendente** | Falta o domínio ficar OK ou publicar alguma página nativa. |
+| **Assinatura Bloqueada**, **Cota Excedida**, **Pagamento Pendente** | Um problema de cobrança suspendeu a campanha. |
 
 <Check>
-Publicar uma página ou resolver o DNS **reativa a campanha automaticamente** — você não precisa recriá-la.
+Publicar uma página ou verificar o domínio **reativa a campanha sozinho**. Não é preciso recriar nada.
 </Check>
 
-## Regras de validação (resumo)
+## Na lista de campanhas
 
-- Domínio, White Page, Black Page, Fonte de Tráfego e ≥1 dispositivo são **obrigatórios**.
-- White ≠ Black; Gray ≠ White/Black.
-- Slug: `^[a-z0-9-]+$`, único por domínio.
-- O domínio precisa estar **OK** para criar a campanha.
-- Limite de campanhas conforme o **plano**.
-- **Digistore24 (Upsell):** sem Gray Page e **sem Teste A/B** na Black.
-
-## Editar, duplicar e métricas
-
-- **Editar** abre o mesmo formulário com todos os campos.
-- **Duplicar** cria uma cópia (ótimo para variações de uma mesma oferta).
-- **Métricas** mostram acessos, conversões, taxa e receita da campanha, com gráfico e logs.
+- **Busca**, filtro por **Fonte** e ordenação (mais recentes, maior receita, mais acessos, mais vendas, nome).
+- **Domínio / Slug** com botão de copiar a URL.
+- **Funil**: **Criar funil** ou o número de etapas. Veja [Funil de vendas](/campanhas/funil).
+- **HPID Hash**: mostrar e copiar o hash a qualquer momento.
+- Ações: **Editar**, **Métricas**, **Duplicar** e **Excluir**.
 
 <Tip>
-Precisa injetar **pixels/scripts de rastreamento** (Facebook Pixel, GA, etc.)? Adicione no **editor da página → aba Scripts → Head**. Veja [HTML e scripts](/paginas/html-e-scripts).
+**Duplicar** cria uma cópia com todas as configurações e abre o editor, bom para variações da mesma oferta em outra fonte de tráfego.
 </Tip>
 
 ## Próximos passos
 
 <CardGroup cols={2}>
   <Card title="O hash HPID" icon="key" href="/campanhas/hpid">
-    Monte o link do anúncio do jeito certo.
+    Monte o link do anúncio. Leia antes de subir tráfego.
   </Card>
   <Card title="Funil de vendas" icon="filter-circle-dollar" href="/campanhas/funil">
-    Adicione upsell, downsell e página de obrigado.
+    Upsell, downsell e obrigado.
+  </Card>
+  <Card title="Métricas da campanha" icon="chart-line" href="/painel/dashboard#métricas-por-campanha">
+    Acessos, conversões e receita.
+  </Card>
+  <Card title="Rastreamento de conversões" icon="plug" href="/conversoes/visao-geral">
+    As vendas voltando para o painel.
   </Card>
 </CardGroup>

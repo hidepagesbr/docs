@@ -1,55 +1,61 @@
 ---
-title: "Testes A/B: Rules Manager (por regras)"
+title: "Testes A/B: Rules Manager"
 icon: "route"
-description: "Roteie o tráfego da oferta por parâmetro da URL, com prioridade e fallback padrão."
+description: "Escolha a página da oferta pelo parâmetro da URL do anúncio, com prioridade entre regras e um tráfego padrão."
 ---
 
-O **Rules Manager** é o modo de Teste A/B que **roteia o tráfego por parâmetro da URL**, em vez de dividir por peso fixo. Ideal para servir páginas de oferta diferentes conforme um parâmetro que vem do anúncio (ex.: `cid=F19` → página A).
+import { Print } from '/snippets/print.mdx';
+
+O **Rules Manager** é o tipo de teste que escolhe as páginas **pelo parâmetro da URL**, em vez de dividir por peso fixo. Serve para mostrar ofertas diferentes conforme um valor que vem do anúncio, por exemplo `utm_source=facebook` → variante B.
 
 ## Como funciona
 
-- Você define **regras em ordem de prioridade**. A **primeira** que casar decide qual conjunto de páginas serve.
-- Cada regra combina:
-  - **Parâmetro** — um preset ou **Custom** (ex.: `cid`).
-  - **Operador** — **contém** ou **igual a**.
-  - **Argumento** — o valor a comparar (ex.: `F19`).
-- Cada regra tem seu **próprio conjunto de páginas + pesos**.
-- **Tráfego padrão (Default)** — o conjunto usado quando **nenhuma** regra casa.
-
-```
-Regra 1:  cid  contém  "F19"   → Página A (100%)
-Regra 2:  cid  igual   "V2"    → Página B (50%) / Página C (50%)
-Default:  (nenhuma regra casou) → Página original (100%)
-```
+- As regras são avaliadas **em ordem de prioridade**. A **primeira** que bater decide as páginas.
+- Cada regra tem **Parâmetro**, **Operador** e **Argumento**, e o seu próprio conjunto de páginas e pesos.
+- O **Tráfego padrão** atende quem não bate em nenhuma regra.
+- A comparação ignora maiúsculas e minúsculas e ignora colchetes: `[F19]` e `f19` batem igual.
 
 ## Montar as regras
 
+<Print src="testes-ab/regras" alt="Regra de prioridade 1: utm_source contém facebook, servindo a variante B com 100%" />
+
 <Steps>
-  <Step title="Adicione uma regra">
-    Escolha o **Parâmetro**, o **Operador** e o **Argumento**, e monte o conjunto de páginas + pesos daquela regra.
+  <Step title="Adicionar regra">
+    - **Parâmetro**: `sub1` a `sub10`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term` ou **Personalizado**.
+    - **Operador**: **contém** ou **igual a**.
+    - **Argumento**: o valor a comparar, sem colchetes (ex.: `F19`).
+  </Step>
+  <Step title="Páginas desta regra">
+    Uma ou mais páginas, com pesos que somam 100%.
   </Step>
   <Step title="Ordene por prioridade">
-    As regras são avaliadas **de cima para baixo** — a primeira que casar vence. Coloque as mais específicas no topo.
+    Use as setas para subir e descer as regras. Coloque as mais específicas no topo. O limite é de 20 regras.
   </Step>
-  <Step title="Configure o Tráfego padrão">
-    Defina o conjunto de páginas que atende quem **não** casou com nenhuma regra.
+  <Step title="Tráfego padrão">
+    Pelo menos duas páginas para quem não bate em nenhuma regra.
+
+    <Print src="testes-ab/regras-padrao" alt="Cartão Tráfego padrão com duas variantes" />
   </Step>
 </Steps>
 
-## Teste antes de subir
+<Warning>
+Voltar um teste de **Rules Manager** para **Teste A/B** apaga as regras. O painel pede confirmação antes.
+</Warning>
 
-<Card title="Testar regras" icon="flask">
-  Use o simulador **"Testar regras"**: digite um valor de parâmetro e veja **qual regra e qual variante** seriam servidas — assim você valida a lógica antes de mandar tráfego real.
-</Card>
+## Testar antes de subir
+
+Clique em **Testar regras**, digite o valor do parâmetro exatamente como ele sai da sua fonte de tráfego e clique em **Simular visita**. O simulador mostra qual regra bateu e por quê.
+
+<Print src="testes-ab/simulador" alt="Simulador Testar regras mostrando que utm_source=facebook corresponde à regra de prioridade 1" />
 
 ## Usar na campanha
 
-Igual ao modo padrão: selecione o teste no campo **Black Page** da campanha. O parâmetro que você usa nas regras deve **chegar na URL** do seu tráfego (normalmente vindo do anúncio, junto com o `hpid` e as UTMs).
+Igual ao teste por peso: selecione o teste na **Black Page** da campanha. O parâmetro das regras precisa **chegar na URL** do tráfego, junto com o `hpid` e as UTMs:
 
-<Warning>
-Como qualquer variante, as páginas das regras precisam ser **páginas do próprio HidePages** e estar **publicadas**.
-</Warning>
+```text
+https://seudominio.com/oferta?utm_source=facebook&hpid=SEU_HASH
+```
 
-<Card title="Voltar para a visão geral de Testes A/B" icon="chart-pie" href="/testes-ab/visao-geral" horizontal>
-  Modos, métricas e como plugar na campanha.
+<Card title="Voltar para a visão geral de Testes A/B" icon="flask" href="/testes-ab/visao-geral" horizontal>
+  Pesos, métricas e como ligar na campanha.
 </Card>

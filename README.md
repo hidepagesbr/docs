@@ -3,8 +3,8 @@
 Site de documentação do HidePages, publicado em [docs.hidepages.com](https://docs.hidepages.com)
 com [Mintlify](https://mintlify.com). Duas abas:
 
-- **Guia**, em português, para quem usa o painel: páginas, domínios, campanhas, conversões,
-  testes A/B e os conceitos por trás do cloaking.
+- **Guia**, em português e com prints do painel, para quem usa o HidePages: como iniciar,
+  domínios, Builder, campanhas, testes A/B, conversões, painel e conta.
 - **API**, para quem integra: guias em português e a referência de endpoints, gerada da
   especificação OpenAPI da própria API (`api/openapi.json`).
 
@@ -14,10 +14,12 @@ com [Mintlify](https://mintlify.com). Duas abas:
 docs.json          navegação, tema, links
 index.mdx          página inicial
 primeiros-passos.mdx
-builder-v2/ paginas/ dominios/ campanhas/ conversoes/ conceitos/ testes-ab/   guia
+conceitos/ dominios/ builder-v2/ campanhas/ testes-ab/ conversoes/ painel/ conta/   guia
+snippets/print.mdx componente de print claro/escuro
 api/               aba de API: introdução, autenticação, erros, paginação, guias/
 api/openapi.json   a especificação; a referência é gerada dela
-images/ logo/      assets
+images/<seção>/    prints (-light.webp e -dark.webp)
+logo/              assets
 ```
 
 ## Rodar localmente

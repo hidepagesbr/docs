@@ -1,64 +1,74 @@
 ---
-title: "Blocos e componentes"
+title: "Widgets e camadas"
 icon: "shapes"
-description: "Os widgets que você arrasta para a página no Builder V2 — dos blocos básicos aos componentes prontos (DTC, cabeçalho, comentários)."
+description: "Os widgets que você arrasta para a página, das peças básicas às seções prontas, e como organizar tudo pelas camadas."
 ---
 
-Na aba **Widgets**, você arrasta blocos para o canvas. Os conceitos são os mesmos do V1 — o que muda é que aqui você **arrasta e solta** direto na página.
+import { Print } from '/snippets/print.mdx';
 
-## Blocos básicos
+No painel **Widgets**, você arrasta blocos para o canvas. Use a busca **Buscar widgets...** para achar um widget pelo nome.
 
-<CardGroup cols={2}>
+<Print src="builder/painel-widgets" alt="Painel Widgets com os grupos Básico e Seções" />
+
+## Básico
+
+<CardGroup cols={3}>
   <Card title="Texto" icon="font">
-    Um bloco de texto editável (título, parágrafo, etc.).
+    Títulos e parágrafos.
   </Card>
   <Card title="Imagem" icon="image">
-    Uma imagem — você faz upload e define o texto alternativo.
+    Upload de JPG, PNG ou WEBP de até 1 MB, com texto alternativo.
   </Card>
   <Card title="Vídeo" icon="play">
-    O player de vídeo (VTurb). Veja [Vídeo e delay](/builder-v2/video-e-delay).
+    O player VTurb. Veja [Vídeo e delay](/builder-v2/video-e-delay).
   </Card>
   <Card title="Botão" icon="hand-pointer">
-    Um botão de CTA. O destino se configura em **Navegação**.
+    Um botão de ação. O destino se define em **Ajustes → Navegação**.
   </Card>
   <Card title="Contêiner" icon="square-dashed">
-    Um bloco que agrupa outros elementos (para montar seções e colunas).
+    Agrupa outros elementos para montar seções e colunas.
   </Card>
   <Card title="HTML" icon="code">
-    Um bloco de **HTML personalizado**, para quando você precisa colar código próprio.
+    Código HTML próprio, com editor de código.
   </Card>
 </CardGroup>
 
-## Componentes prontos (seções)
+## Seções
 
-Estes vêm com **modelos/aparências predefinidas**. Você arrasta, escolhe um modelo e, ao clicar em **Aplicar**, cada elemento do componente fica **editável individualmente**.
+Seções chegam com modelos prontos. Arraste para a página e escolha o modelo em **Ajustes**. Depois de aplicado, cada texto, preço e botão vira um elemento comum, que você edita como qualquer outro.
 
 <AccordionGroup>
-  <Accordion title="DTC — cards de oferta/preço" icon="table-cells">
-    A tabela de **cards de preço** (aquela de 1/3/6 unidades). Na aba **Estilo**, o painel **Estilo DTC** tem um **Preset** de cores para escolher (Ouro clássico, Meia-noite, Roxo real, Azul profundo, Esmeralda, Carmesim, Azul-marinho e ouro…). Clique em **Aplicar** para editar preços, textos e botões de cada card.
+  <Accordion title="DTC — cards de preço" icon="table-cells">
+    A tabela de pacotes (1, 3 ou 6 unidades, por exemplo). São 8 modelos, com presets de cores.
   </Accordion>
-  <Accordion title="Cabeçalho — topo estilo portal" icon="window-maximize">
-    Um cabeçalho no estilo de grandes portais/mídia. Em **Estilo de cabeçalho**, escolha o **Modelo** (Fox News, YouTube, G1, Facebook, CBS News, CBS + 60 Minutes, CNN World, Today, NBC News) e clique em **Aplicar** para editar cada parte.
+  <Accordion title="Cabeçalho — topo de portal" icon="window-maximize">
+    Um cabeçalho no estilo de portais de notícia e plataformas de vídeo. São 9 modelos.
+  </Accordion>
+  <Accordion title="Acordeão — perguntas frequentes" icon="list">
+    Perguntas e respostas que abrem e fecham.
   </Accordion>
   <Accordion title="Comentários — prova social" icon="comments">
-    Uma seção de **comentários/depoimentos**. Em **Estilo de comentários**, escolha o **Modelo** (Clássico, YouTube, Facebook) e clique em **Aplicar** para editar os comentários.
+    Uma seção de comentários ou depoimentos. Modelos Clássico, YouTube e Facebook.
   </Accordion>
-  <Accordion title="Acordeão — FAQ" icon="list">
-    Um bloco de perguntas e respostas retráteis, pronto para você editar o conteúdo.
-  </Accordion>
-  <Accordion title="Garantia — selo de garantia" icon="shield-check">
-    Um bloco de garantia (selo + texto + botão), pronto para personalizar.
+  <Accordion title="Garantia" icon="shield-check">
+    Selo, texto e botão de garantia.
   </Accordion>
 </AccordionGroup>
 
-<Tip>
-Depois de **Aplicar** um componente pronto, cada texto, preço e botão vira um elemento comum — é só clicar e editar como qualquer outro.
-</Tip>
+<Warning>
+Os modelos de **Cabeçalho** e de **Comentários** imitam o visual de marcas conhecidas. Use-os com cuidado e só na **Black Page**: a **White Page** precisa passar na revisão da rede de anúncios.
+</Warning>
 
-## Organização: Camadas
+## Camadas
 
-A aba **Camadas** mostra a **árvore** de todos os elementos da página. Use-a para **selecionar** um elemento que está difícil de clicar no canvas, **reordenar** (arrastando) e enxergar a estrutura da página.
+O painel **Camadas** mostra a árvore de elementos da página aberta. Use-o para selecionar um elemento difícil de clicar no canvas, esconder temporariamente um bloco (ícone de olho) e entender a estrutura da página.
 
-<Card title="Agora: estilo e configurações" icon="sliders" href="/builder-v2/estilo-e-configuracoes" horizontal>
-  Como ajustar cores, espaçamento e as opções de cada componente.
+<Print src="builder/painel-camadas" alt="Painel Camadas com a árvore Body, Section, Text e Div" />
+
+## Marcadores no canvas
+
+Com **Marcadores** ligado (base do canvas), elementos especiais ganham um selo: **Vídeo**, **Link**, **Atraso**, **DTC**, **Formulário**. Clicar no selo leva direto para os ajustes daquele elemento.
+
+<Card title="Próximo: estilo e ajustes" icon="sliders" href="/builder-v2/estilo-e-configuracoes" horizontal>
+  Aparência, navegação e atraso de cada elemento.
 </Card>

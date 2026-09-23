@@ -1,95 +1,93 @@
 ---
 title: "Rastreamento de conversões: visão geral"
 icon: "chart-line"
-description: "Como o HidePages atribui cada venda à campanha e à página certa, e o que você precisa configurar."
+description: "Como o HidePages atribui cada venda à campanha, à página e à variante do teste A/B, e o que você configura."
 ---
 
-O **Rastreamento de Conversões** conecta seus **gateways de pagamento** ao HidePages para que **cada venda volte automaticamente** e apareça nas métricas de **Conversões** e **Receita** — por campanha e por página.
+import { Print } from '/snippets/print.mdx';
 
-## Como funciona (o conceito)
+O **Rastreamento de Conversões** liga os seus **gateways de pagamento** ao HidePages. Cada venda volta automaticamente e aparece em **Conversões** e **Receita**, por campanha, por página e por variante de teste A/B.
 
-O segredo é uma **chave de conversão** que o HidePages injeta sozinho nos links de checkout da sua oferta:
+## Como funciona
 
-```
-hp1_{idDaCampanha}.{idDaPagina}[.{idDoTesteAB}.{idDaVariante}]
-```
+Tudo gira em torno de uma **chave de conversão**, um valor que começa com `hp1_` e identifica a campanha, a página e, se houver, o teste A/B e a variante.
 
 <Steps>
-  <Step title="O visitante vê a oferta (Black Page)">
-    O HidePages injeta a **chave de conversão** (`hp1_...`) nos links de checkout da página, dentro do **parâmetro** que você escolheu (ex.: `sck`, `src`, `sid1`).
+  <Step title="O visitante vê a oferta">
+    O HidePages acrescenta a chave `hp1_...` nos links de checkout da Black Page, dentro do **parâmetro** que você escolheu na integração (ex.: `sck` na Hotmart, `sid1` na Digistore24).
   </Step>
-  <Step title="O comprador finaliza a compra">
-    A chave viaja junto para o gateway (Hotmart, CartPanda, Digistore24…) e fica guardada no pedido.
+  <Step title="O comprador paga">
+    A chave vai junto para o gateway e fica gravada no pedido.
   </Step>
   <Step title="O gateway avisa o HidePages">
-    Quando a venda acontece, o gateway dispara um **webhook/postback** para o HidePages, carregando a chave de volta.
+    Na venda, o gateway chama a **URL de webhook ou postback** da integração, levando a chave de volta.
   </Step>
-  <Step title="O HidePages atribui a venda">
-    Ele **decodifica a chave** (campanha, página, teste A/B), converte o valor para USD, evita duplicatas e registra a conversão — que aparece no seu **Dashboard** e nas **Métricas** da campanha.
+  <Step title="O HidePages registra a venda">
+    A chave diz de qual campanha, página e variante veio a venda. O valor é convertido para dólar e pedidos repetidos são ignorados.
   </Step>
 </Steps>
 
-<Note>
-A **injeção da chave** e o **repasse das UTMs/click-ids** para o checkout são **automáticos** na Black Page — você não mexe na página para isso funcionar. Basta configurar a integração.
-</Note>
+<Warning>
+A chave é acrescentada automaticamente só nas Black Pages em modo **Nativo**, ou seja, páginas do Builder. Em **Mirror** e **Redirect** a página é sua, fora do HidePages, e a venda não volta para o painel do HidePages. Veja [os três modos de entrega](/conceitos/modos-de-entrega).
+</Warning>
 
-## Os dois tipos de integração
+## Configurar
 
-| Tipo | Como funciona | Exemplos |
-|------|---------------|----------|
-| **Webhook / IPN** | O gateway envia um **JSON/POST** para a URL do HidePages a cada venda. | Hotmart, CartPanda Advertiser, ClickBank, N8N |
-| **Postback S2S** | O gateway chama uma **URL de postback** (server-to-server) com os dados da venda em parâmetros. | Digistore24, BuyGoods, CartPanda Affiliate |
+A tela começa vazia, com o botão **Adicionar integração**.
 
-## O que você configura
+<Print src="conversoes/vazio" alt="Tela Rastreamento de Conversões sem integrações" />
 
 <Steps>
-  <Step title="Escolha a(s) plataforma(s)">
-    Em **Conversions → Adicionar integração**, selecione seu gateway. **No máximo 4 integrações.**
+  <Step title="Selecione as plataformas">
+    Até **4 plataformas** por workspace.
+
+    <Print src="conversoes/plataformas" alt="Seleção de plataformas com Hotmart, Digistore24 e N8N marcadas" />
   </Step>
-  <Step title="Escolha o parâmetro do gateway">
-    O parâmetro que o gateway devolve na venda (ex.: `sck` no Hotmart, `sid1` no Digistore24). É nele que a chave `hp1_...` viaja. Cada parâmetro deve ser **único** entre as integrações.
+  <Step title="Escolha o parâmetro de cada uma">
+    O parâmetro que o gateway aceita no link de checkout e devolve na venda. É nele que viaja a chave. Um parâmetro só pode ser usado por uma integração.
+
+    <Print src="conversoes/parametros" alt="Tela de parâmetros com um seletor por plataforma" />
   </Step>
-  <Step title="Copie a URL de Webhook/Postback">
-    O HidePages **gera a URL** (já com o `?token=...` de autenticação). Você **cola essa URL** na configuração de IPN/postback do gateway.
+  <Step title="Copie a URL e cole no gateway">
+    A tabela mostra a **URL Webhook** de cada integração, já com o token de autenticação. Copie e cole na área de webhook, IPN ou postback do gateway.
+
+    <Print src="conversoes/integracoes" alt="Tabela de integrações com Hotmart, Digistore24 e N8N aguardando a primeira venda" />
   </Step>
 </Steps>
 
 <Card title="Passo a passo por gateway" icon="plug" href="/conversoes/integrar-gateway" horizontal>
-  Hotmart, CartPanda, Digistore24, BuyGoods e ClickBank.
+  Os parâmetros aceitos por cada plataforma e onde colar a URL.
 </Card>
 
-## Status das integrações
+## Status
 
 | Status | Significado |
 |--------|-------------|
-| **Aguardando 1ª venda** | Integração criada, mas nenhuma conversão recebida ainda. |
-| **Integrado** | Já recebeu pelo menos uma venda com sucesso. |
-| **Key pendente** | Falta concluir a configuração (ex.: escolher o parâmetro). |
+| **Aguardando 1ª venda** | A integração está pronta, mas nenhuma venda chegou ainda. |
+| **Integrado** | Já recebeu pelo menos uma venda. |
+| **Key pendente** | Só no ClickBank: falta a Secret Key. Sem ela, as vendas não podem ser lidas. |
 
-## Dois rastreamentos que não se misturam
-
-É comum confundir estes dois canais — eles são **complementares**:
+## Dois rastreamentos diferentes
 
 <CardGroup cols={2}>
-  <Card title="Atribuição do HidePages" icon="chart-line">
-    É o que você vê **no painel** (Conversões/Receita), alimentado pela chave `hp1_`. Serve para você comparar campanhas, páginas e variantes A/B.
+  <Card title="Painel do HidePages" icon="chart-line">
+    Conversões e receita no painel, pela chave `hp1_`. Serve para comparar campanhas, páginas e variantes.
   </Card>
-  <Card title="Atribuição da rede de anúncios / RedTrack" icon="bullhorn">
-    Quem credita a venda para o **Facebook/Google/RedTrack** são os **pixels** que você cola nas páginas **e** o **postback nativo do próprio gateway**. O HidePages faz o **click-id sobreviver até o checkout** — mas não reenvia a conversão para a rede.
+  <Card title="Rede de anúncios e tracker" icon="bullhorn">
+    Quem credita a venda no Facebook, no Google ou no RedTrack são os **pixels** e o **postback do próprio gateway** para o seu tracker. O HidePages mantém o click-id até o checkout, mas não reenvia a venda para a rede.
   </Card>
 </CardGroup>
 
-<Info>
-Ou seja: para otimizar as campanhas na **rede de anúncios**, você ainda precisa dos **pixels/scripts** nas páginas e/ou do **postback nativo do gateway** apontando para o seu tracker. Veja [RedTrack](/conversoes/redtrack).
-</Info>
-
 ## Próximos passos
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card title="Integrar um gateway" icon="plug" href="/conversoes/integrar-gateway">
-    Configure Hotmart, CartPanda, Digistore24, BuyGoods ou ClickBank.
+    Os 13 gateways suportados.
   </Card>
-  <Card title="Webhook genérico com N8N" icon="diagram-project" href="/conversoes/n8n">
-    Para gateways sem integração nativa.
+  <Card title="RedTrack" icon="arrow-right-arrow-left" href="/conversoes/redtrack">
+    Setup em Nativo, Mirror e Redirect.
+  </Card>
+  <Card title="N8N" icon="circle-nodes" href="/conversoes/n8n">
+    Para gateways sem integração pronta.
   </Card>
 </CardGroup>

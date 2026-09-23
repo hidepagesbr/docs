@@ -1,66 +1,65 @@
 ---
 title: "Fontes de tráfego e exigências"
 icon: "sliders"
-description: "As redes suportadas pelo HidePages e as regras obrigatórias de cada uma."
+description: "As redes suportadas pelo HidePages, o que cada uma exige e o que cada uma libera na campanha."
 ---
+
+import { Print } from '/snippets/print.mdx';
 
 A **Fonte de Tráfego** é obrigatória na campanha e faz duas coisas:
 
-1. **Liga filtros específicos** daquela rede (o HidePages aplica automaticamente os filtros de revisão daquela rede).
-2. **Ativa a verificação de origem** — o HidePages confere se o visitante realmente veio da rede declarada; se não bater, trata como suspeito (Gray).
+1. **Liga os filtros da rede**: o HidePages aplica sozinho os filtros de revisão específicos daquela rede.
+2. **Confere a origem**: se o visitante não veio da rede declarada, a visita é tratada como suspeita e aparece nos logs com o motivo **Fonte de tráfego**.
 
 <Warning>
-Selecione a fonte que corresponde ao **tráfego real** da campanha. Declarar Meta e mandar tráfego de Taboola, por exemplo, faz o filtro de origem barrar seus próprios cliques.
+Escolha a fonte que corresponde ao **tráfego real**. Declarar Meta e mandar tráfego da Taboola faz o filtro barrar os seus próprios cliques.
 </Warning>
+
+<Print src="campanhas/fontes-lista" alt="Lista de fontes de tráfego do formulário de campanha" />
 
 ## Redes suportadas
 
-**Google, YouTube, Meta, TikTok, Outbrain, Taboola, NewsBreak, Mediago, MGID** e **Digistore24 (Upsell)**.
+**Google, YouTube, Meta, TikTok, Outbrain, Taboola, NewsBreak, Mediago, MGID, TrafficJunky, RevContent** e **Bigo Ads**, além das opções de **Upsell** (Digistore24, Cartpanda, JVZoo e Upsell universal).
+
+<Info>
+As fontes disponíveis dependem do seu **plano**. Alguns planos liberam só Meta e TikTok; os maiores liberam todas. Veja em **Faturamento → Limites do Plano**.
+</Info>
 
 ## Exigências por fonte
 
-| Fonte | Block Suspicious Connections | Gray Page | Teste A/B na Black | Usa HPID? |
+| Fonte | Bloquear Conexões Suspeitas | Gray Page | Teste A/B na Black | Usa HPID |
 |-------|:---:|:---:|:---:|:---:|
-| **Google** | **Obrigatório** | — | ✅ | ✅ |
-| **YouTube** | **Obrigatório** | — | ✅ | ✅ |
-| **TikTok** | **Obrigatório** | — | ✅ | ✅ |
-| **Taboola** | **Obrigatório** | — | ✅ | ✅ |
-| **Outbrain** | **Obrigatório** | — | ✅ | ✅ |
-| **NewsBreak** | **Obrigatório** | — | ✅ | ✅ |
-| **Meta** | Recomendado | ✅ disponível | ✅ | ✅ |
-| **Mediago** | Recomendado | — | ✅ | ✅ |
-| **MGID** | Recomendado | — | ✅ | ✅ |
-| **Digistore24 (Upsell)** | Recomendado | ❌ | ❌ | ❌ |
+| **Google**, **YouTube** | Travado em ligado | — | ✅ | ✅ |
+| **TikTok** | Travado em ligado | — | ✅ | ✅ |
+| **Taboola** | Travado em ligado | — | ✅ | ❌ usa o `tblci` |
+| **Outbrain**, **NewsBreak** | Travado em ligado | — | ✅ | ✅ |
+| **Mediago**, **MGID**, **RevContent**, **Bigo Ads** | Travado em ligado | — | ✅ | ✅ |
+| **Meta** | Recomendado | ✅ | ✅ | ✅ |
+| **TrafficJunky** | Recomendado | — | ✅ | ✅ |
+| **Digistore24**, **Cartpanda**, **JVZoo** (Upsell) | — | — | ❌ | ❌ |
+| **Upsell universal** | — | — | ✅ | ❌ |
 
 <Info>
-Quando **Block Suspicious Connections** é obrigatório, o app não deixa salvar a campanha sem ele ligado. Lembrando que é um recurso **dependente do plano**.
+**Bloquear Conexões Suspeitas** é um recurso do plano. Onde ele é travado em ligado, o formulário não deixa desligar.
 </Info>
 
 ## Observações por rede
 
 <AccordionGroup>
-  <Accordion title="Google e YouTube" icon="google">
-    O HidePages aplica automaticamente os filtros de revisão específicos dessas redes. O bloqueio de conexões suspeitas é **obrigatório**.
-  </Accordion>
   <Accordion title="Meta" icon="facebook">
-    É a **única fonte que libera a Gray Page** no formulário. Útil para dar um tratamento intermediário ao tráfego suspeito do Facebook/Instagram em vez de jogar direto na White.
+    A **única fonte que libera a Gray Page**. Útil para dar um tratamento intermediário ao tráfego suspeito do Facebook e do Instagram em vez de mandar direto para a White. O bloqueio de conexões suspeitas é opcional aqui, mas recomendado.
   </Accordion>
-  <Accordion title="Taboola e Outbrain" icon="newspaper">
-    O HidePages aplica automaticamente os filtros específicos dessas redes para separar clique real de acesso de revisão. Bloqueio de conexões suspeitas **obrigatório**.
+  <Accordion title="Taboola" icon="newspaper">
+    Não usa o hash HPID: o HidePages reconhece o clique pelo `tblci`, o click-id que a própria Taboola acrescenta ao link. Na lista de campanhas, a coluna **HPID Hash** mostra **Não necessário**.
   </Accordion>
-  <Accordion title="NewsBreak, Mediago e MGID" icon="rectangle-ad">
-    Native ads com filtros de revisão específicos aplicados automaticamente. NewsBreak exige o bloqueio de conexões suspeitas.
+  <Accordion title="Google, YouTube, TikTok e native ads" icon="google">
+    Os filtros de revisão dessas redes são aplicados sozinhos, e o bloqueio de conexões suspeitas fica sempre ligado.
   </Accordion>
-  <Accordion title="Digistore24 (Upsell)" icon="cart-shopping">
-    Modo especial para **upsell dentro do checkout** do Digistore24. Particularidades:
-    - **Não usa HPID** — o link vai na configuração de upsell do gateway.
-    - **Não permite Gray Page.**
-    - **Não permite Teste A/B** na Black Page.
-
-    O modo Upsell é otimizado para que o tráfego legítimo de upsell do Digistore24 continue vendo a oferta.
+  <Accordion title="Upsell" icon="cart-shopping">
+    As opções de Upsell não recebem tráfego de anúncio: elas atendem o comprador depois do checkout. Por isso não usam HPID nem Gray Page. Veja [Upsell](/campanhas/upsell).
   </Accordion>
 </AccordionGroup>
 
-<Card title="Configurar as regras da campanha" icon="sliders" href="/campanhas/criar#bloco-3-—-regras-os-filtros" horizontal>
-  Volte para o passo a passo de criação para aplicar essas regras.
+<Card title="Configurar as regras da campanha" icon="bullseye" href="/campanhas/criar#3-regras" horizontal>
+  Volte ao passo a passo de criação.
 </Card>

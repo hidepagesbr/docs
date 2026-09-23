@@ -4,6 +4,8 @@ icon: "key"
 description: "O hash HPID é o que marca o tráfego como legítimo. Sem ele no link do anúncio, todo o tráfego pago cai na White Page."
 ---
 
+import { Print } from '/snippets/print.mdx';
+
 <Warning>
 **Leia esta página antes de subir qualquer tráfego.** Esquecer o hash HPID no link do anúncio é o erro nº 1 — e o sintoma é sempre o mesmo: **"não vende, tudo cai na White Page"**.
 </Warning>
@@ -26,10 +28,12 @@ Texto que o próprio painel mostra: *"Sem o hash HPID, toda visita à sua campan
 
 <Steps>
   <Step title="Na tela de criação">
-    Logo depois de criar a campanha, a tela **"Campanha Criada com Sucesso!"** mostra o hash já no formato `&hpid=xxxxxxxx`, com botão de copiar.
+    Logo depois de criar a campanha, a tela **Campanha Criada com Sucesso!** mostra o hash já no formato `&hpid=xxxxxxxx`, com botão de copiar.
+
+    <Print src="campanhas/criada-sucesso" alt="Tela de sucesso da campanha com o HPID hash" />
   </Step>
   <Step title="Na lista de campanhas">
-    Na tabela de **Campaigns** existe a coluna **HPID Hash**, com um botão para **mostrar/ocultar** e **copiar** o hash a qualquer momento.
+    Na lista de **Campanhas**, a coluna **HPID Hash** tem os botões **Mostrar hash** e **Copiar hash**. O botão de copiar já copia no formato `&hpid=...`.
   </Step>
 </Steps>
 
@@ -69,8 +73,12 @@ O `hpid` **convive com as suas UTMs e parâmetros de rastreamento**. Você pode 
 https://seudominio.com/oferta?hpid=a1b2c3d4e5f6a7b8
 ```
 
-```text Taboola / Outbrain (com click-id)
-https://seudominio.com/oferta?utm_source=taboola&click_id={click_id}&hpid=a1b2c3d4e5f6a7b8
+```text Outbrain (com click-id)
+https://seudominio.com/oferta?utm_source=outbrain&click_id={{ob_click_id}}&hpid=a1b2c3d4e5f6a7b8
+```
+
+```text Taboola (sem HPID)
+https://seudominio.com/oferta?utm_source=taboola&tblci={click_id}
 ```
 
 ```text Meta
@@ -86,7 +94,7 @@ https://seudominio.com/oferta?utm_source=fb&utm_medium={{adset.name}}&hpid=a1b2c
 
 <Steps>
   <Step title="Acompanhe os Logs de Acesso (recomendado)">
-    Depois de subir o anúncio, abra **Logs de Acesso**. Os cliques reais aprovados aparecem como **Approved** (receberam a oferta); os acessos sem o hash aparecem como **Missing param** (`no_hash`). É aqui que você confirma que o **tráfego real** está sendo aprovado.
+    Depois de subir o anúncio, abra os **Logs de Acesso** no Dashboard. Os cliques reais aprovados aparecem com o motivo **Aprovado** (receberam a oferta). Os acessos sem o hash aparecem como **Parâmetro ausente**. É aqui que você confirma que o **tráfego real** está sendo aprovado. Veja [Dashboard e logs](/painel/dashboard#logs-de-acesso).
   </Step>
   <Step title="Confira a oferta pelo preview">
     Para checar se a *Black Page* em si está correta (layout, checkout), use o **preview** da página — ele mostra a oferta sem passar pelo filtro de cloaking.
@@ -111,5 +119,7 @@ https://seudominio.com/oferta?utm_source=fb&utm_medium={{adset.name}}&hpid=a1b2c
 </AccordionGroup>
 
 <Info>
-**Exceção — Digistore24 (Upsell):** campanhas nesse modo **não usam HPID**. O link é instalado na configuração de upsell do próprio gateway, não no anúncio.
+**Exceções:**
+- **Taboola** não precisa do HPID. O HidePages usa o click-id da própria Taboola (`tblci`), e a coluna mostra **Não necessário**.
+- Campanhas de **Upsell** (Digistore24, Cartpanda, JVZoo e Upsell universal) **não usam HPID**. Veja [Upsell](/campanhas/upsell).
 </Info>

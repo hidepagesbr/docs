@@ -1,0 +1,79 @@
+---
+title: "Dashboard e métricas"
+icon: "gauge"
+description: "Os números do tráfego, os logs de cada visita, os filtros e as métricas por campanha."
+---
+
+import { Print } from '/snippets/print.mdx';
+
+O **Dashboard** é a primeira tela do painel depois que você tem campanhas. Ele mostra o tráfego de todas as campanhas, ou de uma só, no período escolhido.
+
+<Print src="painel/dashboard" alt="Dashboard com os cartões de tráfego, o gráfico Visão de Tráfego e os Logs de Acesso" />
+
+## A barra do topo
+
+- **Período**: um dia ou um intervalo de datas.
+- **Todas as Campanhas**: limita os números a uma campanha.
+- **Filtros**: status, dispositivo, país, domínio e IP (abaixo).
+- **Ocultar dados / Mostrar dados**: borra os números e os logs, para gravar tela ou compartilhar print sem expor dados.
+- **Atualizar**: recarrega os números.
+
+## Os cartões
+
+<Print src="painel/cartoes" alt="Cartões Total de Requisições, Acessos Válidos, Bloqueados, Gray Page e Bots Detectados" />
+
+| Cartão | O que conta |
+|--------|-------------|
+| **Total de Requisições** | Todas as visitas recebidas, sem contar os bots. |
+| **Acessos Válidos** | Visitas que chegaram à oferta (Black Page). |
+| **Bloqueados** | Visitas filtradas pelo HidePages e mandadas para a White Page, sem contar os bots. |
+| **Gray Page** | Visitas servidas pela Gray Page (só campanhas Meta), com a taxa de conversão delas. |
+| **Bots Detectados** | Tráfego automatizado: robôs de revisão, crawlers e ferramentas. Sempre recebe a White Page. |
+
+Os cartões mostram também os **únicos**, contando cada visitante uma vez.
+
+## Visão de Tráfego
+
+O gráfico mostra as requisições ao longo do período, separadas por destino. Serve para ver picos de revisão da rede e o efeito de mudanças na campanha.
+
+## Logs de Acesso
+
+A tabela mostra cada visita em tempo real: **data**, **domínio/slug**, **IP**, **localização**, **dispositivo**, **status** (Black, White ou Gray) e o **motivo** da decisão.
+
+<Print src="painel/logs" alt="Logs de Acesso com visitas White por Bot e uma visita Gray por Fonte de tráfego" />
+
+O **motivo** explica por que a visita foi para aquela página: *Bot*, *País*, *Fonte de tráfego*, *Parâmetro ausente*, *Aprovado*, entre outros. A lista completa está em [Como o HidePages decide](/conceitos/como-decide).
+
+<Tip>
+Quando um cliente seu cai na White sem motivo aparente, filtre o log pelo **IP** ou pelo **país** dele. O motivo mostra o que faltou: o `hpid` na URL, a fonte de tráfego certa ou o país liberado na campanha.
+</Tip>
+
+Com **Ocultar dados**, a tabela fica borrada:
+
+<Print src="painel/logs-ocultos" alt="Logs de Acesso com os dados borrados pelo Ocultar dados" />
+
+## Filtros
+
+<Print src="painel/filtros" alt="Diálogo Filtros com status, dispositivo, país, domínio e IP" />
+
+- **Status**: Black, White ou Gray.
+- **Dispositivo**: Mobile ou Desktop.
+- **País**, **Domínio** e **IP**: aceitam busca parcial. Cole a URL inteira, só o caminho (ex.: `/meu-upsell`), o nome do país ou parte do IP.
+
+Os filtros valem para os cartões, o gráfico e os logs.
+
+## Métricas por campanha
+
+Na lista de **Campanhas**, a ação **Métricas** abre a mesma visão filtrada por aquela campanha, com três cartões a mais: **Conversões**, **Taxa de conversão** e **Receita** (em dólar).
+
+<Print src="campanhas/metricas" alt="Métricas da campanha com conversões, taxa de conversão, receita e os cartões de tráfego" />
+
+<Info>
+Conversões e receita dependem do [rastreamento de conversões](/conversoes/visao-geral). Sem integração, esses cartões ficam em zero.
+</Info>
+
+Para comparar variantes de um teste A/B, use as [métricas do teste](/testes-ab/visao-geral#métricas).
+
+## Fuso horário
+
+Datas e gráficos seguem o **fuso horário da conta**, que você muda em [Conta](/conta/conta-e-faturamento#fuso-horário).

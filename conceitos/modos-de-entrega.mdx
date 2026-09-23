@@ -1,0 +1,86 @@
+---
+title: "Nativo, Mirror e Redirect"
+icon: "shuffle"
+description: "As três formas de entregar cada página de uma campanha, o que cada uma faz com o visitante e quando usar."
+---
+
+import { Print } from '/snippets/print.mdx';
+
+Cada página de uma campanha (White, Black e Gray) tem o seu **modo de entrega**. O modo não muda **quem** vê a página, que continua sendo decisão do filtro. Ele muda **como** o conteúdo chega ao visitante.
+
+<Print src="campanhas/paginas-nativo" alt="Cartão Páginas da campanha com o seletor Nativo, Mirror e Redirect em cada página" />
+
+Você escolhe o modo no cartão **Páginas** do formulário da campanha, com o seletor acima de cada campo. As três páginas podem usar modos diferentes na mesma campanha.
+
+## Os três modos
+
+<CardGroup cols={3}>
+  <Card title="Nativo" icon="layer-group">
+    Serve uma página do **Builder** do HidePages, no seu domínio, sem redirecionamento.
+  </Card>
+  <Card title="Mirror" icon="clone">
+    Serve uma página publicada em **outro endereço**, sob o domínio da campanha, sem redirecionamento.
+  </Card>
+  <Card title="Redirect" icon="arrow-up-right-from-square">
+    Manda o visitante para **outro endereço** com um redirecionamento.
+  </Card>
+</CardGroup>
+
+### Nativo
+
+O visitante recebe uma página que você montou no Builder. É o modo padrão e o mais completo:
+
+- A página só entra na lista depois de **publicada**.
+- A campanha só fica **Ativa** quando todas as páginas nativas estão publicadas.
+- É o único modo em que o HidePages **injeta a chave de conversão** nos links de checkout, repassa UTMs e click-ids, roda sub-páginas e o delay de oferta.
+- A Black Page pode ser um **Teste A/B** em vez de uma página única.
+
+### Mirror
+
+Você informa a URL de uma página publicada em outro lugar. O HidePages busca essa página e a entrega **no domínio da campanha, sem o visitante sair dele**. Os links, imagens e scripts da página de origem continuam funcionando.
+
+<Print src="campanhas/modo-mirror" alt="Gray Page configurada no modo Mirror com a URL de origem preenchida" />
+
+Use o Mirror quando a página já existe em outra plataforma e você não quer recriá-la, mas quer manter a URL do anúncio igual à URL final.
+
+- A página de origem precisa estar **no ar e acessível**. Se ela sair do ar, a campanha deixa de mostrá-la.
+- O rastreamento da página é o dela mesma: pixels e scripts que já estão na origem continuam rodando.
+- O HidePages **não injeta a chave de conversão** numa página espelhada. Para medir vendas, use o seu tracker (veja [RedTrack](/conversoes/redtrack)).
+
+### Redirect
+
+Você informa uma URL e o visitante é **redirecionado** para ela. Os parâmetros da URL do visitante (UTMs, `sub1`…, click-ids) seguem junto até o destino. O hash HPID é removido antes do redirecionamento.
+
+<Print src="campanhas/modo-redirect" alt="Aviso do painel ao escolher o modo Redirect: não recomendamos o Redirect" />
+
+<Warning>
+O próprio painel avisa: **não recomendamos o Redirect**. O salto para outro domínio fica registrado no navegador e é o padrão que revisores procuram para identificar cloaking. Sempre que puder, prefira o **Mirror**: mesmo conteúdo, sob o seu domínio, sem salto. Entenda o motivo em [Estrutura vs Redirecionamento](/conceitos/estrutura-vs-redirect).
+</Warning>
+
+## Comparativo
+
+| | Nativo | Mirror | Redirect |
+|---|:---:|:---:|:---:|
+| Onde a página vive | Builder do HidePages | Outro endereço | Outro endereço |
+| URL que o visitante vê | A da campanha | A da campanha | A do destino |
+| Precisa publicar no HidePages | Sim | Não | Não |
+| Chave de conversão do HidePages | Sim | Não | Não |
+| Sub-páginas, delay de oferta, funil inline | Sim | Não | Não |
+| Teste A/B na Black Page | Sim | Não | Não |
+| Parâmetros do visitante chegam ao destino | Sim | Sim | Sim |
+
+## Regras de preenchimento
+
+- A URL precisa ser completa. Um endereço sem `https://` ganha o prefixo automaticamente, e o host precisa ter um ponto (`exemplo.com`).
+- Trocar o modo de uma página limpa os outros dois: uma página é servida de um jeito só.
+- White Page e Black Page são obrigatórias em qualquer modo. A Gray Page continua opcional e só existe em campanhas Meta.
+- O mesmo vale para as etapas do [funil](/campanhas/funil): cada etapa tem o seletor de modo na White e na Black.
+
+<CardGroup cols={2}>
+  <Card title="Criar uma campanha" icon="bullseye" href="/campanhas/criar">
+    O formulário completo, com os três modos.
+  </Card>
+  <Card title="Como o HidePages decide quem vê o quê" icon="filter" href="/conceitos/como-decide">
+    A decisão que vem antes do modo de entrega.
+  </Card>
+</CardGroup>

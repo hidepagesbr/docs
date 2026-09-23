@@ -1,72 +1,78 @@
 ---
-title: "Estilo e configurações"
+title: "Estilo e ajustes"
 icon: "sliders"
-description: "Onde ajustar cores, espaçamento, tipografia e as opções específicas de cada componente no Builder V2."
+description: "O inspetor do Builder: a aba Estilo para a aparência e a aba Ajustes para navegação, atraso e as opções de cada widget."
 ---
 
-Quando você **seleciona um elemento**, a aba **Configurações** abre com três sub-abas:
+import { Print } from '/snippets/print.mdx';
 
-| Sub-aba | Para quê |
+Selecione um elemento no canvas (ou pelas **Camadas**) e o inspetor, à direita, mostra duas abas: **Estilo** e **Ajustes**.
+
+<Print src="builder/editor-selecionado" alt="Botão selecionado no canvas com o inspetor aberto na aba Estilo" />
+
+## Estilo
+
+A aparência do elemento.
+
+<Print src="builder/inspetor-estilo" alt="Aba Estilo do inspetor" />
+
+| Seção | O que ajusta |
 |---|---|
-| **Estilo** | Aparência visual (cores, espaçamento, tipografia, bordas, sombra) |
-| **Configurações** | Opções específicas do tipo de elemento (imagem, vídeo, link, atraso…) |
-| **Página** | Ajustes da página inteira ([veja aqui](/builder-v2/pagina-e-scripts)) |
-
-## Estilo (visual)
-
-O painel de **Estilo** é onde você deixa o elemento com a cara que quiser:
-
-<AccordionGroup>
-  <Accordion title="Espaçamento" icon="up-down-left-right">
-    **Interno** (espaço dentro do elemento) e **Externo** (espaço ao redor).
-  </Accordion>
-  <Accordion title="Tamanho" icon="ruler-combined">
-    **Largura**: Cheia (100%), Automática ou Fixa (com uma largura exata em px).
-  </Accordion>
-  <Accordion title="Cores" icon="palette">
-    Cor do **Texto** e do **Fundo**.
-  </Accordion>
-  <Accordion title="Texto" icon="font">
-    **Fonte**, **Tamanho**, **Alinhamento** (esquerda/centro/direita/justificado) e **Peso** (normal/negrito).
-  </Accordion>
-  <Accordion title="Bordas & cantos" icon="border-all">
-    **Arredondamento** dos cantos, ligar/desligar **Borda** e a **Cor da borda**.
-  </Accordion>
-  <Accordion title="Sombra" icon="clone">
-    **Intensidade** da sombra (nenhuma / leve / média / forte).
-  </Accordion>
-</AccordionGroup>
-
-### Estilo por dispositivo (responsivo)
-
-O estilo é **por dispositivo**. Troque entre **Desktop / Tablet / Mobile** (botões na base do painel) e ajuste o estilo de cada um separadamente — assim a página fica perfeita em qualquer tela.
+| **Espaçamento** | Espaço interno e externo. |
+| **Tamanho** | Largura cheia, automática ou fixa. |
+| **Cores** | Cor do texto e do fundo. |
+| **Texto** | Fonte, tamanho, peso e alinhamento. |
+| **Alinhamento** | Posição do elemento no bloco. |
+| **Bordas e cantos** | Borda, cor da borda e arredondamento. |
+| **Sombra** | Intensidade da sombra. |
+| **Avançado (CSS)** | Qualquer propriedade CSS do elemento. |
 
 <Tip>
-Precisa de controle fino? A seção **Avançado (CSS)** dá acesso a **todas as propriedades CSS** do elemento.
+O estilo vale **por dispositivo**. Troque para **Tablet** ou **Mobile** na base do canvas e ajuste cada um separadamente.
 </Tip>
 
-## Configurações por componente
+## Ajustes
 
-A sub-aba **Configurações** muda conforme o elemento selecionado:
+O comportamento do elemento. As seções mudam conforme o widget selecionado.
+
+<Print src="builder/inspetor-ajustes-botao" alt="Aba Ajustes de um botão com as seções Navegação e Atraso" />
+
+### Navegação
+
+Define para onde o elemento leva o visitante. Funciona em botões, imagens e textos.
+
+<Print src="builder/navegacao" alt="Seção Navegação com o Destino apontando para a sub-página Oferta" />
+
+| Destino | O que faz |
+|---|---|
+| **Nenhum** | O elemento não leva a lugar nenhum. |
+| *Uma sub-página* | Vai para outra sub-página do funil, sem trocar de URL. |
+| **URL externa** | Vai para outro endereço, por exemplo o checkout. |
+| **Checkout de upsell** | Passa pelo domínio de uma campanha de [Upsell universal](/campanhas/upsell) antes de ir ao checkout. |
+
+<Print src="builder/navegacao-destinos" alt="Lista de destinos: Nenhum, Oferta, URL externa e Checkout de upsell" />
+
+### Atraso
+
+Esconde o elemento até um tempo passar ou um vídeo chegar num ponto. É o **delay de oferta**. Veja [Vídeo e delay](/builder-v2/video-e-delay).
+
+### Ajustes por widget
 
 <AccordionGroup>
   <Accordion title="Imagem" icon="image">
-    **Enviar imagem** (JPG/PNG/WEBP, até **1 MB**) e o **Texto alternativo** (melhora acessibilidade e SEO).
-  </Accordion>
-  <Accordion title="HTML" icon="code">
-    O **Conteúdo** HTML do bloco, com um botão **Abrir editor** para um espaço maior, com destaque de sintaxe.
+    Upload de JPG, PNG ou WEBP de até **1 MB** e o **Texto alternativo**.
   </Accordion>
   <Accordion title="Vídeo" icon="play">
-    Provedor e código do VTurb — veja [Vídeo e delay](/builder-v2/video-e-delay).
+    Provedor VTurb e código de incorporação. Veja [Vídeo e delay](/builder-v2/video-e-delay).
   </Accordion>
-  <Accordion title="Navegação (link)" icon="link">
-    Para onde o elemento leva (outra página do funil ou URL externa) — veja [Sub-páginas e navegação](/builder-v2/sub-paginas-e-navegacao).
+  <Accordion title="HTML" icon="code">
+    O conteúdo HTML do bloco, com um editor de código maior.
   </Accordion>
-  <Accordion title="Configurações de atraso" icon="stopwatch">
-    Esconder/revelar o elemento por tempo ou por progresso do vídeo — veja [Vídeo e delay](/builder-v2/video-e-delay).
+  <Accordion title="Seções prontas" icon="table-cells">
+    DTC, Cabeçalho, Comentários, Acordeão e Garantia têm aqui o seletor de modelo.
   </Accordion>
 </AccordionGroup>
 
-<Card title="Sub-páginas e navegação" icon="diagram-project" href="/builder-v2/sub-paginas-e-navegacao" horizontal>
-  Monte o funil e ligue uma página na outra.
+<Card title="Próximo: vídeo e delay de oferta" icon="stopwatch" href="/builder-v2/video-e-delay" horizontal>
+  O player VTurb e a oferta que aparece no tempo certo.
 </Card>

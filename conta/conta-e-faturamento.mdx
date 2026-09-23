@@ -1,0 +1,63 @@
+---
+title: "Conta, faturamento e chaves de API"
+icon: "user-gear"
+description: "Seu perfil, o fuso horário dos relatórios, o plano, o uso de requisições e as chaves de API."
+---
+
+import { Print } from '/snippets/print.mdx';
+
+## Conta
+
+Em **Conta** ficam os seus dados de contato.
+
+<Print src="conta/perfil" alt="Tela Conta com Meu perfil e Fuso horário da conta" />
+
+- **Nome** e **WhatsApp**: o WhatsApp é usado pelo suporte para falar com você. Inclua o código do país.
+- **E-mail**: é o seu login e não muda por aqui.
+
+### Fuso horário
+
+O **Fuso horário da conta** define em que horário aparecem os logs de acesso e os gráficos. Escolha o fuso e clique em **Salvar**.
+
+## Faturamento
+
+Em **Faturamento** você vê o plano, o uso e o que o plano libera.
+
+<Print src="conta/faturamento" alt="Tela Faturamento com o plano atual, o uso de requisições e os limites do plano" />
+
+- **Plano Atual**: o plano, o status, o início do período e a próxima cobrança. **Gerenciar Faturamento** abre a área de pagamento, onde você troca o cartão e baixa as faturas.
+- **Uso de Requisições**: quantas requisições o workspace já usou no período e quando o contador reinicia. O uso também aparece no rodapé da barra lateral.
+- **Limites do Plano**: campanhas, páginas, domínios e requisições por mês, o preço das requisições extras e os recursos incluídos, como Teste A/B, sub-páginas, Funil de Upsell e detecção de conexão suspeita.
+- **Alterar Plano**: para subir ou descer de plano.
+
+<Info>
+Quando a assinatura tem um problema, as campanhas mudam de status: **Assinatura Bloqueada**, **Cota Excedida** ou **Pagamento Pendente**. Veja [os status da campanha](/campanhas/criar#status-da-campanha).
+</Info>
+
+## Chaves de API
+
+Em **Chaves de API** você cria as chaves para usar a [API do HidePages](/api/introducao).
+
+<Print src="conta/chaves-api" alt="Tela Chaves de API com a lista de chaves e o bloco Como usar a API" />
+
+<Steps>
+  <Step title="Nova chave de API">
+    Dê um nome que diga onde ela vai ser usada e clique em **Criar chave**.
+
+    <Print src="conta/chave-nova" alt="Diálogo Criar chave de API com o campo Nome da chave" />
+  </Step>
+  <Step title="Copie a chave">
+    A chave começa com `hp_live_` e aparece **uma única vez**, logo após criar. Guarde num lugar seguro.
+  </Step>
+  <Step title="Use no header X-API-Key">
+    ```bash
+    curl https://api.hidepages.com/v1/pages \
+      -H "X-API-Key: hp_live_..." \
+      -H "Accept: application/json"
+    ```
+  </Step>
+</Steps>
+
+<Warning>
+A chave dá acesso ao workspace inteiro. Não coloque em páginas, repositórios públicos ou prints. Se ela vazar, exclua na lista (ícone de lixeira) e crie outra.
+</Warning>

@@ -1,48 +1,71 @@
 ---
 title: "Página e scripts"
 icon: "gear"
-description: "As configurações da página inteira no Builder V2 (página inicial, back redirect, layout, compartilhamento) e onde colar pixels."
+description: "Os ajustes da página inteira no Builder (layout, código-fonte, compartilhamento) e onde colar pixels e tags de rastreamento."
 ---
 
-Além das configurações de cada elemento, o Builder V2 tem configurações da **página inteira** e um lugar próprio para **pixels/scripts**.
+import { Print } from '/snippets/print.mdx';
 
-## Configurações da Página
+Além dos ajustes de cada elemento, o Builder tem os ajustes da **sub-página aberta**, no painel **Página atual**, e um lugar próprio para **pixels**, o painel **Scripts**.
 
-Na aba **Configurações**, a sub-aba **Página** reúne os ajustes gerais:
+## Página atual
+
+<Print src="builder/painel-pagina-atual" alt="Painel Página atual com nome, ID, Backredirect, Trocar links em massa e Código-fonte" />
 
 <AccordionGroup>
-  <Accordion title="Página inicial" icon="flag">
-    Define a **primeira página** que o visitante vê ao abrir o funil.
+  <Accordion title="Nome e ID da página" icon="tag">
+    O nome da sub-página e o **ID**, com botão de copiar. O ID é usado na [navegação por código](/builder-v2/sub-paginas-e-navegacao#navegação-por-código).
   </Accordion>
-  <Accordion title="Redirecionamento de retorno + Intenção de saída" icon="arrow-rotate-left">
-    Escolhe a página de **back redirect** e liga a **Intenção de saída** — aciona o redirecionamento quando o visitante tenta sair pela navegação de retorno.
+  <Accordion title="Backredirect" icon="arrow-rotate-left">
+    A sub-página mostrada quando o visitante tenta sair. Veja [Backredirect](/builder-v2/sub-paginas-e-navegacao#backredirect).
   </Accordion>
-  <Accordion title="Layout da página" icon="table-columns">
-    Controla **largura, espaçamento e alinhamento** da página como um todo.
+  <Accordion title="Layout" icon="table-columns">
+    Largura máxima, preenchimento, espaçamento, alinhamento, cor de fundo e altura mínima da página. Só aparece em páginas montadas com o contêiner de layout do Builder.
   </Accordion>
-  <Accordion title="Compartilhar página" icon="share-nodes">
-    Gera (ou desativa) um **código de compartilhamento público** — é esse código que a opção **Importar** (na criação de páginas) consome para copiar sua página.
+  <Accordion title="Trocar links em massa" icon="arrows-rotate">
+    Troca todas as ocorrências de um link na página, internos ou externos.
   </Accordion>
-  <Accordion title="Revelar elementos" icon="eye">
-    Mostra, **só dentro do editor**, os elementos que estão escondidos (por delay, por exemplo) — para você conseguir editá-los.
-  </Accordion>
-  <Accordion title="Editor de código-fonte" icon="code">
-    Edita a página em **HTML e CSS brutos**, com opções de **Exportar** e **Aplicar** o código.
+  <Accordion title="Código-fonte" icon="code">
+    Edita o HTML e o CSS da página. Com **Tempo real**, as mudanças aparecem no canvas na hora. **Editar com IA** pede alterações em linguagem natural. Também dá para **Importar página externa** e **Exportar página**.
   </Accordion>
 </AccordionGroup>
 
-## Scripts (pixels e rastreamento)
-
-A aba **Scripts** é onde vão seus **pixels e tags de rastreamento** (Facebook Pixel, Google, etc.).
-
-- Escolha a **página** (principal ou uma sub-página).
-- Cole seus scripts nos slots **Head**, **Body** ou **Footer**.
-- Cada página/sub-página tem seus próprios scripts.
-
 <Tip>
-Head é o lugar mais comum para pixels de rastreamento. Cada sub-página do funil pode ter seus próprios scripts, então dá para rastrear cada etapa separadamente.
+**Clonar/importar página**, na base do painel, substitui o conteúdo, os estilos e os scripts da sub-página atual pelos de um site (por URL) ou de outra página sua (**Meus sites**).
 </Tip>
 
-<Card title="Voltar para a visão geral do Builder V2" icon="wand-magic-sparkles" href="/builder-v2/visao-geral" horizontal>
-  O editor, criar página e publicar.
+## Scripts
+
+O painel **Scripts** é onde vão pixels e tags de rastreamento: Meta Pixel, Google Tag, RedTrack, Clarity.
+
+<Print src="builder/scripts" alt="Diálogo Scripts com a escolha da página e os campos Head, Body e Footer" />
+
+<Steps>
+  <Step title="Escolha a sub-página">
+    Cada sub-página tem os seus scripts, então dá para medir cada etapa do funil separadamente.
+  </Step>
+  <Step title="Cole no campo certo">
+    | Campo | Onde entra |
+    |---|---|
+    | **Head** | Dentro de `<head>`. O lugar certo para pixels. |
+    | **Body** | Logo depois da abertura de `<body>`. |
+    | **Footer** | Antes do fechamento de `</body>`. |
+  </Step>
+  <Step title="Publique a página">
+    Scripts só vão ao ar depois de **Publicar**.
+  </Step>
+</Steps>
+
+## Compartilhar por código
+
+Em **Páginas → Compartilhar por código**, ligue **Importação por código** para gerar um **Código de importação**. Quem tiver o código importa a página inteira, com as sub-páginas, pela opção [Importar](/builder-v2/criar-pagina#importar).
+
+<Print src="builder/compartilhar-codigo" alt="Seção Compartilhar por código no painel Páginas" />
+
+<Warning>
+Qualquer pessoa com o código consegue copiar a página. Desligue a importação quando não precisar mais compartilhar.
+</Warning>
+
+<Card title="Voltar para a visão geral do Builder" icon="wand-magic-sparkles" href="/builder-v2/visao-geral" horizontal>
+  O editor, salvar e publicar.
 </Card>

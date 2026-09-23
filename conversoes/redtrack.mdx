@@ -1,59 +1,39 @@
 ---
-title: "RedTrack (no-redirect)"
+title: "RedTrack"
 icon: "arrow-right-arrow-left"
-description: "Setup recomendado do RedTrack no HidePages: modo no-redirect, script de rastreamento e encaminhamento do clickid até o checkout."
+description: "Como manter o click-id do RedTrack até o checkout em cada modo de entrega da Black Page: Nativo, Mirror e Redirect."
 ---
 
+import { Print } from '/snippets/print.mdx';
+
+O RedTrack credita a venda pelo **click-id**: ele precisa chegar até o checkout, e o **postback do gateway** para o RedTrack devolve a venda. O que muda é **quem leva o click-id até o checkout**, e isso depende do modo da Black Page na campanha.
+
+| Modo da Black | Quem leva o click-id ao checkout | Venda no painel do HidePages |
+|---------------|----------------------------------|:---:|
+| **Nativo** (página do Builder) | Os scripts que você cola na página | ✅ com uma integração de conversão |
+| **Mirror** | O HidePages, automaticamente | — |
+| **Redirect** | A sua página de destino | — |
+
 <Info>
-O RedTrack **não** é uma integração de API no HidePages (não existe campo de "domínio" ou "postback do RedTrack" no painel). O setup recomendado é rodar o RedTrack em **modo no-redirect** e instalar **dois scripts na página de oferta (Black)**: o script de rastreamento do RedTrack + um script que **encaminha o `clickid` para os links de checkout**. Assim o click-id sobrevive até a venda, e o **postback nativo do gateway** credita a conversão no RedTrack.
+O RedTrack não é uma integração no painel do HidePages: não existe campo de domínio nem de postback do RedTrack. O postback que credita a venda sai **do gateway** e é configurado no gateway e no RedTrack.
 </Info>
 
-## Visão geral do fluxo
+## Nativo
+
+A oferta é uma página do Builder. O link do RedTrack aponta para a URL da campanha no HidePages, com o `hpid` e os parâmetros da sua fonte de tráfego.
 
 <Steps>
-  <Step title="RedTrack (no-redirect) leva o visitante à sua oferta">
-    O link do RedTrack aponta **direto** para a sua campanha no HidePages, sem redirecionar.
+  <Step title="Pegue o script do RedTrack">
+    O `track.js` da campanha no RedTrack, com o seu domínio de tracking e o `rtkcmpid`.
   </Step>
-  <Step title="O script do RedTrack grava o click-id">
-    O `track.js` do RedTrack registra o acesso e guarda o click-id no cookie `rtkclickid-store`.
+  <Step title="Cole os dois scripts no Head da Black Page">
+    No Builder, abra **Scripts → Head** e cole o `track.js` e, depois dele, o encaminhador do `clickid` (abaixo). Veja [Página e scripts](/builder-v2/pagina-e-scripts).
   </Step>
-  <Step title="O encaminhador injeta o clickid nos checkouts">
-    O segundo script lê esse cookie e adiciona o click-id (como `clickid`) em todos os **links externos** (checkout) da página.
-  </Step>
-  <Step title="O gateway devolve a venda ao RedTrack">
-    No checkout, o click-id viaja no pedido. O **postback nativo do gateway** (apontando para o RedTrack) credita a conversão.
+  <Step title="Publique a página" />
+  <Step title="Configure o postback do gateway para o RedTrack">
+    No gateway, o postback server-to-server do RedTrack, repassando o `clickid`.
   </Step>
 </Steps>
-
-## Passo a passo
-
-<Steps>
-  <Step title="Configure a campanha no RedTrack em modo no-redirect">
-    Pegue o **script de rastreamento** do RedTrack (`track.js?rtkcmpid=...`) e o seu domínio de tracking.
-  </Step>
-  <Step title="Abra a página de oferta (Black) → aba Scripts → Head">
-    No **editor da página**, abra **Scripts** e use o slot **Head** ("Ideal para pixels de tracking").
-  </Step>
-  <Step title="Cole os dois scripts (abaixo)">
-    Primeiro o `track.js` do RedTrack, depois o encaminhador do `clickid`.
-  </Step>
-  <Step title="Publique a página">
-    Republique a Black para os scripts irem ao ar.
-  </Step>
-  <Step title="Ative o postback no gateway">
-    No seu gateway, configure o **postback do RedTrack** (server-to-server) para receber as vendas.
-  </Step>
-</Steps>
-
-<Warning>
-Este setup depende de a oferta ser uma **página do próprio HidePages** — é o que permite injetar os scripts e reescrever os links de checkout. Veja [Use páginas do próprio HidePages](/primeiros-passos#use-p%C3%A1ginas-do-pr%C3%B3prio-hidepages).
-</Warning>
-
-## Os dois scripts
-
-<Warning>
-Troque `trk.seudominio.com` e `rtkcmpid=xxxxxxxxxxxxx` pelos valores da **sua conta RedTrack**. E confirme que o parâmetro **`clickid`** é o que o seu gateway repassa de volta ao RedTrack no postback.
-</Warning>
 
 **1. Script de rastreamento do RedTrack**
 
@@ -124,30 +104,62 @@ Troque `trk.seudominio.com` e `rtkcmpid=xxxxxxxxxxxxx` pelos valores da **sua co
 })();
 </script>
 ```
-
-## Como funciona
-
-- O `track.js` do RedTrack grava o click-id no cookie **`rtkclickid-store`**.
-- O encaminhador lê esse cookie, extrai o click-id (aceita valor puro ou JSON com `rtkcid`/`clickid`) e o adiciona como **`clickid`** em todos os links **externos** — ele **ignora** links do próprio domínio.
-- Ele reforça a injeção em **intervalos** (de 500&nbsp;ms a 10&nbsp;s) e **no clique** (via `composedPath`). Isso cobre botões de pacote/"potes" e players de VSL que **reescrevem o `href`** na hora de escolher a oferta.
-- No checkout, o `clickid` entra no pedido; o **postback do gateway** devolve a venda ao RedTrack.
-
-<Tip>
-O `PARAM = "clickid"` é o nome do parâmetro que carrega o click-id até o checkout. Ele precisa ser o **mesmo** que o seu gateway repassa de volta ao RedTrack no postback. Se o seu setup usa outro nome, troque nas duas pontas.
-</Tip>
-
-## Atribuição no painel do HidePages (opcional)
-
-O fluxo acima credita a venda **no RedTrack**. Se você também quer ver a conversão **no painel do HidePages** (Conversões/Receita, por campanha e por variante), configure **também** uma integração em [Conversões](/conversoes/integrar-gateway) — ela usa a chave `hp1_` do HidePages, que viaja em um **parâmetro separado** do `clickid`.
-
 <Warning>
-Use **parâmetros diferentes** para o `clickid` do RedTrack e para a chave `hp1_` do HidePages — assim um não sobrescreve o outro no checkout.
+Troque `trk.seudominio.com` e `rtkcmpid=xxxxxxxxxxxxx` pelos valores da sua conta RedTrack. `PARAM = "clickid"` é o parâmetro que leva o click-id ao checkout: ele precisa ser o mesmo que o gateway devolve ao RedTrack no postback.
 </Warning>
 
-## Pixels também contam
+O `track.js` grava o click-id no cookie `rtkclickid-store`. O encaminhador lê esse cookie e acrescenta o `clickid` em todos os links **externos** da página. Ele repete a operação por alguns segundos e também no clique, o que cobre botões de pacote e players de VSL que trocam o link na hora.
 
-Você pode colar **pixels** (Facebook Pixel, Google, etc.) nos **Scripts da página** (mesmo lugar: editor → **Scripts**), disparando no navegador em paralelo ao RedTrack.
+### Parâmetro RedTrack na integração
+
+Para ver as vendas **também no painel do HidePages**, crie uma [integração de conversão](/conversoes/integrar-gateway). Se o seu RedTrack já repassa um `sub` para o gateway pela Offer URL, selecione esse `sub` (de `sub1` a `sub20`) como **Parâmetro RedTrack** no mesmo campo do parâmetro do gateway.
+
+<Print src="conversoes/parametro-popover" alt="Seletor de parâmetros da Hotmart com sck e a lista de parâmetros RedTrack" />
+
+O painel mostra então a configuração que o RedTrack precisa:
+
+<Print src="conversoes/redtrack-guia" alt="Guia Configuração do RedTrack com os passos para Traffic Channel e Offer URL" />
+
+1. No **Traffic Channel** do RedTrack, `sub1` entra como parâmetro de rastreamento na URL da campanha.
+2. Na **Offer URL** do RedTrack, o valor de `sub1` vai para um parâmetro aceito pelo gateway, por exemplo `?sck={sub1}`.
+3. O parâmetro da Offer URL não pode estar em uso na fonte de tráfego.
+
+<Warning>
+A chave do HidePages vai só no parâmetro do gateway (no exemplo, `sck`). Use parâmetros **diferentes** para a chave do HidePages e para o `clickid` do RedTrack, para um não sobrescrever o outro no checkout.
+</Warning>
+
+## Mirror
+
+Em **Mirror**, o HidePages serve a sua página de oferta hospedada fora, sob o domínio da campanha. Os scripts do RedTrack são os que já estão **na sua página de origem**: não cole nada no HidePages.
+
+O visitante chega pelo **link de clique do RedTrack**, que redireciona para a URL da campanha com o click-id na query. O HidePages lê esse click-id e o acrescenta como `clickid` nos links de checkout da página espelhada, inclusive nos links que o script da página monta depois de carregar.
+
+<Steps>
+  <Step title="Na campanha, Black Page em Mirror">
+    Informe a URL da sua página de oferta. Veja [os três modos](/conceitos/modos-de-entrega).
+  </Step>
+  <Step title="No RedTrack, a Offer URL é a URL da campanha">
+    Com o `hpid` e os parâmetros que você usa.
+  </Step>
+  <Step title="Postback do gateway para o RedTrack">
+    Igual ao Nativo.
+  </Step>
+</Steps>
+
+<Note>
+No Mirror, a chave `hp1_` do HidePages não é acrescentada. As vendas aparecem no RedTrack, não no painel de conversões do HidePages.
+</Note>
+
+## Redirect
+
+Em **Redirect**, o visitante aprovado é enviado para a URL da Black Page. O HidePages **repassa a query** do visitante: UTMs, `sub1`…`sub10`, click-ids. Só o `hpid` é retirado.
+
+Todo o rastreamento fica **na página de destino**: o `track.js` do RedTrack e o encaminhamento do click-id ao checkout são configurados lá, como você faria sem o HidePages.
+
+## Pixels
+
+Pixels de Facebook, Google e outros vão no mesmo lugar dos scripts: **Scripts** da página no Nativo, ou na própria página nos modos Mirror e Redirect.
 
 <Card title="Voltar para a visão geral de conversões" icon="chart-line" href="/conversoes/visao-geral" horizontal>
-  Como tudo se conecta.
+  Como a chave de conversão funciona.
 </Card>

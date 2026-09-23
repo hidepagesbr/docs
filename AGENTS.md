@@ -16,7 +16,11 @@ Site Mintlify. Páginas são MDX com frontmatter YAML; a navegação vive em `do
 
 - **White Page**, **Black Page**, **Gray Page**: as três superfícies. Sempre com esses nomes.
 - **Publicar** uma página, nunca "deployar". **Rascunho**, nunca "draft" fora de código.
-- **Campanha** fica **ok** ou **pendente**; não invente outros estados.
+- **Campanha** fica **Ativa** ou **Pendente**; os outros status (Assinatura Bloqueada, Cota
+  Excedida, Pagamento Pendente) são de cobrança. Não invente outros.
+- **Builder** é o editor de páginas. Não existe "Builder V1/V2" na doc; a pasta `builder-v2/`
+  mantém o nome só para não quebrar links. As abas do inspetor são **Estilo** e **Ajustes**.
+- Modos de entrega de cada superfície: **Nativo**, **Mirror**, **Redirect**.
 - **Workspace**, não "projeto". **Conta** é quem assina; workspace é o conjunto de dados.
 - A plataforma é "o HidePages" (masculino).
 
@@ -28,6 +32,24 @@ Site Mintlify. Páginas são MDX com frontmatter YAML; a navegação vive em `do
 - Código para arquivos, comandos, caminhos, campos e valores.
 - Nenhuma URL de ambiente local, chave real, hostname interno ou nome de provedor de
   infraestrutura. A API tem uma base URL, `https://api.hidepages.com/v1`, e só.
+
+## Imagens
+
+- Todo print existe em duas versões, `images/<seção>/<nome>-light.webp` e `-dark.webp`, e entra
+  na página pelo snippet:
+
+  ```mdx
+  import { Print } from '/snippets/print.mdx';
+
+  <Print src="dominios/dns-dialog" alt="O que o print mostra" />
+  ```
+- Capture do app em produção com uma conta de teste, nunca de ambiente local: a URL, o domínio e
+  os dados precisam parecer os de um cliente. Viewport 1440x900, escala 2, `pt-BR`, e troque o
+  tema pela classe `dark`/`light` no `<html>` para gerar as duas versões.
+- Borre IP, e-mail de cliente e qualquer dado real antes de capturar. Nada de chave de API,
+  token ou preço de plano que não seja público.
+- `cwebp -q 82` para converter. Recorte no elemento; a barra lateral só entra quando o contexto
+  da navegação importa.
 
 ## Limites de conteúdo
 

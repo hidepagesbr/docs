@@ -1,95 +1,86 @@
 ---
 title: "Testes A/B: visão geral"
 icon: "flask"
-description: "Divida o tráfego da sua oferta entre várias páginas para descobrir qual converte mais — sem trocar a campanha."
+description: "Divida o tráfego da oferta entre várias páginas para descobrir qual converte mais, sem mexer na campanha."
 ---
 
-Um **Teste A/B** é um objeto reutilizável que você **encaixa no lugar da Black Page** de uma campanha para dividir o tráfego da oferta entre várias **variantes** (páginas) e descobrir qual converte mais.
+import { Print } from '/snippets/print.mdx';
 
-<Info>
-O Teste A/B entra **no campo Black Page** da campanha. Em vez de escolher uma única página de oferta, você escolhe um teste, e o HidePages roteia cada visitante aprovado para uma das variantes. Recurso **dependente do plano**.
-</Info>
-
-<Warning>
-**Use páginas do próprio HidePages.** As variantes são páginas criadas **dentro do HidePages** (do zero, por template, importadas ou clonadas por URL). É isso que permite servir tudo no seu domínio **sem redirect** e atribuir a conversão à variante certa. Veja [por que isso é essencial](/primeiros-passos#use-p%C3%A1ginas-do-pr%C3%B3prio-hidepages).
-</Warning>
+Um **Teste A/B** divide o tráfego da oferta entre várias **variantes** (páginas do Builder). Ele entra **no lugar da Black Page** de uma campanha: em vez de uma página única, a campanha serve uma das variantes para cada visitante aprovado.
 
 ## Criar um teste
 
 <Steps>
-  <Step title="Abra A/B Tests → novo teste">
-    Dê um **nome** ao teste (ex.: *VSL V1 vs V2*). Isso cria o teste e abre o editor.
+  <Step title="Testes A/B → Novo teste">
+    Dê um **nome** ao teste, como *VSL curta vs longa*. O editor do teste abre em seguida.
+
+    <Print src="testes-ab/novo" alt="Diálogo Novo teste A/B com o campo Nome do teste" />
   </Step>
-  <Step title="Escolha o modo">
-    **A/B padrão** (por peso) ou **Rules Manager** (por regras de parâmetro).
+  <Step title="Escolha o tipo de teste">
+    - **Teste A/B**: divide o tráfego por pesos fixos.
+    - **Rules Manager**: escolhe as páginas por parâmetro da URL, com um tráfego padrão quando nenhuma regra bate. Veja [Rules Manager](/testes-ab/rules-manager).
   </Step>
-</Steps>
-
-## Os dois modos
-
-<CardGroup cols={2}>
-  <Card title="A/B padrão (por peso)" icon="chart-pie">
-    Divide o tráfego entre variantes com **porcentagens fixas**. É o clássico "50/50".
-  </Card>
-  <Card title="Rules Manager (por regras)" icon="route" href="/testes-ab/rules-manager">
-    Roteia por **parâmetro da URL**, com um fallback padrão. Para segmentar por parâmetro do anúncio.
-  </Card>
-</CardGroup>
-
-## Modo padrão (por peso)
-
-<Steps>
-  <Step title="Adicione variantes">
-    Até **20 páginas** como variantes. Cada variante tem **Nome**, **Página** e **Tráfego %**.
-  </Step>
-  <Step title="Ajuste os pesos (soma = 100%)">
-    A soma dos percentuais precisa fechar **100%**. Use **"Distribuir igualmente"** para dividir automaticamente.
-
-    <Tip>Você pode deixar uma variante em **0%** (pausa aquela variante sem removê-la), desde que o total continue 100%.</Tip>
+  <Step title="Adicione as variantes e salve">
+    Cada variante é uma página publicada com um **Tráfego %**. Clique em **Salvar alterações**.
   </Step>
 </Steps>
+
+## Teste A/B por peso
+
+<Print src="testes-ab/padrao" alt="Editor do Teste A/B com duas variantes em 50% cada e total de 100%" />
+
+- Até **20 variantes**, cada uma com uma página diferente.
+- A soma dos pesos precisa dar **100%**. **Distribuir igualmente** divide o tráfego por você.
+- Uma variante em **0%** fica pausada sem ser removida, desde que o total continue 100%.
+- A mesma pessoa vê sempre a mesma variante.
+
+<Warning>
+As variantes precisam ser páginas do **Builder**, publicadas. Uma página do editor antigo não é entregue na rotação: se todas forem antigas, a oferta fica sem página.
+</Warning>
 
 ## Usar o teste na campanha
 
 <Steps>
-  <Step title="No campo Black Page da campanha">
-    Ao criar/editar a campanha, no campo **Black Page**, selecione o teste (ele aparece no grupo **"A/B Tests"**, com a contagem de variantes) em vez de uma página única.
+  <Step title="Edite a campanha">
+    No campo **Black Page**, em modo **Nativo**, os testes aparecem num grupo próprio da lista, com o número de variantes.
+
+    <Print src="testes-ab/anexar-black" alt="Lista da Black Page mostrando as páginas e o grupo de testes A/B" />
   </Step>
-  <Step title="Suba o tráfego normalmente">
-    O roteamento entre variantes é **determinístico por visitante** (a mesma pessoa vê sempre a mesma variante).
+  <Step title="Selecione o teste e salve">
+    <Print src="testes-ab/campanha-com-teste" alt="Cartão Páginas da campanha com o teste Oferta — A vs B na Black Page" />
   </Step>
 </Steps>
 
 <Note>
-Teste A/B **não** está disponível para campanhas **Digistore24 (Upsell)**.
+O teste não entra em campanhas de upsell por gateway (Digistore24, Cartpanda, JVZoo). Excluir um teste devolve as campanhas ligadas a ele para a Black Page fixa.
 </Note>
 
-## Status do teste
+## A lista de testes
 
-| Status | Significado |
-|--------|-------------|
-| **Draft** | Rascunho, ainda não em uso. |
-| **Running** | Ativo, dividindo tráfego. |
-| **Paused** | Pausado. |
-| **Completed** | Encerrado. |
+<Print src="testes-ab/lista" alt="Lista de testes A/B com os modos A/B Test e Rules Manager" />
 
-<Info>
-**Excluir** um teste devolve as campanhas ligadas a ele para uma **Black Page fixa** (elas não quebram).
-</Info>
+A lista mostra o **modo** de cada teste, o número de **variantes** e de **campanhas** que o usam. As ações são **Editar**, **Métricas** e **Excluir**.
 
 ## Métricas
 
-A tela de **métricas** do teste mostra, por variante: **Acessos/Views**, **Conversões**, **Taxa de conversão** e **Receita**, além de uma **tabela comparativa** (com % editável na hora), gráfico e logs de acesso.
+A tela **Métricas** compara as variantes lado a lado.
+
+<Print src="testes-ab/metricas" alt="Tela de métricas do teste A/B com acessos, conversões, taxa de conversão e receita" />
+
+- **Acessos**, **Conversões**, **Taxa de Conversão** e **Receita Gerada**, no período escolhido.
+- **Tráfego por Variante**: o gráfico de acessos de cada variante ao longo do tempo.
+- **Comparativo por Variante**: a tabela com os números de cada uma. A coluna **Tráfego** é editável: ajuste os pesos ali mesmo e clique em **Salvar distribuição**.
+- **Logs de Acesso** com a variante servida em cada visita.
 
 <Warning>
-As **conversões por variante** só aparecem se você tiver o **rastreamento de conversões** configurado — é a chave `hp1_` que carrega o id da variante de volta na venda.
+**Conversões e receita por variante** só aparecem com o [rastreamento de conversões](/conversoes/visao-geral) configurado. É a chave de conversão que leva a variante de volta junto com a venda.
 </Warning>
 
 <CardGroup cols={2}>
-  <Card title="Rules Manager (por regras)" icon="route" href="/testes-ab/rules-manager">
-    Roteie a oferta por parâmetro da URL.
+  <Card title="Rules Manager" icon="route" href="/testes-ab/rules-manager">
+    Escolha a página pelo parâmetro do anúncio.
   </Card>
   <Card title="Rastreamento de conversões" icon="chart-line" href="/conversoes/visao-geral">
-    Para medir conversão e receita por variante.
+    Medir conversão e receita por variante.
   </Card>
 </CardGroup>

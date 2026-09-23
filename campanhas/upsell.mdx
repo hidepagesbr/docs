@@ -1,0 +1,71 @@
+---
+title: "Upsell"
+icon: "cart-plus"
+description: "Campanhas de upsell pós-compra: o modo de cada gateway (Digistore24, Cartpanda, JVZoo) e o Upsell universal, que funciona com qualquer checkout."
+---
+
+import { Print } from '/snippets/print.mdx';
+
+Uma campanha de **Upsell** não recebe tráfego de anúncio: ela atende o **comprador que acabou de pagar**, na volta do checkout. Por isso ela não usa o hash HPID nem a Gray Page.
+
+Você cria uma campanha de upsell escolhendo, em **Fonte de Tráfego**, uma das opções marcadas **Upsell**.
+
+## Upsell por gateway
+
+**Digistore24**, **Cartpanda** e **JVZoo** têm a própria área de upsell dentro do checkout. Nesses modos:
+
+<Steps>
+  <Step title="Crie a campanha com a fonte do gateway">
+    White Page e Black Page como em qualquer campanha. A Black é a oferta de upsell.
+  </Step>
+  <Step title="Copie o link da campanha">
+    A tela de sucesso mostra a URL da campanha e explica que ela vai na configuração de upsell do gateway.
+  </Step>
+  <Step title="Instale o link no gateway">
+    Cole a URL da campanha na configuração de upsell do produto, dentro do Digistore24, da Cartpanda ou do JVZoo.
+  </Step>
+</Steps>
+
+<Note>
+Nesses modos não há Teste A/B na Black Page.
+</Note>
+
+## Upsell universal
+
+O **Upsell universal** funciona com **qualquer checkout**: Hotmart, Kiwify, Digistore24, Stripe ou o link de um tracker como o RedTrack. É um recurso do plano; sem ele, a opção aparece com cadeado.
+
+O botão de compra da sua página de oferta passa um instante pelo domínio da campanha de upsell, onde o HidePages grava um cookie próprio, e só então segue para o checkout. Quando o comprador volta do pagamento, a campanha o reconhece e serve a Black Page de upsell.
+
+<Print src="campanhas/upsell-universal" alt="Cartão Upsell universal com URL do checkout, Ofertas permitidas e Como ligar" />
+
+<Steps>
+  <Step title="Crie a campanha com a fonte Upsell universal">
+    O slug é obrigatório nesse modo.
+  </Step>
+  <Step title="URL do checkout (obrigatório)">
+    O link do checkout do produto principal. Pode ser o link do gateway ou o link de clique do seu tracker.
+  </Step>
+  <Step title="Ofertas permitidas">
+    As suas campanhas que podem mandar compradores para este upsell. Vazio aceita qualquer uma.
+  </Step>
+  <Step title="Salve e siga o bloco Como ligar">
+    Depois de salvar, o cartão **Como ligar** mostra os três passos com os seus valores:
+
+    1. **Faça o checkout devolver para cá**: configure no gateway o retorno pós-compra para a URL da campanha de upsell.
+    2. **Carregue o script na página de oferta**: uma tag `<script>` que aponta para o domínio do upsell.
+    3. **Marque o botão de compra**: no Builder, em **Ajustes → Navegação → Destino → Checkout de upsell**; no HTML, com o atributo `data-checkout`; ou pelo botão do player VTurb, com o script alternativo indicado.
+  </Step>
+</Steps>
+
+<Tip>
+No Builder, o destino **Checkout de upsell** já acrescenta o script à página. Informe o **Domínio do upsell** e o **Slug da campanha de upsell** no próprio ajuste do botão.
+</Tip>
+
+<CardGroup cols={2}>
+  <Card title="Funil de vendas" icon="filter-circle-dollar" href="/campanhas/funil">
+    Upsell, downsell e obrigado no mesmo domínio da oferta.
+  </Card>
+  <Card title="Estilo e ajustes" icon="sliders" href="/builder-v2/estilo-e-configuracoes#navegação">
+    O destino Checkout de upsell nos botões.
+  </Card>
+</CardGroup>

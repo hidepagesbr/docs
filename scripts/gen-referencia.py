@@ -58,6 +58,9 @@ FRASES_STAFF = [
 ]
 # Nada disso pode sobrar na doc publicada; se a API ganhar uma frase nova, o script para aqui.
 PROIBIDO = re.compile(r"\b(staff|Staff|SUPPORT|ADMIN)\b")
+# Host de ambiente local ou de teste: o spec vem de uma instância rodando, e o que ela põe em
+# `info.contact` e nos exemplos é a configuração dela, não a de produção.
+HOST_LOCAL = re.compile(r"localhost|127\.0\.0\.1|\.test\b|\.local\b|\.internal\b")
 
 
 def limpar_texto(texto):
@@ -103,6 +106,7 @@ def kebab(s):
 def filtrar(spec):
     spec["info"]["title"] = "HidePages API"
     spec["servers"] = [{"url": "https://api.hidepages.com"}]
+    spec["info"]["contact"] = {"name": "HidePages", "url": "https://app.hidepages.com"}
     for p in list(spec["paths"]):
         for m in list(spec["paths"][p]):
             if f"{m.upper()} {p}" in EXCLUIR:
@@ -134,6 +138,9 @@ def filtrar(spec):
     if sobras:
         sys.exit(f"menção a papel de equipe sobrou na doc pública ({', '.join(sobras)}); "
                  "acrescente a frase a FRASES_STAFF ou a operação a EXCLUIR")
+    locais = sorted({m.group(0) for m in HOST_LOCAL.finditer(json.dumps(spec, ensure_ascii=False))})
+    if locais:
+        sys.exit(f"host local ou de teste sobrou na doc pública ({', '.join(locais)})")
     return spec
 
 

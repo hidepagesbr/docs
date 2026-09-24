@@ -27,7 +27,7 @@ campanha, que precisa ser alcançável pela sua chave; senão é **404**.
 | `GET /v1/analytics/chart` | série por dia, ou por hora até dois dias, com filtros |
 | `GET /v1/analytics/campaign/summary` | views, connect rate, conversões, taxa de conversão, receita |
 | `GET /v1/analytics/campaigns/bulk-summary` | views, conversões e receita de todas as campanhas do workspace |
-| `GET /v1/analytics/funnel-steps` | views por etapa do funil |
+| `GET /v1/analytics/funnel-steps` | visitas por sub-página de uma página, com nome e na ordem do funil |
 | `GET /v1/analytics/logs` | uma linha por visita |
 | `GET /v1/analytics/ab-tests/{id}/summary` | totais do teste e de cada variante |
 | `GET /v1/analytics/ab-tests/{id}/chart` | visitas por variante ao longo do tempo |
@@ -66,6 +66,43 @@ nomeando o campo.
 | `country` | códigos ISO 3166-1 alpha-2, separados por vírgula: `BR,US` |
 | `domain` | um hostname, ou uma URL da qual o hostname é extraído |
 | `ip` | um endereço ou um prefixo: `203.0.` |
+
+## Etapas do funil
+
+`funnel-steps` é a **Análise de etapas** do painel: uma etapa por **sub-página** da página em
+`pageId` (a oferta, as pré-vendas, o upsell dentro da página), com o nome de cada uma.
+
+```bash
+curl "https://api.hidepages.com/v1/analytics/funnel-steps?from=2026-09-01&to=2026-09-23&pageId=SEU_PAGE_ID" \
+  -H "X-API-Key: hp_live_..."
+```
+
+```json
+{
+  "steps": [
+    { "stepIndex": 0, "totalSteps": 3, "views": 1200, "viewsRaw": 1540,
+      "subPageId": "a1b2c3d4e5f6g7h8", "name": "Pré-venda", "isMain": false,
+      "missing": false, "inFlow": true },
+    { "stepIndex": 1, "totalSteps": 3, "views": 830, "viewsRaw": 990,
+      "subPageId": "h8g7f6e5d4c3b2a1", "name": "Oferta", "isMain": true,
+      "missing": false, "inFlow": true },
+    { "stepIndex": 2, "totalSteps": 3, "views": 40, "viewsRaw": 41,
+      "subPageId": "p0l1t1c4pr1v4c1d", "name": "Política de privacidade", "isMain": false,
+      "missing": false, "inFlow": false }
+  ]
+}
+```
+
+- **A ordem é a do funil**: a primeira página, depois as páginas para onde os links dela levam,
+  na ordem em que aparecem, depois as que nenhum link alcança (páginas legais, backredirect) e,
+  por último, sub-páginas que foram removidas (`missing: true`, `name: null`).
+- **Compare só etapas seguidas com `inFlow: true`.** Uma política de privacidade com menos
+  visitas que a oferta não é abandono.
+- `views` conta uma visita por sessão; `viewsRaw` conta cada visualização.
+- Vale a estrutura **publicada** da página. Se você reordenou o funil num rascunho, a ordem
+  nova aparece depois de publicar.
+- `campaignId` é opcional: sem ele, entram todas as campanhas que servem a página.
+- Uma página de outra conta, ou que não existe, é **404**.
 
 ## O log de visitas
 

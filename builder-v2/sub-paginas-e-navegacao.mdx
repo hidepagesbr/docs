@@ -69,6 +69,25 @@ pageNavigator.goTo("ID_DA_PAGINA");
 
 O ID está em **Página atual → ID da página** ou em **Copiar ID da página**, no menu da sub-página.
 
+## Análise de etapas
+
+A **Análise de etapas** mostra quantos visitantes chegaram em cada sub-página e quantos passaram de uma para a outra. Abra pelo painel **Páginas** do editor, em **Ferramentas → Análise de etapas**, ou pela lista de páginas, no menu **⋮** do card → **Analytics**.
+
+- Cada barra é uma sub-página, com o nome dela, **na ordem do funil**: a primeira página, depois as páginas para onde os links levam, na ordem em que aparecem.
+- Páginas que nenhum link alcança, como política de privacidade e backredirect, aparecem no fim e ficam fora da **Taxa entre etapas**.
+- Escolha o período e, se a página estiver em mais de uma campanha, uma campanha ou **Todas as campanhas**.
+- Uma sub-página apagada depois de receber visitas aparece como **Página removida**.
+
+<Note>
+A análise usa a versão **publicada** da página. Se você reordenar o funil, a ordem nova aparece depois de publicar.
+</Note>
+
+<Tip>
+Uma etapa com mais visitas que a anterior indica tráfego entrando direto nela, sem passar pela etapa de cima, como um anúncio apontando para uma sub-página no meio do funil.
+</Tip>
+
+Os mesmos números estão na API, em [`GET /v1/analytics/funnel-steps`](/api/guias/analytics#etapas-do-funil).
+
 <Card title="Próximo: página e scripts" icon="gear" href="/builder-v2/pagina-e-scripts" horizontal>
   Layout, código-fonte, compartilhamento e pixels.
 </Card>

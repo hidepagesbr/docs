@@ -5,7 +5,7 @@
     "description": "Programmatic access to the HidePages platform: pages, campaigns, domains, funnel steps, A/B tests, conversion integrations and analytics — everything the panel does, over REST and JSON.\n\n## Authenticating\n\nSend an API key as the `X-API-Key` header. A key belongs to an account and works while that account holds an active or past-due subscription. Keys are issued in the panel or with the create-key endpoint, shown once, and stored only as a hash.\n\n## What a caller can reach\n\nA workspace is the dataset of its owner. Lists are scoped to the caller's active workspace, and a single resource is reachable when the caller owns the account it belongs to, or is a member of its workspace holding a sufficient level on that kind of resource — view to read, edit to write.\n\nAsking for a resource the caller cannot reach answers **404, never 403** — a 403 would confirm that the id exists.\n\n## Errors\n\nEvery failure answers an object with a single `error` member holding a code, a message, an optional field and a timestamp. Switch on the code; the message is for people and its wording may change. The field names the offending request field when the failure is about one. A 503 carries a `Retry-After` header.\n\n## Lists\n\nCollections answer a `data` array alongside a `pagination` object. Page numbers are 1-based and the page size is clamped to a maximum. Listing API keys is the one exception: it answers a bare array, because a caller holds only a handful of keys.\n\n## Pages\n\nPages are authored in the current editor's content shape, and only that one: `settings.version` is `2`. Pages have a published row and a working draft. A PATCH writes the draft, and both a GET and the PATCH's own answer return the draft merged over the published row. Publishing promotes one to the other; until it runs visitors keep getting the published content. A publish reports `propagation`: whether every visitor-facing cache has the new version yet.\n\n## Domains\n\nA domain made here is the same as one made in the panel: the platform registers it, decides which edge serves it, and hands back the DNS records to create. Add it, create the records, verify.\n\n## Analytics\n\nThe figures the dashboard shows, from the same store, per account, per campaign, per funnel step and per A/B test, plus the visit log. Never zeros in place of an error: a store that does not answer is a 503.",
     "contact": {
       "name": "HidePages",
-      "url": "https://app.hidepages.test"
+      "url": "https://app.hidepages.com"
     },
     "version": "v1"
   },
@@ -10146,8 +10146,8 @@
         "tags": [
           "Analytics"
         ],
-        "summary": "Totals per funnel step",
-        "description": "Where visitors left the upsell path. `campaignId` is required; `pageId` is the\nfunnel's entry page and is required to read step data. `views` is deduplicated by\nsession, `viewsRaw` is not. `from` and `to` default to the last 30 days.\n",
+        "summary": "Visits per sub-page of a page",
+        "description": "Where leads left a page's funnel: one step per sub-page that had visits, named, in\nthe order a lead walks it — from the first page along its links, then the pages\nno link reaches (legal pages, the backredirect), then sub-pages since removed.\nOnly compare consecutive steps with `inFlow` true. `pageId` is required and must\nbe a page of the account; the structure read is the published one. `campaignId`\nnarrows to one campaign serving the page; without it, all of them. `views` is\ndeduplicated by session, `viewsRaw` is not. `from` and `to` default to the last\n30 days.\n",
         "operationId": "getFunnelSteps",
         "parameters": [
           {
@@ -13731,19 +13731,46 @@
         "properties": {
           "stepIndex": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "description": "Position in the funnel, from 0: the first page, then the pages its `data-page-link`s lead to in the order they appear, then the pages no link reaches. Not the sub-page's position in `elements.pages`."
           },
           "totalSteps": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "description": "How many steps this answer has."
           },
           "views": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "Visits, one per session."
           },
           "viewsRaw": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "Every page view, repeated views included."
+          },
+          "subPageId": {
+            "type": "string",
+            "description": "The sub-page's key in `elements.pages`, or `main` for the main page of a page from the old editor. Empty for old data that matches no sub-page."
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The sub-page's name. Null when it has none, or no longer exists."
+          },
+          "isMain": {
+            "type": "boolean",
+            "description": "True for the page's main sub-page."
+          },
+          "missing": {
+            "type": "boolean",
+            "description": "True when the sub-page has since been removed from the page."
+          },
+          "inFlow": {
+            "type": "boolean",
+            "description": "True when the sub-page is on the path a lead follows from the first page. Legal pages, the backredirect and pages no link reaches are false; a drop-off rate only makes sense between consecutive steps that are true."
           }
         }
       },

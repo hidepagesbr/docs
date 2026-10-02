@@ -11,6 +11,9 @@ curl https://api.hidepages.com/v1/campaigns \
   -H "X-API-Key: hp_live_SUA_CHAVE"
 ```
 
+A chave de API é a única credencial. Um header `Authorization: Bearer` não autentica nada e
+recebe **401**.
+
 Sem o header, ou com uma chave inválida, revogada ou expirada, a resposta é **401
 `UNAUTHORIZED`**.
 

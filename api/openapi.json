@@ -1642,7 +1642,7 @@
           "Pages"
         ],
         "summary": "List pages",
-        "description": "Scoped to the caller's **active** workspace — not to every workspace the account owns.\nSwitching workspace is how you reach the rest.\n\n`search` matches the name, case-insensitively. `sortBy` accepts any field of the response;\nthe ordering is the database's collation, in which uppercase sorts before lowercase.\n",
+        "description": "Scoped to the caller's **active** workspace — not to every workspace the account owns.\nSwitching workspace is how you reach the rest.\n\n`search` matches the name, case-insensitively. `sortBy` is one of `name`, `slug`, `color`,\n`createdAt`, `updatedAt`; the ordering is the database's collation, in which uppercase\nsorts before lowercase.\n",
         "operationId": "listPages",
         "parameters": [
           {
@@ -14117,6 +14117,7 @@
               "MAINTENANCE_MODE",
               "METHOD_NOT_ALLOWED",
               "UNSUPPORTED_MEDIA_TYPE",
+              "PAYLOAD_TOO_LARGE",
               "ANALYTICS_UNAVAILABLE",
               "DOMAIN_SERVICE_UNAVAILABLE",
               "INTERNAL_ERROR"

@@ -8,7 +8,8 @@ Uma campanha amarra um domínio, um slug e até três **superfícies**: **white*
 moderadores e tráfego filtrado, **black** para o comprador, e **gray**, opcional, para tráfego
 suspeito. Cada superfície é servida de uma de três formas: uma página do HidePages
 (`whitePageId`), um espelho (`whiteMirrorUrl`) ou um redirect (`whiteRedirectUrl`). White e
-black são obrigatórias.
+black são obrigatórias. A URL de espelho ou redirect precisa ser um endereço público: IP de
+rede privada, `localhost` e nomes `.local` ou `.internal` são **400**.
 
 ```bash
 curl -X POST https://api.hidepages.com/v1/campaigns \

@@ -32,9 +32,10 @@ o campo da requisição em falta, quando o erro é sobre um campo.
 | 404 | `RESOURCE_NOT_FOUND` | O recurso não existe, ou não é alcançável pela sua chave |
 | 405 | `METHOD_NOT_ALLOWED` | Método HTTP não suportado nesse caminho |
 | 409 | `CONFLICT` | Unicidade violada (slug, hostname), ou o recurso ainda está em uso por outro |
+| 413 | `PAYLOAD_TOO_LARGE` | O corpo da requisição passa de 8 MB |
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Escrita sem `Content-Type: application/json` |
 | 422 | `QUOTA_EXCEEDED` | Um limite do plano foi atingido; `field` diz qual (`max_pages`, `max_domains`, `max_campaigns`) |
-| 429 | `RATE_LIMIT_EXCEEDED` | Limite de requisições ou de tentativas de autenticação; veja abaixo |
+| 429 | `RATE_LIMIT_EXCEEDED` | Limite de requisições, de requisições simultâneas ou de tentativas de autenticação; veja abaixo |
 | 503 | `ANALYTICS_UNAVAILABLE` | O armazém de analytics não respondeu. Nunca substituído por zeros |
 | 503 | `DOMAIN_SERVICE_UNAVAILABLE` | O serviço de domínios não respondeu; nada foi alterado |
 | 500 | `INTERNAL_ERROR` | Falha inesperada. Nunca expõe detalhes internos |
@@ -64,9 +65,11 @@ Há dois limites, e eles respondem de forma diferente:
 
 | Onde | Limite | Como responde |
 |---|---|---|
-| A API, por chave | 120 requisições por minuto, disponíveis de uma vez | 429 em JSON com `RATE_LIMIT_EXCEEDED` e `retryAfter` |
+| A API, por conta | 120 requisições por minuto, repostas aos poucos ao longo do minuto | 429 em JSON com `RATE_LIMIT_EXCEEDED` e `retryAfter` |
+| A API, por conta | 16 requisições em andamento ao mesmo tempo | 429 em JSON com `Retry-After: 1` |
 | A borda, por endereço IP | 60 requisições a cada 10 segundos | 429 em HTML, sem envelope JSON |
 
+Os limites da API valem por **conta**: várias chaves da mesma conta dividem os mesmos números.
 Um dashboard ou um script que dispara muitas chamadas de uma vez encosta primeiro no limite da
 borda. Espalhe as chamadas, e trate o 429 lendo o `Content-Type`: se não for JSON, é a borda.
 

@@ -29,7 +29,9 @@ curl "https://api.hidepages.com/v1/pages?page=1&pageSize=20&sortBy=createdAt&sor
 ```
 
 - `page` começa em **1**. `pageSize` tem teto de **100**.
-- `sortBy` aceita qualquer campo da resposta; um campo inexistente é **400**.
+- `sortBy` aceita uma lista curta por recurso: em geral `name`, `createdAt` e `updatedAt`, e
+  onde existirem `slug`, `status`, `platform` e afins. Qualquer outro valor é **400**, e a
+  mensagem lista os aceitos. `sortDir` é `asc` ou `desc`.
 - `search` compara com o nome, sem diferenciar maiúsculas.
 - A ordenação segue a collation do banco: maiúsculas vêm antes de minúsculas.
 

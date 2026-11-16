@@ -1,7 +1,7 @@
 ---
 title: "Criar uma página"
 icon: "file-circle-plus"
-description: "Os quatro jeitos de começar uma página no Builder: em branco, importando por código, clonando um site ou a partir de um template."
+description: "Os jeitos de começar uma página no Builder: em branco, importando por código, clonando um site, subindo um ZIP ou a partir de um template."
 ---
 
 import { Print } from '/snippets/print.mdx';
@@ -59,6 +59,10 @@ Transforma uma página publicada na internet em uma página editável do Builder
 Sites montados com JavaScript (aplicações que só aparecem depois de carregar) são detectados e renderizados antes de clonar, para trazer o conteúdo visível e não uma página vazia.
 </Info>
 
+<Warning>
+Alguns sites usam proteção anti-bot (Cloudflare, DataDome e similares) e bloqueiam qualquer cópia automática. Nesse caso o clone não acontece e o painel avisa: **Este site é protegido por Cloudflare e bloqueia cópias automáticas**. O bloqueio é uma escolha do dono do site; tentar de novo não muda o resultado.
+</Warning>
+
 ### Limpeza depois de clonar
 
 O HTML de outros sites costuma trazer peso que a sua página não precisa. Vale remover no **Código-fonte**:
@@ -70,6 +74,48 @@ O HTML de outros sites costuma trazer peso que a sua página não precisa. Vale 
 - trackers duplicados que conflitam com os seus.
 
 E confira se todas as imagens usam `https://` absoluto. Em imagens com *lazy-load*, use a URL real, não a do placeholder.
+
+## Subir ZIP
+
+Importa um site pronto que você tem no computador: um `.zip` com os arquivos HTML, CSS, JavaScript e imagens. Cada arquivo `.html` vira uma sub-página da mesma página do Builder.
+
+<Steps>
+  <Step title="Escolha o arquivo .zip">
+    Em **Subir ZIP**, clique em **Escolher arquivo**. O ZIP pode ter até 50 MB.
+  </Step>
+  <Step title="Dê um nome">
+    **Nome da página** gera o slug, como nas outras opções.
+  </Step>
+  <Step title="Importar">
+    O envio mostra o progresso e, em seguida, as páginas e os arquivos são processados. No fim aparece um resumo e o botão **Abrir no editor**.
+  </Step>
+</Steps>
+
+### Como o ZIP vira página
+
+- **Página principal**: o `index.html` da raiz do ZIP. Sem ele, entra o `index.html` mais próximo da raiz e, na falta de qualquer `index`, a primeira página da raiz em ordem alfabética.
+- **Demais páginas**: cada `.html` vira uma [sub-página](/builder-v2/sub-paginas-e-navegacao) com o nome do arquivo (`obrigado.html` vira **obrigado**; `checkout/index.html` vira **checkout**).
+- **Links entre páginas**: um link para outra página do próprio ZIP (`<a href="obrigado.html">`, ou um script que faz `location.href = "vsl.html"`) passa a navegar para a sub-página correspondente.
+- **Arquivos**: imagens, CSS, JavaScript, fontes, vídeos curtos e PDF são hospedados pelo HidePages, mantendo a estrutura de pastas do ZIP, e os caminhos nas páginas são ajustados para eles.
+- **O resto fica como veio**: o HidePages não reescreve o seu HTML, seus scripts, formulários ou links de checkout. Se uma pasta envolve todos os arquivos (ex.: `meu-site/index.html`), ela é ignorada e `meu-site/` passa a ser a raiz.
+
+Depois da importação, o resumo lista:
+
+- **Arquivos citados que não estão no ZIP**: referências a arquivos que faltaram. Elas ficam como estavam e podem aparecer quebradas; suba um ZIP completo ou corrija no editor.
+- **Arquivos ignorados**: tipos não aceitos (como `.php`) ou nomes inválidos.
+
+### Limites
+
+| | Limite |
+|---|---|
+| Tamanho do `.zip` | 50 MB |
+| Conteúdo descompactado | 200 MB no total, 25 MB por arquivo |
+| Páginas `.html` | 30, com até 3 MB cada |
+| Arquivos aproveitados | 2.000 |
+
+<Note>
+ZIPs protegidos por senha ou corrompidos são recusados. Arquivos que se expandem de forma anormal ao descompactar (*zip bomb*) também.
+</Note>
 
 ## Templates
 

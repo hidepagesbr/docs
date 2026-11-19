@@ -289,6 +289,10 @@
   "navbar": {
     "links": [
       {
+        "label": "Blog",
+        "href": "https://www.hidepages.com/blog"
+      },
+      {
         "label": "Suporte",
         "href": "https://wa.me/5551980417208"
       }
@@ -308,7 +312,30 @@
   "footer": {
     "socials": {
       "website": "https://www.hidepages.com"
-    }
+    },
+    "links": [
+      {
+        "header": "HidePages",
+        "items": [
+          {
+            "label": "Site",
+            "href": "https://www.hidepages.com/pt"
+          },
+          {
+            "label": "Blog",
+            "href": "https://www.hidepages.com/blog"
+          },
+          {
+            "label": "Filtro de tráfego",
+            "href": "https://www.hidepages.com/pt/filtro-de-trafego"
+          },
+          {
+            "label": "Preços explicados",
+            "href": "https://www.hidepages.com/blog/precos-hidepages-explicados"
+          }
+        ]
+      }
+    ]
   },
   "api": {
     "playground": {
